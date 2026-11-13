@@ -77,7 +77,9 @@ After rebuilding a running app, quit and reopen it to load the new code. Build o
 
 The existing `.github/workflows/deploy.yml` still builds and deploys the **website**, using the repository name as Vite’s base path. Hash navigation remains refresh-safe. The native build has its own relative asset base and does not change Pages configuration.
 
-Once this folder is connected to the intended GitHub repository, push to `main` and select **Settings → Pages → Source: GitHub Actions**. A local build is not proof of deployment. No remote was configured at implementation time, so publication has not been verified.
+Source repository: [Kiara-Li/shortcut](https://github.com/Kiara-Li/shortcut). Pages is configured to use **GitHub Actions**. Pushes to `main` run lint, build and deployment.
+
+Website URL after a successful deployment: [kiara-li.github.io/shortcut](https://kiara-li.github.io/shortcut/). Check the latest Actions result before treating a new version as published. Global keyboard interception still requires the local macOS app.
 
 ## Code map
 

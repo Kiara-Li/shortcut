@@ -22,7 +22,7 @@ The user reviewed the previous browser preview and found that a simulated keyboa
 - Browser search → card → explanation → Saved → refresh was verified through the actual UI. The explicit self-report → Congratulations → Achievements → refresh flow was also verified. This is not native keystroke detection.
 - Added first-try achievements at the user’s request: matching target shortcut within two minutes, once per card, persistent records, non-interactive desktop confetti and Reduced Motion support. Completion is labeled as a shortcut try rather than a proven document edit.
 - No independent participant test has been completed in this session. November 5 test notes were not supplied, so no findings or fixes are attributed to that test.
-- GitHub publication was subsequently requested by the user, using a public repository named shortcut. Repository creation, push and deployment status are updated after verification.
+- At the user’s explicit request, created the public repository https://github.com/Kiara-Li/shortcut and pushed the project to main (initial commit fbc7f82). Verified the public repository page and matching local/remote commit. The first Pages job failed because Pages was disabled; configured the repository’s Pages source as GitHub Actions. A subsequent push triggers deployment verification.
 - Card mappings remain marked unverified until checked in both actual applications. Photoshop defaults were consulted in Adobe documentation.
 
 ## Next priorities
