@@ -1,0 +1,171 @@
+@import "tailwindcss";
+@import "./styles/tokens.css";
+
+/* Expose tokens as Tailwind utilities (bg-window, text-card-ink, rounded-card, …)
+   and map shadcn's semantic names onto them. */
+@theme inline {
+  --font-sans: var(--font-sans);
+
+  --color-window: var(--color-window);
+  --color-window-title: var(--color-window-title);
+  --color-window-ink: var(--color-window-ink);
+  --color-window-ink-muted: var(--color-window-ink-muted);
+  --color-field: var(--color-field);
+  --color-field-border: var(--color-field-border);
+  --color-tile: var(--color-tile);
+  --color-tile-hover: var(--color-tile-hover);
+  --color-tile-selected: var(--color-tile-selected);
+  --color-track: var(--color-track);
+  --color-brand: var(--color-brand);
+  --color-brand-soft: var(--color-brand-soft);
+  --color-brand-tint: var(--color-brand-tint);
+  --color-rail: var(--color-rail);
+  --color-rail-active: var(--color-rail-active);
+  --color-rail-ink: var(--color-rail-ink);
+  --color-card: var(--color-card);
+  --color-card-muted: var(--color-card-muted);
+  --color-card-ink: var(--color-card-ink);
+  --color-card-ink-soft: var(--color-card-ink-soft);
+  --color-card-button: var(--color-card-button);
+  --color-card-button-ink: var(--color-card-button-ink);
+  --color-but: var(--color-but);
+  --color-but-bg: var(--color-but-bg);
+  --color-warn: var(--color-warn);
+  --color-warn-bg: var(--color-warn-bg);
+  --color-keycap: var(--color-keycap);
+  --color-keycap-border: var(--color-keycap-border);
+  --color-keycap-ink: var(--color-keycap-ink);
+
+  --text-window-title: var(--text-window-title);
+  --text-heading: var(--text-heading);
+  --text-body: var(--text-body);
+  --text-small: var(--text-small);
+  --text-tiny: var(--text-tiny);
+  --text-card-action: var(--text-card-action);
+  --text-card-body: var(--text-card-body);
+
+  --radius-window: var(--radius-window);
+  --radius-card: var(--radius-card);
+  --radius-tile: var(--radius-tile);
+  --radius-icon: var(--radius-icon);
+  --radius-keycap: var(--radius-keycap);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-window: var(--shadow-window);
+
+  /* shadcn semantic colors */
+  --color-background: var(--color-window);
+  --color-foreground: var(--color-window-ink);
+  --color-primary: var(--color-brand);
+  --color-primary-foreground: var(--color-brand-ink);
+  --color-secondary: var(--color-tile);
+  --color-secondary-foreground: var(--color-window-ink);
+  --color-muted: var(--color-keycap);
+  --color-muted-foreground: var(--color-keycap-ink);
+  --color-accent: var(--color-tile-hover);
+  --color-accent-foreground: var(--color-window-ink);
+  --color-destructive: var(--color-light-close);
+  --color-border: var(--color-field-border);
+  --color-input: var(--color-field-border);
+  --color-ring: var(--color-brand-soft);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--color-window);
+    color: var(--color-window-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+}
+
+/* The overlay is a transparent NSPanel above the actual application. */
+html[data-overlay='true'],
+html[data-overlay='true'] body {
+  background: transparent;
+}
+
+:where(button, input, a):focus-visible,
+label:has(input:focus-visible) {
+  outline: 2px solid var(--color-brand-soft);
+  outline-offset: 3px;
+}
+
+/* Flashcard flip (3D). Kept in CSS because it needs preserve-3d. */
+.flip-scene {
+  perspective: 1200px;
+}
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.flip-inner[data-flipped='true'] {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-face--back {
+  transform: rotateY(180deg);
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.card-enter {
+  animation: card-in 0.22s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner {
+    transition: none;
+  }
+  .card-enter {
+    animation: none;
+  }
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  width: 9px;
+  height: 18px;
+  border-radius: 2px;
+  opacity: 0;
+}
+
+@keyframes confetti-fall {
+  0% { opacity: 0; transform: translate3d(0, -20px, 0) rotate(0deg); }
+  8% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(var(--drift), 85vh, 0) rotate(var(--spin)); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .confetti-piece { animation: confetti-fall 2.8s ease-in forwards; }
+  .celebration-toast { animation: card-in 0.2s ease-out; }
+}

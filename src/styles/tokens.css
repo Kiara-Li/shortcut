@@ -1,0 +1,90 @@
+/*
+ * Design tokens, pulled from the Figma exports in /11.
+ * Components use these through Tailwind utilities (see index.css @theme)
+ * or var(--…). Don't hard-code colors, sizes or radii in components.
+ */
+:root {
+  /* ---- App window (dark, "Settings" / "Figma" frames) ---- */
+  --color-window: #1c1c1c;
+  --color-window-title: #9a9999;
+  --color-window-ink: #f5f5f5;
+  --color-window-ink-muted: #d4d4d4;
+  --color-field: #0e0e0e;
+  --color-field-border: #2a2a2a;
+  --color-tile: #262626;
+  --color-tile-hover: #303030;
+  --color-tile-selected: #737373;
+  --color-track: #2e2e2e;
+
+  /* traffic lights */
+  --color-light-close: #ff4b59;
+  --color-light-min: #414141;
+  --color-light-max: #00ca48;
+
+  /* ---- Accent (purple) ---- */
+  --color-brand: #6767ff;
+  --color-brand-soft: #9999ff;
+  --color-brand-tint: #babaff;
+  --color-brand-ink: #ffffff;
+  --color-rail: rgb(186 186 255 / 0.57);
+  --color-rail-active: #1c1c1c;
+  --color-rail-ink: #ffffff;
+
+  /* ---- Flashcard (light) ---- */
+  --color-card: #ffffff;
+  --color-card-muted: #dddddd;
+  --color-card-ink: #414d55;
+  --color-card-ink-soft: #6b7780;
+  --color-card-button: rgb(186 186 255 / 0.85);
+  --color-card-button-ink: #6f6f8f;
+  --color-but: #6767ff;
+  --color-but-bg: rgb(103 103 255 / 0.1);
+  --color-warn: #c2410c;
+  --color-warn-bg: #fff1e8;
+
+  /* keycaps on the card */
+  --color-keycap: #f7f7f5;
+  --color-keycap-border: #d4d4d0;
+  --color-keycap-ink: #3b3b3b;
+
+  /* ---- App icon tiles ---- */
+  --color-ai-bg: #330000;
+  --color-ai-ink: #ff9a00;
+  --color-ps-bg: #001e36;
+  --color-ps-ink: #31a8ff;
+  --color-id-bg: #49021f;
+  --color-id-ink: #ff3366;
+  --color-figma-bg: #000b1d;
+
+  /* ---- Type ---- */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --text-window-title: 1.0625rem; /* 17px */
+  --text-heading: 1.5rem; /* 24px */
+  --text-body: 0.9375rem; /* 15px */
+  --text-small: 0.75rem; /* 12px */
+  --text-tiny: 0.6875rem; /* 11px */
+  --text-card-action: 1.375rem; /* 22px */
+  --text-card-body: 1.125rem; /* 18px */
+
+  /* ---- Spacing ---- */
+  --space-window-x: 1.5rem;
+  --space-window-y: 1.25rem;
+
+  /* ---- Radii ---- */
+  --radius-window: 20px;
+  --radius-card: 16px;
+  --radius-tile: 14px;
+  --radius-icon: 8px;
+  --radius-keycap: 6px;
+  --radius-pill: 999px;
+
+  /* ---- Sizes ---- */
+  --size-card-w: 250px;
+  --size-card-h: 345px;
+  --size-tile: 76px;
+  --size-tabbar: 84px; /* bottom nav incl. padding */
+
+  /* ---- Elevation ---- */
+  --shadow-card: 0 18px 40px rgb(0 0 0 / 0.18), 0 2px 6px rgb(0 0 0 / 0.08);
+  --shadow-window: 0 24px 60px rgb(0 0 0 / 0.35);
+}

@@ -1,0 +1,56 @@
+{
+  "from": "figma",
+  "to": "photoshop",
+  "cards": [
+    {
+      "id": "photoshop-copy", "action": "Copy", "fromKeys": "Cmd+C", "toKeys": "Cmd+C", "type": "same-key",
+      "summary": "Copies the selection on the active layer to the clipboard.",
+      "but": "Photoshop copies selected pixels or layer content, rather than Figma objects.", "noMatchAlternative": null, "verified": false
+    },
+    {
+      "id": "photoshop-scale", "action": "Scale → Free Transform", "fromKeys": "K", "toKeys": "Cmd+T", "type": "different-key",
+      "summary": "Select a layer, enter Free Transform, and drag a corner to resize it.",
+      "but": "Press Return to apply or Esc to cancel. Transforming a raster layer can change its image quality.", "noMatchAlternative": null, "verified": false
+    },
+    {
+      "id": "photoshop-duplicate", "action": "Duplicate → Layer via Copy", "fromKeys": "Cmd+D", "toKeys": "Cmd+J", "type": "false-friend",
+      "summary": "Copies the selected layer to a new layer.",
+      "but": "With an active pixel selection, only that area is copied. Cmd+D in Photoshop means Deselect.", "noMatchAlternative": null, "verified": false
+    },
+    {
+      "id": "photoshop-move", "action": "Move", "fromKeys": "V", "toKeys": "V", "type": "same-key",
+      "summary": "Selects the Move tool to reposition the active layer or selection.",
+      "but": "Which layer moves depends on the selected layer and the Auto-Select setting.", "noMatchAlternative": null, "verified": false
+    },
+    {
+      "id": "photoshop-text", "action": "Text → Type", "fromKeys": "T", "toKeys": "T", "type": "same-key",
+      "summary": "Selects the Type tool. Click for point text or drag a text box.",
+      "but": "Tool groups remember the last tool used; Shift+T cycles through the Type tools with default settings.", "noMatchAlternative": null, "verified": false
+    },
+    {
+      "id": "photoshop-pen", "action": "Pen", "fromKeys": "P", "toKeys": "P", "type": "same-key",
+      "summary": "Selects the Pen tool group for drawing paths or vector shapes.",
+      "but": "Check Path or Shape mode in the options bar. The tool group remembers its last tool.", "noMatchAlternative": null, "verified": false
+    },
+    {
+      "id": "photoshop-group", "action": "Group layers", "fromKeys": "Cmd+G", "toKeys": "Cmd+G", "type": "same-key",
+      "summary": "Puts the selected layers into a group in the Layers panel.",
+      "but": null, "noMatchAlternative": null, "verified": false
+    },
+    {
+      "id": "photoshop-zoom-fit", "action": "Zoom to fit", "fromKeys": "Shift+1", "toKeys": "Cmd+0", "type": "different-key",
+      "summary": "Fits the document in the Photoshop window.",
+      "but": "Fits the document canvas rather than the bounds of all Figma objects.", "noMatchAlternative": null, "verified": false
+    },
+    {
+      "id": "photoshop-rulers", "action": "Show rulers", "fromKeys": "Shift+R", "toKeys": "Cmd+R", "type": "different-key",
+      "summary": "Shows or hides the document rulers.",
+      "but": null, "noMatchAlternative": null, "verified": false
+    },
+    {
+      "id": "photoshop-auto-layout", "action": "Auto layout", "fromKeys": "Shift+A", "toKeys": null, "type": "no-match",
+      "summary": "Photoshop has no direct equivalent to Figma auto layout.",
+      "but": null, "noMatchAlternative": "Use the Move tool's Align and Distribute controls for selected layers.", "verified": false
+    }
+  ]
+}

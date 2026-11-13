@@ -1,0 +1,182 @@
+{
+  "from": "figma",
+  "to": "illustrator",
+  "cards": [
+    {
+      "id": "copy",
+      "action": "Copy",
+      "fromKeys": "Cmd+C",
+      "toKeys": "Cmd+C",
+      "type": "same-key",
+      "summary": "Copies the selection to the clipboard.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "scale",
+      "action": "Scale",
+      "fromKeys": "K",
+      "toKeys": "S",
+      "type": "different-key",
+      "summary": "Resizes the selection, strokes and effects included.",
+      "but": "In Illustrator, S scales from the object's center by default. Click once to move the origin point first.",
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "rectangle",
+      "action": "Rectangle",
+      "fromKeys": "R",
+      "toKeys": "M",
+      "type": "different-key",
+      "summary": "Draws a rectangle. Hold Shift for a square.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "ellipse",
+      "action": "Ellipse",
+      "fromKeys": "O",
+      "toKeys": "L",
+      "type": "different-key",
+      "summary": "Draws an ellipse. Hold Shift for a circle.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "line",
+      "action": "Line",
+      "fromKeys": "L",
+      "toKeys": "\\",
+      "type": "false-friend",
+      "summary": "Draws a straight line segment.",
+      "but": "L in Illustrator is the Ellipse tool, not Line.",
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "frame",
+      "action": "Frame → Artboard",
+      "fromKeys": "F",
+      "toKeys": "Shift+O",
+      "type": "different-key",
+      "summary": "An artboard sets the area of a design, like a top-level frame.",
+      "but": "Artboards can't be nested, and they don't clip or hold auto layout.",
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "hide",
+      "action": "Hide selection",
+      "fromKeys": "Cmd+Shift+H",
+      "toKeys": "Cmd+3",
+      "type": "different-key",
+      "summary": "Hides the selected objects.",
+      "but": "To show them again, use Cmd+Option+3. It shows everything you hid.",
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "lock",
+      "action": "Lock selection",
+      "fromKeys": "Cmd+Shift+L",
+      "toKeys": "Cmd+2",
+      "type": "different-key",
+      "summary": "Locks the selected objects so they can't be clicked.",
+      "but": "To unlock, use Cmd+Option+2. It unlocks everything at once.",
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "duplicate",
+      "action": "Duplicate",
+      "fromKeys": "Cmd+D",
+      "toKeys": "Cmd+C, Cmd+F",
+      "type": "false-friend",
+      "summary": "Copy, then Paste in Front puts the copy exactly on top.",
+      "but": "Cmd+D in Illustrator is Transform Again: it repeats your last move.",
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "rulers",
+      "action": "Show rulers",
+      "fromKeys": "Shift+R",
+      "toKeys": "Cmd+R",
+      "type": "different-key",
+      "summary": "Toggles the rulers along the canvas edges.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "zoom-fit",
+      "action": "Zoom to fit",
+      "fromKeys": "Shift+1",
+      "toKeys": "Cmd+0",
+      "type": "different-key",
+      "summary": "Fits the current artboard in the window.",
+      "but": "Cmd+0 fits the active artboard only. Cmd+Option+0 fits all of them.",
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "move",
+      "action": "Move / Select",
+      "fromKeys": "V",
+      "toKeys": "V",
+      "type": "same-key",
+      "summary": "Selects and moves whole objects.",
+      "but": "To select points inside a path, use the Direct Selection tool (A).",
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "pen",
+      "action": "Pen",
+      "fromKeys": "P",
+      "toKeys": "P",
+      "type": "same-key",
+      "summary": "Draws paths point by point.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "text",
+      "action": "Text",
+      "fromKeys": "T",
+      "toKeys": "T",
+      "type": "same-key",
+      "summary": "Adds text. Click for point text, drag for a text box.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "group",
+      "action": "Group",
+      "fromKeys": "Cmd+G",
+      "toKeys": "Cmd+G",
+      "type": "same-key",
+      "summary": "Groups the selected objects.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false
+    },
+    {
+      "id": "auto-layout",
+      "action": "Auto layout",
+      "fromKeys": "Shift+A",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "Illustrator has no auto layout.",
+      "but": null,
+      "noMatchAlternative": "Line things up with the Align panel (Window → Align).",
+      "verified": false
+    }
+  ]
+}
