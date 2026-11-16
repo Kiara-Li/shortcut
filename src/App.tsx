@@ -1,5 +1,5 @@
 import { usePair } from '@/bridge'
-import { CardLayer } from '@/components/CardLayer'
+import { HintLayer } from '@/components/HintLayer'
 import { CelebrationLayer } from '@/components/CelebrationLayer'
 import { TabBar } from '@/components/TabBar'
 import { DECKS, findDeck } from '@/lib/deck'
@@ -18,7 +18,7 @@ export function App() {
   // Only the macOS event tap handles shortcut interception. A web page cannot
   // intercept a shortcut in another application.
   if (isCelebration) return <CelebrationLayer />
-  if (isDesktop && isOverlay) return <CardLayer key={deck.to} deck={deck} />
+  if (isDesktop && isOverlay) return <HintLayer key={deck.to} deck={deck} />
 
   return (
     <>
@@ -34,7 +34,7 @@ export function App() {
         )}
       </main>
       <TabBar active={route} />
-      {!isDesktop && <CardLayer key={deck.to} deck={deck} />}
+      {!isDesktop && <HintLayer key={deck.to} deck={deck} />}
       {!isDesktop && <CelebrationLayer />}
     </>
   )

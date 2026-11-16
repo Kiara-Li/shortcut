@@ -28,7 +28,7 @@ export function ShortcutSearch({ deck }: { deck: Deck }) {
             <li key={card.id}>
               <button type="button" onClick={() => bridge.showCard({ pressed: parseCombo(card.fromKeys), at: null, source: 'search' })}
                 className="flex min-h-16 w-full items-center justify-between gap-3 rounded-xl bg-tile px-4 py-3 text-left hover:bg-tile-hover"
-                aria-label={`Show ${card.action} card`}>
+                aria-label={`Show ${card.action} hint`}>
                 <span className="text-small font-medium">{card.action}</span>
                 <span className="flex shrink-0 items-center gap-2 text-small">
                   <KeyCaps combo={parseCombo(card.fromKeys)} />

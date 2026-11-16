@@ -35,10 +35,11 @@ if case .show(let combo) = press(4, query.union(.maskShift)) {
 } else { expect(false, "Cmd+Shift query must show a card") }
 _ = press(4, [], down: false)
 expect(isPass(press(53, [])), "Escape must pass through when no card is visible")
-if case .dismiss = press(53, [], visible: true) { checks += 1 } else { expect(false, "Escape must close a visible card") }
-_ = press(53, [], down: false)
-if case .flip = press(49, [.maskControl, .maskAlternate], visible: true) { checks += 1 } else { expect(false, "Query Space must flip a visible card") }
+expect(isPass(press(53, [], visible: true)), "Escape must also reach the target app while a hint is visible")
+expect(isPass(press(53, [], down: false)), "Escape release must reach the target app too")
+if case .toggleDetails = press(49, [.maskControl, .maskAlternate], visible: true) { checks += 1 } else { expect(false, "Query Space must expand a visible hint") }
 _ = press(49, [], down: false)
+expect(isPass(press(49, [.maskControl, .maskAlternate], eligible: false, visible: true)), "Details toggle must not intercept another app")
 expect(isPass(press(122, query)), "Unsupported function keys must not be swallowed")
 expect(ShortcutPolicy.isTarget("com.adobe.illustrator", target: "illustrator"), "Illustrator bundle ID must match")
 expect(ShortcutPolicy.isTarget("com.adobe.illustrator.2026", target: "illustrator"), "Versioned Illustrator bundle must match")
@@ -149,4 +150,109 @@ expect(TextEntryGuard.shouldProtect(role: "AXComboBox", attributes: []), "Editab
 expect(TextEntryGuard.shouldProtect(role: "AXGroup", attributes: ["AXSelectedTextRange"]), "Custom editable controls must be protected by their text attributes")
 expect(TextEntryGuard.shouldProtect(role: "", attributes: []), "Unknown focus must preserve the user's input")
 expect(!TextEntryGuard.shouldProtect(role: "AXWindow", attributes: []), "An ordinary document window can use FG")
-print("Passed \(checks) native shortcut, mode, input-protection and achievement checks.")
+let display = CGRect(x: 0, y: 40, width: 1440, height: 860)
+let compact = HintPlacement.frame(in: display, height: 220)
+let expanded = HintPlacement.frame(in: display, height: 480)
+expect(compact.maxY == expanded.maxY && compact.maxX == expanded.maxX, "Expanding a hint must preserve its top-right anchor")
+expect(display.contains(expanded), "Expanded hints must remain inside the visible screen")
+expect(compact.width == 392, "Desktop hint width must stay consistent")
+let leftDisplay = CGRect(x: -1920, y: -100, width: 1920, height: 1080)
+let leftHint = HintPlacement.frame(in: leftDisplay, height: 300)
+expect(leftDisplay.contains(leftHint) && leftHint.maxX == -8, "A secondary screen left of the primary must use its own corner")
+let smallDisplay = CGRect(x: 0, y: 0, width: 320, height: 420)
+expect(smallDisplay.contains(HintPlacement.frame(in: smallDisplay, height: 900)), "Small screens must clamp expanded hints without moving them offscreen")
+expect(HintPlacement.frame(in: display, height: .infinity).height == 220, "Invalid measured heights must use a safe default")
+let aboveWindow = HintPlacement.windowFrame(position: CGPoint(x: 100, y: -700), size: CGSize(width: 600, height: 400), primaryTop: 900)
+expect(aboveWindow == CGRect(x: 100, y: 1200, width: 600, height: 400), "AX coordinates must resolve screens above the primary correctly")
+let leftWindow = HintPlacement.windowFrame(position: CGPoint(x: -1200, y: 200), size: CGSize(width: 500, height: 300), primaryTop: 900)
+expect(leftWindow == CGRect(x: -1200, y: 400, width: 500, height: 300), "AX coordinates must preserve negative horizontal screen positions")
+// Verify every executable mapping in the actual catalog without posting input.
+var executableMappings = 0
+var unavailableMappings = 0
+for file in ["figma-to-illustrator.json", "figma-to-photoshop.json"] {
+    let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent("src/data/" + file)
+    let data = try! Data(contentsOf: url)
+    let deck = try! JSONSerialization.jsonObject(with: data) as! [String: Any]
+    for row in deck["cards"] as! [[String: Any]] {
+        let card = LearningCard(id: row["id"] as! String, action: row["action"] as! String,
+            from: "figma", to: deck["to"] as! String, fromKeys: row["fromKeys"] as! String, toKeys: row["toKeys"] as? String)
+        switch RemapResolution.resolve(card) {
+        case .unavailable:
+            unavailableMappings += 1
+            expect(card.toKeys == nil, "Only declared no-match entries may be unavailable: \(card.id)")
+        case .same:
+            executableMappings += 1
+            expect(card.fromKeys == card.toKeys, "Shared commands must not be synthesized: \(card.id)")
+        case .keys(let steps):
+            executableMappings += 1
+            for step in steps {
+                guard let pair = RemapEvents.pair(for: step) else {
+                    expect(false, "Quartz event creation unavailable. Run native event tests outside a sandbox with WindowServer access.")
+                    continue
+                }
+                expect(pair.count == 2 && pair[0].type == .keyDown && pair[1].type == .keyUp, "Every remap chord must release its target key: \(card.id)")
+                for event in pair {
+                    let flags = event.flags.intersection([.maskCommand, .maskShift, .maskControl, .maskAlternate])
+                    expect(flags.contains(.maskCommand) == step.cmd && flags.contains(.maskShift) == step.shift
+                        && flags.intersection([.maskControl, .maskAlternate]).isEmpty, "Synthesized modifiers must match the target, not the source: \(card.id)")
+                    expect(RemapEvents.isSynthetic(event), "Synthetic target keys must be tagged to prevent remapping recursion")
+                    expect(ShortcutPolicy.keys[event.getIntegerValueField(.keyboardEventKeycode)] == step.key, "Target virtual key must match the catalog: \(card.id)")
+                }
+            }
+        }
+    }
+}
+expect(executableMappings == 24 && unavailableMappings == 2, "Current catalogs have 24 executable entries and 2 no-direct-equivalent entries")
+let invalid = LearningCard(id: "invalid", action: "Invalid", from: "figma", to: "illustrator", fromKeys: "K", toKeys: "Cmd+C, BAD+F")
+expect(RemapResolution.resolve(invalid) == .unavailable, "A partly invalid sequence must not execute its first step")
+expect(RemapResolution.resolve(noMatch) == .unavailable, "Auto layout must never synthesize an unrelated target shortcut")
+
+var pendingRemaps: [() -> Void] = []
+var postedKeys: [(pid_t, Int64, CGEventType)] = []
+var outcomes: [Bool] = []
+var contextAllowed = true
+let executor = RemapExecutor(post: { event, pid in
+    postedKeys.append((pid, event.getIntegerValueField(.keyboardEventKeycode), event.type))
+}, schedule: { _, work in pendingRemaps.append(work) })
+let duplicateSteps = [ShortcutStep.parse("Cmd+C")!, ShortcutStep.parse("Cmd+F")!]
+func drainRemaps() {
+    var attempts = 0
+    while !pendingRemaps.isEmpty && attempts < 100 { attempts += 1; pendingRemaps.removeFirst()() }
+    expect(pendingRemaps.isEmpty, "The remap queue must settle")
+}
+expect(executor.enqueue(duplicateSteps, pid: 123, allowed: { contextAllowed }, finished: { outcomes.append($0) }), "A valid direct sequence can be queued")
+drainRemaps()
+expect(postedKeys.map { $0.1 } == [8, 8, 3, 3], "Duplicate must send Copy down/up before Paste in Front down/up")
+expect(postedKeys.allSatisfy { $0.0 == 123 }, "Every target event must be routed only to the captured application PID")
+expect(outcomes == [true], "A sequence reports sent only after its last chord")
+postedKeys = []; outcomes = []
+_ = executor.enqueue(duplicateSteps, pid: 123, allowed: { contextAllowed }, finished: { outcomes.append($0) })
+pendingRemaps.removeFirst()()
+contextAllowed = false
+drainRemaps()
+expect(postedKeys.map { $0.1 } == [8, 8], "App or text-context changes must stop the pending Paste command")
+expect(outcomes == [false], "Interrupted sequences must not report sent")
+contextAllowed = true; postedKeys = []; outcomes = []
+_ = executor.enqueue(duplicateSteps, pid: 123, allowed: { contextAllowed }, finished: { outcomes.append($0) })
+pendingRemaps.removeFirst()()
+executor.cancel()
+_ = executor.enqueue([ShortcutStep.parse("S")!], pid: 456, allowed: { contextAllowed }, finished: { outcomes.append($0) })
+drainRemaps()
+expect(postedKeys.map { $0.1 } == [8, 8, 1, 1], "Mode cancellation must discard old sequence steps while allowing a fresh job")
+expect(outcomes == [true], "Cancelled jobs must not later display a success toast")
+postedKeys = []; outcomes = []; contextAllowed = false
+_ = executor.enqueue([ShortcutStep.parse("S")!], pid: 123, allowed: { contextAllowed }, finished: { outcomes.append($0) })
+drainRemaps()
+expect(postedKeys.isEmpty && outcomes == [false], "Protected or unavailable contexts must receive no synthesized input")
+contextAllowed = true
+for _ in 0..<16 { _ = executor.enqueue([ShortcutStep.parse("S")!], pid: 123, allowed: { true }, finished: { _ in }) }
+expect(!executor.enqueue(duplicateSteps, pid: 123, allowed: { true }, finished: { _ in }), "The remap queue must bound a burst of actions")
+executor.cancel(); drainRemaps()
+expect(!executor.enqueue([], pid: 123, allowed: { true }, finished: { _ in }), "An empty mapping cannot claim execution")
+policy.reset()
+expect(isPass(policy.decide(keyCode: 40, flags: [.maskControl, .maskAlternate], keyDown: true,
+    repeated: false, enabled: true, eligible: true, cardVisible: false, figmaMode: true,
+    sourceKeys: sourceKeys, sameKeys: sameKeys, allowPrefixedLookup: false)), "Direct mode must not open learning cards from prefixed queries")
+expect(isPass(policy.decide(keyCode: 40, flags: [], keyDown: false, repeated: false, enabled: true,
+    eligible: true, cardVisible: false)), "Passing a prefixed native shortcut must also pass its release")
+print("Passed \(checks) native shortcut, mode, input-protection, remapping and achievement checks.")

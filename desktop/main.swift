@@ -47,14 +47,28 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     private var tapSource: CFRunLoopSource?
     private var policy = ShortcutPolicy()
     private var figmaMode = false
+    private var interactionMode = InteractionMode.learn
+    private lazy var remapper = RemapExecutor(post: { [weak self] event, pid in
+        event.postToPid(pid)
+        if event.type == .keyDown {
+            self?.textEntry.observeKey(code: event.getIntegerValueField(.keyboardEventKeycode),
+                flags: event.flags, pid: pid, targetIsDesignApp: true)
+        }
+    })
+    private var remapEpoch = 0
+    private var lastRemap = ""
     private var nativeModeItem: NSMenuItem!
     private var figmaModeItem: NSMenuItem!
+    private var learnModeItem: NSMenuItem!
+    private var remapModeItem: NSMenuItem!
     private var switchModeItem: NSMenuItem!
     private var modeStatusItem: NSMenuItem!
     private let modePopover = NSPopover()
     private var modeMenu: NSMenu?
     private lazy var modePopoverContent = ModePopoverController(onToggle: { [weak self] enabled in
         self?.setFigmaMode(enabled)
+    }, onSelect: { [weak self] mode in
+        self?.setInteractionMode(mode)
     }, onOpen: { [weak self] in
         self?.modePopover.performClose(nil)
         self?.showSettings()
@@ -71,6 +85,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     private var modeSourceKeys = Set<ShortcutStep>()
     private var modeSameKeys = Set<ShortcutStep>()
     private var timer: Timer?
+    private var activationObserver: NSObjectProtocol?
     private var menuItem: NSStatusItem!
     private var window: NSWindow!
     private var panel: CardPanel!
@@ -85,7 +100,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     private var catalog: [LearningCard] = []
     private var overlayReady = false
     private var pendingCard: [String: Any]?
-    private var watchdog: Timer?
+    private var hintScreen: NSScreen?
     private var target: String { (state["pair"] as? [String: String])?["to"] ?? "photoshop" }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -95,11 +110,12 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         }
         if !(state["pair"] is [String: String]) { state["pair"] = ["from": "figma", "to": "photoshop"] }
         if state["achievements"] == nil { state["achievements"] = [String: Any]() }
+        interactionMode = InteractionMode(rawValue: defaults.string(forKey: "interactionMode") ?? "") ?? .learn
         loadCatalog()
         updateModeKeys()
         // Test scope deliberately resets on launch.
         makeMenu()
-        panel = CardPanel(contentRect: NSRect(x: 0, y: 0, width: 306, height: 401),
+        panel = CardPanel(contentRect: NSRect(x: 0, y: 0, width: 392, height: 220),
                           styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
         panel.level = .popUpMenu
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
@@ -137,6 +153,11 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         showSettings()
         refresh()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in self?.refresh() }
+        activationObserver = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification, object: nil, queue: .main) { [weak self] _ in
+                self?.cancelRemaps()
+                self?.textEntry.invalidate()
+            }
     }
 
     private func makeMenu() {
@@ -170,6 +191,10 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         nativeModeItem.target = self
         figmaModeItem = menu.addItem(withTitle: "", action: #selector(selectFigmaMode), keyEquivalent: "")
         figmaModeItem.target = self
+        learnModeItem = menu.addItem(withTitle: "Learning", action: #selector(selectLearning), keyEquivalent: "")
+        learnModeItem.target = self
+        remapModeItem = menu.addItem(withTitle: "Direct remap", action: #selector(selectRemapping), keyEquivalent: "")
+        remapModeItem.target = self
         modeStatusItem = menu.addItem(withTitle: "", action: nil, keyEquivalent: "")
         menu.addItem(.separator())
         switchModeItem = menu.addItem(withTitle: "", action: #selector(toggleMode), keyEquivalent: "")
@@ -191,7 +216,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         menu.addItem(withTitle: "Quit Shortcut", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         modeMenu = menu
         modePopover.contentViewController = modePopoverContent
-        modePopover.contentSize = NSSize(width: 320, height: 225)
+        modePopover.contentSize = NSSize(width: 340, height: 410)
         modePopover.behavior = .transient
         modePopover.animates = false
         requestedHotKey = ModeHotKey(rawValue: defaults.string(forKey: "modeHotKey") ?? "") ?? .controlShiftSpace
@@ -252,7 +277,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         case "setPair":
             guard let pair = value as? [String: String], pair["from"] == "figma",
                   pair["to"] == "illustrator" || pair["to"] == "photoshop" else { return }
-            hideCard(); completion.clear(); followThrough.clear(); figmaMode = false
+            cancelRemaps(); hideCard(); completion.clear(); followThrough.clear(); figmaMode = false
             state["pair"] = pair; updateModeKeys(); save(); refresh()
         case "recordLookup":
             guard let id = value as? String, id.count < 100 else { return }
@@ -264,19 +289,21 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             state["saved"] = saved; save()
         case "clearSaved": state["saved"] = [String: Any](); save()
         case "resetAll":
-            hideCard(); completion.clear(); followThrough.clear(); figmaMode = false; celebrationPanel.orderOut(nil)
+            cancelRemaps(); hideCard(); completion.clear(); followThrough.clear(); figmaMode = false; celebrationPanel.orderOut(nil)
             state = ["pair": ["from": "figma", "to": "photoshop"], "saved": [String: Any](), "achievements": [String: Any]()]; save()
             updateModeKeys(); refresh()
         case "requestPermission":
             let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
             _ = AXIsProcessTrustedWithOptions(options)
             NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!)
-        case "setPaused": paused = value as? Bool ?? false; if paused { hideCard(); completion.clear(); followThrough.clear() }; refresh()
+        case "setPaused": paused = value as? Bool ?? false; if paused { cancelRemaps(); hideCard(); completion.clear(); followThrough.clear() }; refresh()
         case "setKeyboardMode": setFigmaMode(value as? String == "figma")
+        case "setInteractionMode":
+            if let raw = value as? String, let mode = InteractionMode(rawValue: raw) { setInteractionMode(mode) }
         case "showModeControl": showModeControl()
         case "setModeHotKey":
             if let raw = value as? String, let key = ModeHotKey(rawValue: raw) { configureModeHotKey(key); refresh() }
-        case "setScope": scope = (value as? String) == "all" ? "all" : "target"; completion.clear(); followThrough.clear(); refresh()
+        case "setScope": cancelRemaps(); scope = (value as? String) == "all" ? "all" : "target"; completion.clear(); followThrough.clear(); refresh()
         case "overlayReady":
             overlayReady = true
             if let request = pendingCard { pendingCard = nil; emit(cardWeb, "card", request) }
@@ -284,6 +311,10 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             celebrationReady = true
             if let entry = pendingAchievement { pendingAchievement = nil; emit(celebrationWeb, "achievement", entry) }
         case "hideCard": hideCard()
+        case "setHintHeight":
+            guard message.webView === cardWeb, let height = value as? Double, height.isFinite,
+                  let screen = hintScreen else { return }
+            panel.setFrame(HintPlacement.frame(in: screen.visibleFrame, height: CGFloat(height)), display: true)
         case "showCard":
             guard let request = value as? [String: Any], let source = request["source"] as? String,
                   source == "saved" || source == "search" else { return }
@@ -302,6 +333,10 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                 "listening": listening,
                 "paused": paused, "scope": scope, "foregroundApp": active?.localizedName ?? "",
                 "targetActive": targetActive,
+                "interactionMode": interactionMode.rawValue,
+                "remapSupported": catalog.filter { $0.to == target && RemapResolution.resolve($0) != .unavailable }.count,
+                "remapTotal": catalog.filter { $0.to == target }.count,
+                "lastRemap": lastRemap,
                 "keyboardMode": figmaMode ? "figma" : "native", "modeActive": figmaMode && listening && targetActive && !protected && !IsSecureEventInputEnabled(),
                 "inputProtected": protected,
                 "modeHotKey": modeHotKey.current?.rawValue ?? requestedHotKey.rawValue,
@@ -318,7 +353,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             CGEvent.tapEnable(tap: current, enable: false)
             if let source = tapSource { CFRunLoopRemoveSource(CFRunLoopGetMain(), source, .commonModes) }
             CFMachPortInvalidate(current)
-            tap = nil; tapSource = nil; policy.reset(); completion.clear(); followThrough.clear()
+            tap = nil; tapSource = nil; policy.reset(); completion.clear(); followThrough.clear(); cancelRemaps()
         }
         let next = status()
         let encoded = jsonString(next)
@@ -350,10 +385,11 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
 
     private func handle(_ type: CGEventType, _ event: CGEvent) -> Unmanaged<CGEvent>? {
         if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
-            policy.reset(); completion.clear(); followThrough.clear()
+            policy.reset(); completion.clear(); followThrough.clear(); cancelRemaps()
             if let tap = tap, AXIsProcessTrusted() { CGEvent.tapEnable(tap: tap, enable: true) }
             return Unmanaged.passUnretained(event)
         }
+        if RemapEvents.isSynthetic(event) { return Unmanaged.passUnretained(event) }
         let active = NSWorkspace.shared.frontmostApplication
         let inTarget = ShortcutPolicy.isTarget(active?.bundleIdentifier, target: target)
         if type == .leftMouseDown {
@@ -361,27 +397,35 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             return Unmanaged.passUnretained(event)
         }
         let code = event.getIntegerValueField(.keyboardEventKeycode)
+        if type == .keyDown && code == 53 &&
+            event.flags.intersection([.maskControl, .maskAlternate, .maskCommand, .maskShift]).isEmpty {
+            cancelRemaps(); completion.clear(); followThrough.clear()
+            DispatchQueue.main.async { self.hideCard(); self.emit(self.cardWeb, "dismiss", NSNull()) }
+            // Escape must also reach the target app (cancel transform, finish a path, etc.).
+        }
         // Let Carbon receive the registered switch even when it resembles a query.
         if modeHotKey.current?.matches(code: code, flags: event.flags) == true { return Unmanaged.passUnretained(event) }
         let now = Date().timeIntervalSince1970
         let protected = figmaMode && inTarget && active != nil ? textEntry.isProtected(pid: active!.processIdentifier, now: now) : false
-        let eligible = scope == "all" || inTarget
+        let eligible = interactionMode == .remap ? inTarget : scope == "all" || inTarget
         let decision = policy.decide(keyCode: event.getIntegerValueField(.keyboardEventKeycode), flags: event.flags,
             keyDown: type == .keyDown, repeated: event.getIntegerValueField(.keyboardEventAutorepeat) != 0,
             enabled: figmaMode && !paused && state["pair"] is [String: Any] && !IsSecureEventInputEnabled(),
-            eligible: eligible, cardVisible: panel.isVisible,
+            eligible: eligible, cardVisible: panel.isVisible && interactionMode == .learn,
             figmaMode: figmaMode && inTarget, textEntry: protected,
-            sourceKeys: modeSourceKeys, sameKeys: modeSameKeys, expectedTarget: followThrough.expectedStep(now: now))
+            sourceKeys: modeSourceKeys, sameKeys: modeSameKeys,
+            expectedTarget: interactionMode == .learn ? followThrough.expectedStep(now: now) : nil,
+            allowPrefixedLookup: interactionMode == .learn)
         switch decision {
         case .pass:
             if inTarget, let active = active, type == .keyDown, !protected || code == 53 || code == 36 {
                 textEntry.observeKey(code: code, flags: event.flags, pid: active.processIdentifier, targetIsDesignApp: true)
             }
-            if figmaMode && !paused && !protected && !IsSecureEventInputEnabled() {
+            if interactionMode == .learn && figmaMode && !paused && !protected && !IsSecureEventInputEnabled() {
                 _ = followThrough.observe(keyCode: code, flags: event.flags, keyDown: type == .keyDown,
                     repeated: event.getIntegerValueField(.keyboardEventAutorepeat) != 0, eligible: inTarget, now: now)
             }
-            if figmaMode && !paused && !protected && !IsSecureEventInputEnabled(),
+            if interactionMode == .learn && figmaMode && !paused && !protected && !IsSecureEventInputEnabled(),
                let learned = completion.observe(keyCode: event.getIntegerValueField(.keyboardEventKeycode), flags: event.flags,
                    keyDown: type == .keyDown, repeated: event.getIntegerValueField(.keyboardEventAutorepeat) != 0,
                    eligible: ShortcutPolicy.isTarget(active?.bundleIdentifier, target: target),
@@ -391,11 +435,17 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             // The target shortcut must still reach Photoshop/Illustrator unchanged.
             return Unmanaged.passUnretained(event)
         case .swallow: return nil
-        case .dismiss:
-            DispatchQueue.main.async { self.hideCard(); self.emit(self.cardWeb, "dismiss", NSNull()) }
-        case .flip:
-            DispatchQueue.main.async { self.emit(self.cardWeb, "flip", NSNull()) }
+        case .toggleDetails:
+            DispatchQueue.main.async { self.emit(self.cardWeb, "details", NSNull()) }
         case .show(let combo):
+            if interactionMode == .remap, inTarget, let pid = active?.processIdentifier,
+               !event.flags.contains([.maskControl, .maskAlternate]) {
+                let epoch = remapEpoch
+                DispatchQueue.main.async {
+                    if self.remapEpoch == epoch { self.executeRemap(combo, pid: pid) }
+                }
+                return nil
+            }
             // Keep the event callback short: rendering and saving run after it returns.
             let appName = active?.localizedName ?? "Unknown"
             let label = event.flags.contains([.maskControl, .maskAlternate]) ? combo.label : combo.shortcutLabel
@@ -409,23 +459,92 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         return nil
     }
 
+    private func cancelRemaps() { remapEpoch += 1; remapper.cancel() }
+
+    private func executeRemap(_ combo: ShortcutCombo, pid: pid_t) {
+        let selectedTarget = target
+        let from = (state["pair"] as? [String: String])?["from"] ?? "figma"
+        let step = ShortcutStep(key: combo.key, cmd: combo.cmd, shift: combo.shift)
+        guard figmaMode, interactionMode == .remap, !paused,
+              NSWorkspace.shared.frontmostApplication?.processIdentifier == pid else { return }
+        guard let card = catalog.first(where: { $0.from == from && $0.to == selectedTarget && ShortcutStep.parse($0.fromKeys) == step }) else { return }
+        switch RemapResolution.resolve(card) {
+        case .same: return // Shared shortcuts normally pass before reaching this path.
+        case .unavailable:
+            showRemapNotice(combo, result: "unavailable")
+        case .keys(let steps):
+            let accepted = remapper.enqueue(steps, pid: pid, allowed: { [weak self] in
+                guard let self = self, self.figmaMode, self.interactionMode == .remap, !self.paused,
+                      self.target == selectedTarget, AXIsProcessTrusted(), !IsSecureEventInputEnabled(),
+                      let active = NSWorkspace.shared.frontmostApplication,
+                      active.processIdentifier == pid, ShortcutPolicy.isTarget(active.bundleIdentifier, target: selectedTarget) else { return false }
+                self.textEntry.invalidate()
+                return !self.textEntry.isProtected(pid: pid, now: Date().timeIntervalSince1970)
+            }, finished: { [weak self] sent in
+                guard let self = self else { return }
+                self.lastRemap = "\(combo.shortcutLabel) → \(card.toKeys ?? "") · " + (sent ? "shortcut sent" : "stopped: context changed")
+                if self.figmaMode, self.interactionMode == .remap, self.target == selectedTarget,
+                   NSWorkspace.shared.frontmostApplication?.processIdentifier == pid {
+                    self.showRemapNotice(combo, result: sent ? "sent" : "cancelled")
+                }
+                self.refresh()
+            })
+            if !accepted { showRemapNotice(combo, result: "busy") }
+        }
+    }
+
+    private func showRemapNotice(_ combo: ShortcutCombo, result: String) {
+        if result != "sent" {
+            lastRemap = combo.shortcutLabel + " · " + (result == "unavailable" ? "no direct equivalent" : result == "busy" ? "queue busy" : "not sent")
+        }
+        let screen = screenForHint()
+        hintScreen = screen
+        panel.ignoresMouseEvents = true
+        panel.setFrame(HintPlacement.frame(in: screen.visibleFrame, height: 128), display: true)
+        let request: [String: Any] = ["pressed": combo.json, "at": NSNull(), "source": "remap", "remapResult": result]
+        if overlayReady { emit(cardWeb, "card", request) } else { pendingCard = request }
+        panel.orderFrontRegardless()
+    }
+
     private func showCard(_ request: [String: Any]) {
         guard state["pair"] is [String: Any] else { return }
         armAchievement(request)
-        let cursor = NSEvent.mouseLocation
-        let screen = NSScreen.screens.first { NSMouseInRect(cursor, $0.frame, false) } ?? NSScreen.main!
-        let bounds = screen.visibleFrame
-        let size = panel.frame.size
-        let x = max(bounds.minX, min(cursor.x + 18, bounds.maxX - size.width))
-        let y = max(bounds.minY, min(cursor.y - size.height - 12, bounds.maxY - size.height))
-        panel.setFrameOrigin(NSPoint(x: x, y: y))
-        // The browser position is local to this panel, not a desktop coordinate.
+        panel.ignoresMouseEvents = false
+        let screen = screenForHint()
+        hintScreen = screen
+        panel.setFrame(HintPlacement.frame(in: screen.visibleFrame, height: 220), display: true)
+        // One consistent screen corner. Request pointer positions are deliberately ignored.
         var next = request; next["at"] = NSNull()
         if overlayReady { emit(cardWeb, "card", next) } else { pendingCard = next }
         panel.orderFrontRegardless()
-        watchdog?.invalidate()
-        // Safety net if the renderer crashes; normal timing pauses on hover/flip.
-        watchdog = Timer.scheduledTimer(withTimeInterval: 120, repeats: false) { [weak self] _ in self?.hideCard() }
+        // React owns auto-hide; expanded/hovered/focused hints remain available for reading.
+    }
+
+    private func screenForHint() -> NSScreen {
+        let fallback = NSScreen.main ?? NSScreen.screens[0]
+        guard let active = NSWorkspace.shared.frontmostApplication,
+              active.processIdentifier != ProcessInfo.processInfo.processIdentifier, AXIsProcessTrusted() else {
+            return window.screen ?? fallback
+        }
+        let app = AXUIElementCreateApplication(active.processIdentifier)
+        AXUIElementSetMessagingTimeout(app, 0.05)
+        var focused: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(app, kAXFocusedWindowAttribute as CFString, &focused) == .success,
+              let value = focused, CFGetTypeID(value) == AXUIElementGetTypeID() else { return fallback }
+        let focusedWindow = value as! AXUIElement
+        var positionValue: CFTypeRef?, sizeValue: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(focusedWindow, kAXPositionAttribute as CFString, &positionValue) == .success,
+              AXUIElementCopyAttributeValue(focusedWindow, kAXSizeAttribute as CFString, &sizeValue) == .success,
+              let positionAX = positionValue, let sizeAX = sizeValue,
+              CFGetTypeID(positionAX) == AXValueGetTypeID(), CFGetTypeID(sizeAX) == AXValueGetTypeID() else { return fallback }
+        var position = CGPoint.zero, size = CGSize.zero
+        guard AXValueGetValue(positionAX as! AXValue, .cgPoint, &position),
+              AXValueGetValue(sizeAX as! AXValue, .cgSize, &size) else { return fallback }
+        let rect = HintPlacement.windowFrame(position: position, size: size, primaryTop: NSScreen.screens[0].frame.maxY)
+        return NSScreen.screens.max {
+            let a = $0.frame.intersection(rect), b = $1.frame.intersection(rect)
+            return (a.isNull ? 0 : a.width * a.height) < (b.isNull ? 0 : b.width * b.height)
+        } ?? fallback
     }
 
     private func loadCatalog() {
@@ -493,11 +612,19 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     }
 
     private func setFigmaMode(_ enabled: Bool) {
+        cancelRemaps()
         figmaMode = enabled
         paused = false
         completion.clear(); followThrough.clear(); textEntry.invalidate()
         hideCard(); emit(cardWeb, "dismiss", NSNull())
         refresh()
+    }
+
+    private func setInteractionMode(_ mode: InteractionMode) {
+        interactionMode = mode
+        defaults.set(mode.rawValue, forKey: "interactionMode")
+        cancelRemaps(); completion.clear(); followThrough.clear(); textEntry.invalidate()
+        hideCard(); emit(cardWeb, "dismiss", NSNull()); refresh()
     }
 
     private func configureModeHotKey(_ key: ModeHotKey) {
@@ -521,17 +648,19 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         else if status["secureInput"] as? Bool == true { reason = "Figma Mode on · Secure Input protected" }
         else if status["inputProtected"] as? Bool == true { reason = "Figma Mode on · text input protected" }
         else if !active { reason = "Figma Mode on · waiting for \(targetName)" }
-        else { reason = "Figma Mode on in \(targetName)" }
+        else { reason = "\(interactionMode.label) on in \(targetName)" }
         menuItem.button?.title = figmaMode ? "On" : "Off"
         menuItem.button?.toolTip = reason
         menuItem.button?.setAccessibilityLabel("Shortcut: " + reason)
         nativeModeItem.title = "Figma Mode: Off — Original shortcuts"
-        figmaModeItem.title = "Figma Mode: On — Figma hints"
+        figmaModeItem.title = "Figma Mode: On — \(interactionMode.label)"
         nativeModeItem.state = figmaMode ? .off : .on
         figmaModeItem.state = figmaMode ? .on : .off
+        learnModeItem.state = interactionMode == .learn ? .on : .off
+        remapModeItem.state = interactionMode == .remap ? .on : .off
         modeStatusItem.title = hotKeyError ?? reason
         switchModeItem.title = "Toggle Figma Mode (\(modeHotKey.current?.label ?? requestedHotKey.label))"
-        modePopoverContent.update(enabled: figmaMode, active: active, target: targetName, permission: allowed,
+        modePopoverContent.update(enabled: figmaMode, mode: interactionMode, active: active, target: targetName, permission: allowed,
             protected: status["inputProtected"] as? Bool == true || status["secureInput"] as? Bool == true,
             paused: paused, shortcut: modeHotKey.current?.label ?? requestedHotKey.label, error: hotKeyError)
         for item in hotKeyItems {
@@ -540,6 +669,8 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     }
 
     @objc private func selectNativeMode() { setFigmaMode(false) }
+    @objc private func selectLearning() { setInteractionMode(.learn) }
+    @objc private func selectRemapping() { setInteractionMode(.remap) }
     @objc private func selectFigmaMode() { setFigmaMode(true) }
     @objc private func toggleMode() { setFigmaMode(!figmaMode) }
     @objc private func showModeControl() {
@@ -560,13 +691,14 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         configureModeHotKey(key); refresh()
     }
 
-    private func hideCard() { panel?.orderOut(nil); pendingCard = nil; watchdog?.invalidate() }
+    private func hideCard() { panel?.orderOut(nil); pendingCard = nil }
     @objc private func showSettings() { window.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true) }
-    @objc private func togglePause() { paused.toggle(); if paused { hideCard(); completion.clear(); followThrough.clear() }; refresh() }
+    @objc private func togglePause() { paused.toggle(); if paused { cancelRemaps(); hideCard(); completion.clear(); followThrough.clear() }; refresh() }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { showSettings(); return true }
     func applicationWillTerminate(_ notification: Notification) {
-        timer?.invalidate(); watchdog?.invalidate(); celebrationTimer?.invalidate()
+        cancelRemaps(); timer?.invalidate(); celebrationTimer?.invalidate()
+        if let observer = activationObserver { NSWorkspace.shared.notificationCenter.removeObserver(observer) }
         if let tap = tap { CGEvent.tapEnable(tap: tap, enable: false); CFMachPortInvalidate(tap) }
     }
 }

@@ -11,7 +11,7 @@ struct ShortcutCombo {
 }
 
 enum ShortcutDecision {
-    case pass, swallow, dismiss, flip
+    case pass, swallow, toggleDetails
     case show(ShortcutCombo)
 }
 
@@ -42,7 +42,7 @@ struct ShortcutPolicy {
                          repeated: Bool, enabled: Bool, eligible: Bool,
                          cardVisible: Bool, figmaMode: Bool = false, textEntry: Bool = false,
                          sourceKeys: Set<ShortcutStep> = [], sameKeys: Set<ShortcutStep> = [],
-                         expectedTarget: ShortcutStep? = nil) -> ShortcutDecision {
+                         expectedTarget: ShortcutStep? = nil, allowPrefixedLookup: Bool = true) -> ShortcutDecision {
         // Swallow the matching release even if modifiers, app or pause changed.
         if !keyDown {
             return swallowed.remove(keyCode) != nil ? .swallow : .pass
@@ -54,17 +54,14 @@ struct ShortcutPolicy {
         }
         guard enabled, !textEntry else { return .pass }
         let modifiers = flags.intersection([.maskControl, .maskAlternate, .maskCommand, .maskShift])
-        if cardVisible && keyCode == 53 && modifiers.isEmpty {
+        if eligible && cardVisible && keyCode == 49 && modifiers == [.maskControl, .maskAlternate] {
             swallowed.insert(keyCode)
-            return .dismiss
-        }
-        if cardVisible && keyCode == 49 && modifiers == [.maskControl, .maskAlternate] {
-            swallowed.insert(keyCode)
-            return .flip
+            return .toggleDetails
         }
         guard eligible, !repeated, let key = Self.keys[keyCode] else { return .pass }
         let step = ShortcutStep(key: key, cmd: flags.contains(.maskCommand), shift: flags.contains(.maskShift))
         let prefixed = flags.contains([.maskControl, .maskAlternate])
+        if prefixed && !allowPrefixedLookup { return .pass }
         if !prefixed {
             guard figmaMode, flags.intersection([.maskControl, .maskAlternate, .maskSecondaryFn]).isEmpty,
                   sourceKeys.contains(step), !sameKeys.contains(step), step != expectedTarget else { return .pass }

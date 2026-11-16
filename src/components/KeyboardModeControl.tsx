@@ -11,12 +11,28 @@ export function KeyboardModeControl({ status, target }: { status: DesktopStatus;
       <div className="flex items-center justify-between gap-4 py-2">
         <label htmlFor="figma-mode" className="cursor-pointer">
           <span className="block text-lg font-semibold">{on ? 'On' : 'Off'}</span>
-          <span className="mt-1 block text-small text-window-ink-muted">{on ? `Figma shortcut hints in ${APPS[target].name}` : `Original ${APPS[target].name} shortcuts`}</span>
+          <span className="mt-1 block text-small text-window-ink-muted">{on ? `${status.interactionMode === 'remap' ? 'Direct remap' : 'Learning'} in ${APPS[target].name}` : `Original ${APPS[target].name} shortcuts`}</span>
         </label>
         <input id="figma-mode" name="figma-mode" type="checkbox" role="switch" checked={on}
           onChange={(event) => desktopCommand('setKeyboardMode', event.target.checked ? 'figma' : 'native')}
           className="mode-switch" aria-label="Figma Mode" />
       </div>
+      <fieldset className="mt-4" aria-describedby="behavior-help">
+        <legend className="text-small font-semibold">How you want to work</legend>
+        <div className="mt-3 grid gap-2">
+          {([
+            {id:'learn',title:'Learning',description:'See a hint, then press the target shortcut yourself.'},
+            {id:'remap',title:'Direct remap',description:'Use supported Figma shortcuts directly. Brief feedback only.'},
+          ] as const).map((mode) => <label key={mode.id}
+            className={`flex min-h-16 cursor-pointer items-start gap-3 rounded-lg border p-3 ${status.interactionMode === mode.id ? 'border-brand-soft bg-tile' : 'border-field-border'}`}>
+            <input type="radio" name="interaction-mode" value={mode.id} checked={status.interactionMode === mode.id}
+              onChange={() => desktopCommand('setInteractionMode', mode.id)} className="mt-1 accent-brand" />
+            <span><span className="block text-body font-semibold">{mode.title}</span>
+              <span className="mt-1 block text-small text-window-ink-muted">{mode.description}</span></span>
+          </label>)}
+        </div>
+      </fieldset>
+      <p id="behavior-help" className="mt-3 text-small text-window-ink-muted">{status.remapSupported} of {status.remapTotal} shortcuts have an executable mapping, including shared keys. Auto layout has no direct equivalent. Uses the apps’ default keymaps.</p>
       <p id="mode-help" className="mt-3 text-small text-window-ink-muted">
         {status.modeHotKeyRegistered ? <>Press <kbd>{status.modeHotKeyLabel}</kbd> to turn on or off.</> : 'Choose a working toggle shortcut in Settings, or use the menu-bar switch.'}
       </p>

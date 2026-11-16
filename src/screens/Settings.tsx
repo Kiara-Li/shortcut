@@ -39,9 +39,9 @@ export function Settings({ deck }: { deck: Deck }) {
           Desktop shortcuts
         </h3>
         <p className="mt-1 text-small text-window-ink-muted">
-          Turn on Figma Mode using the menu-bar switch to look up the shortcuts below directly.
+          Choose Learning or Direct remap in the menu-bar panel, then turn on Figma Mode.
           Turn off to restore the target app’s original shortcuts and stop lookups. Shared shortcuts pass through.
-          Hints show what to press; you still perform the target shortcut yourself. Requires Accessibility permission.
+          Learning shows what to press. Direct remap sends supported target shortcuts for you and shows brief feedback. Requires Accessibility permission and the apps’ default keymaps.
         </p>
         <ul className="mt-3 flex flex-wrap gap-1.5">
           {deck.cards.map((c) => (

@@ -19,6 +19,10 @@ export interface DesktopStatus {
   lastTrigger: string
   error: string | null
   keyboardMode: 'native' | 'figma'
+  interactionMode: 'learn' | 'remap'
+  remapSupported: number
+  remapTotal: number
+  lastRemap: string
   modeActive: boolean
   inputProtected: boolean
   modeHotKey: 'controlShiftSpace' | 'controlOptionBackslash' | 'controlOptionReturn'
@@ -66,8 +70,8 @@ window.addEventListener('shortcut-native', (event) => {
     achievementListeners.forEach((listener) => listener(message.value))
   } else if (message.type === 'dismiss') {
     window.dispatchEvent(new Event('shortcut-dismiss'))
-  } else if (message.type === 'flip') {
-    window.dispatchEvent(new Event('shortcut-flip'))
+  } else if (message.type === 'details') {
+    window.dispatchEvent(new Event('shortcut-details'))
   }
 })
 

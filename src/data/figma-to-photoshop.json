@@ -4,8 +4,8 @@
   "cards": [
     {
       "id": "photoshop-copy", "action": "Copy", "fromKeys": "Cmd+C", "toKeys": "Cmd+C", "type": "same-key",
-      "summary": "Copies the selection on the active layer to the clipboard.",
-      "but": "Photoshop copies selected pixels or layer content, rather than Figma objects.", "noMatchAlternative": null, "verified": false
+      "summary": "Copies the selected layers or content to the clipboard.",
+      "but": "The result depends on whether you have layers, pixels, paths or text selected. A pixel selection can limit what is copied.", "noMatchAlternative": null, "verified": false
     },
     {
       "id": "photoshop-scale", "action": "Scale → Free Transform", "fromKeys": "K", "toKeys": "Cmd+T", "type": "different-key",

@@ -96,34 +96,10 @@ html[data-overlay='true'] body {
   background: transparent;
 }
 
-:where(button, input, a):focus-visible,
+:where(button, input, a, summary):focus-visible,
 label:has(input:focus-visible) {
   outline: 2px solid var(--color-brand-soft);
   outline-offset: 3px;
-}
-
-/* Flashcard flip (3D). Kept in CSS because it needs preserve-3d. */
-.flip-scene {
-  perspective: 1200px;
-}
-.flip-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.flip-inner[data-flipped='true'] {
-  transform: rotateY(180deg);
-}
-.flip-face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-.flip-face--back {
-  transform: rotateY(180deg);
 }
 
 @keyframes card-in {
@@ -136,17 +112,114 @@ label:has(input:focus-visible) {
     transform: none;
   }
 }
-.card-enter {
-  animation: card-in 0.22s ease-out;
+.hint-layer {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 50;
+  width: 360px;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  scrollbar-width: thin;
 }
+.hint-layer-native {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  left: 16px;
+  width: auto;
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+}
+.shortcut-hint {
+  padding: 18px;
+  border: 1px solid var(--color-keycap-border);
+  border-radius: inherit;
+  background: var(--color-card);
+  color: var(--color-card-ink);
+}
+.hint-close {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin: -4px -4px 0 0;
+  border-radius: var(--radius-keycap);
+  color: var(--color-card-ink-soft);
+  cursor: pointer;
+}
+.hint-close:hover { background: var(--color-keycap); }
+.hint-mapping {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+  padding-block: 14px;
+  border-block: 1px solid var(--color-keycap-border);
+}
+.hint-details > summary {
+  width: fit-content;
+  margin-top: 12px;
+  padding: 4px 2px;
+  font-size: var(--text-small);
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-brand);
+}
+.hint-details > summary:hover { text-decoration: underline; }
+.hint-explanation {
+  display: grid;
+  gap: 12px;
+  padding-top: 12px;
+  font-size: var(--text-body);
+  line-height: 1.55;
+}
+.hint-difference {
+  border-left: 2px solid var(--color-brand);
+  padding-left: 12px;
+}
+.hint-tried {
+  width: fit-content;
+  padding: 8px 12px;
+  border: 1px solid var(--color-keycap-border);
+  border-radius: var(--radius-keycap);
+  font-size: var(--text-small);
+  cursor: pointer;
+}
+.hint-tried:hover { background: var(--color-keycap); }
 
-@media (prefers-reduced-motion: reduce) {
-  .flip-inner {
-    transition: none;
-  }
-  .card-enter {
-    animation: none;
-  }
+.hint-layer-remap { pointer-events: none; }
+.remap-toast {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--color-field-border);
+  border-left: 3px solid var(--color-brand-soft);
+  border-radius: inherit;
+  background: var(--color-window);
+  color: var(--color-window-ink);
+}
+.remap-toast-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-icon);
+  background: var(--color-brand);
+  color: var(--color-brand-ink);
+}
+@keyframes remap-arrive {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .remap-toast { animation: remap-arrive 0.16s ease-out; }
 }
 
 .confetti-piece {

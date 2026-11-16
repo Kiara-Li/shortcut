@@ -17,7 +17,8 @@ final class TextEntryGuard {
         if code == 53 || (code == 36 && modifiers == .maskCommand) {
             typeToolPID = nil; canvasTypingPID = nil; invalidate(); return
         }
-        guard targetIsDesignApp, canvasTypingPID != pid, modifiers.isEmpty else { return }
+        guard targetIsDesignApp, canvasTypingPID != pid,
+              modifiers.isEmpty || modifiers == .maskShift else { return }
         if code == 17 { typeToolPID = pid }
         else if ShortcutPolicy.keys[code] != nil { typeToolPID = nil }
     }

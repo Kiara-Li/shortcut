@@ -38,12 +38,12 @@ if (command !== 'open') {
 <key>CFBundleShortVersionString</key><string>1.0.0</string>
 <key>LSMinimumSystemVersion</key><string>13.0</string>
 <key>NSHighResolutionCapable</key><true/>
-<key>NSAccessibilityUsageDescription</key><string>Recognize shortcut queries and Figma keyboard mode in your selected app, while protecting text input.</string>
+<key>NSAccessibilityUsageDescription</key><string>Recognize Figma shortcuts in your selected app, show learning hints or send supported target shortcuts, while protecting text input.</string>
 </dict></plist>
 `)
   run('xcrun', ['swiftc', '-O', '-module-cache-path', '/tmp/shortcut-swift-cache',
-    'desktop/ShortcutPolicy.swift', 'desktop/CompletionTracker.swift', 'desktop/ModeHotKey.swift', 'desktop/TextEntryGuard.swift', 'desktop/ModePopover.swift',
-    'desktop/main.swift', '-o', path.join(contents, 'MacOS/Shortcut'),
+    'desktop/ShortcutPolicy.swift', 'desktop/CompletionTracker.swift', 'desktop/ModeHotKey.swift', 'desktop/TextEntryGuard.swift', 'desktop/ModePopover.swift', 'desktop/HintPlacement.swift',
+    'desktop/Remapping.swift', 'desktop/main.swift', '-o', path.join(contents, 'MacOS/Shortcut'),
     '-framework', 'AppKit', '-framework', 'WebKit', '-framework', 'Carbon'])
   // Ad-hoc signing supports local execution without an Apple developer account.
   // Rebuilt ad-hoc binaries can require re-enabling Accessibility in macOS.

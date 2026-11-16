@@ -9,11 +9,12 @@ export function Home({ deck }: { deck: Deck }) {
   const status = useDesktopStatus()
   const target = APPS[deck.to].name
   const ready = status?.listening && !status.secureInput
+  const remapping = status?.interactionMode === 'remap'
   const heading = !status ? `Find your shortcut in ${target}`
     : !status.accessibility ? 'Allow Accessibility access'
     : status.paused ? 'Listening is paused'
     : status.secureInput ? 'Secure Input is active'
-    : ready ? status.keyboardMode === 'figma' ? 'Figma Mode is on' : 'Figma Mode is off' : 'Shortcut listener unavailable'
+    : ready ? status.keyboardMode === 'figma' ? `${remapping ? 'Direct remap' : 'Learning'} is on` : 'Figma Mode is off' : 'Shortcut listener unavailable'
 
   return (
     <WindowFrame title="Shortcut" className="pb-[calc(var(--size-tabbar)+1rem)]">
@@ -27,8 +28,9 @@ export function Home({ deck }: { deck: Deck }) {
               : status.secureInput ? 'macOS is protecting keyboard input. Leave the password field or turn off Secure Keyboard Entry in the app that enabled it.'
               : status.paused ? 'Resume to look up shortcuts in your other apps.'
               : ready ? status.keyboardMode === 'figma'
-                ? status.inputProtected ? 'Text input protected. Finish canvas text with ⌘Return or Esc to resume shortcut hints.'
-                  : status.modeActive ? `Figma Mode is on in ${target}. Press a Figma shortcut directly to see a hint.` : `Figma Mode is on. Switch to ${target} to use shortcut hints.`
+                ? status.inputProtected ? 'Text input protected. Finish canvas text with ⌘Return or Esc to resume shortcuts.'
+                  : status.modeActive ? remapping ? `Supported Figma shortcuts execute directly in ${target}. Keep working; feedback disappears automatically.` : `Learning is on in ${target}. Press a Figma shortcut to see a hint.`
+                    : `Figma Mode is on. Switch to ${target} to use ${remapping ? 'direct remapping' : 'shortcut hints'}.`
                 : `Figma Mode is off. ${target} uses its original shortcuts.`
               : status.error ?? 'Try reopening Shortcut after enabling permission.'}
           </p>
@@ -38,19 +40,21 @@ export function Home({ deck }: { deck: Deck }) {
           </div>
           <label htmlFor="all-apps" className="mt-6 flex items-center gap-3 text-small">
             <input id="all-apps" type="checkbox" checked={status.scope === 'all'}
+              disabled={remapping}
               onChange={(event) => desktopCommand('setScope', event.target.checked ? 'all' : 'target')}
               aria-describedby="scope-hint" />
-            Listen in any app for testing
+            Test learning lookups in any app
           </label>
           <p id="scope-hint" className="mt-2 text-small text-window-ink-muted">
-            Normally, queries are intercepted only in {target}. Testing mode uses this same {target} deck everywhere.
+            Learning only. Direct remap always stays in {target}; other apps keep their original shortcuts.
           </p>
           <p className="mt-4 text-small text-window-ink-muted">Current app: {status.foregroundApp || 'Unknown'}</p>
           {status.lastTrigger && <p className="mt-2 text-small text-window-ink-muted">Last query: {status.lastTrigger}</p>}
+          {status.lastRemap && <p className="mt-2 text-small text-window-ink-muted">Last remap: {status.lastRemap}</p>}
         </>
       ) : (
         <div className="mt-7 space-y-4 border-t border-field-border pt-5 text-small text-window-ink-muted">
-          <h3 className="text-body font-semibold text-window-ink">Want cards over your real apps?</h3>
+          <h3 className="text-body font-semibold text-window-ink">Want hints in your real apps?</h3>
           <p>System-wide shortcuts need the local macOS app. Start it from this project folder:</p>
           <pre className="overflow-x-auto rounded-xl bg-tile p-4 text-window-ink"><code>npm run desktop</code></pre>
           <p>This builds and opens <strong>Shortcut.app</strong>. Allow Accessibility access there, then use your actual applications. The website searches shortcuts and saves cards; it cannot intercept another app’s keyboard input.</p>
@@ -60,10 +64,10 @@ export function Home({ deck }: { deck: Deck }) {
         <h3 id="try-title" className="text-body font-semibold">Try it in your real app</h3>
         <ol className="mt-3 list-decimal space-y-3 pl-5 text-small text-window-ink-muted">
           <li>Turn on <strong>Figma Mode</strong> from the menu-bar switch, or press <kbd>{status.modeHotKeyLabel}</kbd>.</li>
-          <li>In {target}, select an object or layer. Press <kbd>K</kbd> directly to see the Scale hint.</li>
-          <li>Then press <kbd>{deck.to === 'photoshop' ? '⌘T (Free Transform)' : 'S'}</kbd> to perform the action in {target}. The hint does not execute it for you.</li>
+          <li>In {target}, select an object or layer. Press <kbd>K</kbd>{remapping ? ` to ${deck.to === 'photoshop' ? 'enter Free Transform' : 'select the Scale tool'} directly.` : ' to see the Scale hint at the top right.'}</li>
+          <li>{remapping ? 'Drag to resize. You do not need to press the target shortcut again.' : <>Then press <kbd>{deck.to === 'photoshop' ? '⌘T (Free Transform)' : 'S'}</kbd>, and drag to resize. The hint does not execute it for you.</>}</li>
         </ol>
-        <p className="mt-4 text-small text-window-ink-muted">While on, supported Figma keys show hints and the corresponding target keys still work. Shared shortcuts such as ⌘C pass through. Text entry is protected, and other apps keep their own shortcuts. Turn off to stop all shortcut lookups.</p>
+        <p className="mt-4 text-small text-window-ink-muted">{remapping ? 'A small, non-interactive notification confirms the shortcut was sent. Shared shortcuts such as ⌘C pass through. Sending a shortcut does not confirm a document edit.' : `Hints stay in the same corner. Choose View details for an explanation, or ⌃⌥Space while working in ${target}.`} Turn off to restore original shortcuts.</p>
       </section>}
       {status && <ShortcutSearch key={deck.to} deck={deck} />}
       {status && <p className="mt-6 text-tiny text-window-ink-muted">Closing this window keeps Shortcut in the menu bar. Quit from the menu bar to stop it completely.</p>}

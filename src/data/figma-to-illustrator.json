@@ -19,8 +19,8 @@
       "fromKeys": "K",
       "toKeys": "S",
       "type": "different-key",
-      "summary": "Resizes the selection, strokes and effects included.",
-      "but": "In Illustrator, S scales from the object's center by default. Click once to move the origin point first.",
+      "summary": "Select an object, press S, then drag to resize it. Click once before dragging to choose a different origin.",
+      "but": "Unlike Figma Scale, Illustrator scales strokes and effects only when Scale Strokes & Effects is enabled in its scaling settings.",
       "noMatchAlternative": null,
       "verified": false
     },
@@ -64,7 +64,7 @@
       "toKeys": "Shift+O",
       "type": "different-key",
       "summary": "An artboard sets the area of a design, like a top-level frame.",
-      "but": "Artboards can't be nested, and they don't clip or hold auto layout.",
+      "but": "This is an approximate match for a design area. An Illustrator artboard does not provide Figma Frame's container and auto layout behavior.",
       "noMatchAlternative": null,
       "verified": false
     },
@@ -97,7 +97,7 @@
       "toKeys": "Cmd+C, Cmd+F",
       "type": "false-friend",
       "summary": "Copy, then Paste in Front puts the copy exactly on top.",
-      "but": "Cmd+D in Illustrator is Transform Again: it repeats your last move.",
+      "but": "Cmd+D in Illustrator is Transform Again: it repeats the last transformation. Use Copy, then Paste in Front to duplicate; this updates your clipboard.",
       "noMatchAlternative": null,
       "verified": false
     },
@@ -173,7 +173,7 @@
       "fromKeys": "Shift+A",
       "toKeys": null,
       "type": "no-match",
-      "summary": "Illustrator has no auto layout.",
+      "summary": "Figma auto layout responds to content changes. Illustrator's Align and Distribute commands are manual alternatives.",
       "but": null,
       "noMatchAlternative": "Line things up with the Align panel (Window → Align).",
       "verified": false

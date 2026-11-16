@@ -16,10 +16,12 @@ export interface SavedEntry {
 export interface ShowCardRequest {
   /** What was pressed, in the "from" app's terms. */
   pressed: Combo
-  /** Screen position to place the card next to (cursor or tap point). Null = center. */
+  /** Legacy request position; hints now use a consistent right-side location. */
   at: { x: number; y: number } | null
   /** Where the request came from. 'saved' opens don't count as look-ups. */
-  source: 'keyboard' | 'search' | 'saved'
+  source: 'keyboard' | 'search' | 'saved' | 'remap'
+  /** Native direct-mode feedback; sending keys does not prove a document edit. */
+  remapResult?: 'sent' | 'unavailable' | 'cancelled' | 'busy'
 }
 
 export interface AchievementEntry {
@@ -44,9 +46,9 @@ export interface Bridge {
   /** Clear saved cards and restore the default Figma → Photoshop pair. */
   resetAll(): void
 
-  /** Ask for a flashcard to be shown. */
+  /** Ask for a shortcut hint to be shown. */
   showCard(req: ShowCardRequest): void
-  /** Listen for flashcard requests. Returns an unsubscribe function. */
+  /** Listen for hint requests. Returns an unsubscribe function. */
   onCardShow(cb: (req: ShowCardRequest) => void): () => void
 
   /** Listen for any stored-state change (pair or saved). Returns an unsubscribe function. */
