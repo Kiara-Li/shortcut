@@ -10,7 +10,7 @@ struct LearningCard: Equatable {
     let toKeys: String?
 }
 
-struct ShortcutStep: Equatable {
+struct ShortcutStep: Hashable {
     let key: String
     let cmd: Bool
     let shift: Bool
@@ -32,6 +32,11 @@ struct CompletionTracker {
     private var expiresAt: TimeInterval = 0
 
     mutating func clear() { candidate = nil; steps = []; index = 0 }
+
+    func expectedStep(now: TimeInterval) -> ShortcutStep? {
+        guard candidate != nil, now <= expiresAt, index < steps.count else { return nil }
+        return steps[index]
+    }
 
     mutating func arm(_ card: LearningCard?, alreadyUnlocked: Bool, now: TimeInterval) {
         clear()

@@ -18,6 +18,13 @@ export interface DesktopStatus {
   secureInput: boolean
   lastTrigger: string
   error: string | null
+  keyboardMode: 'native' | 'figma'
+  modeActive: boolean
+  inputProtected: boolean
+  modeHotKey: 'controlShiftSpace' | 'controlOptionBackslash' | 'controlOptionReturn'
+  modeHotKeyLabel: string
+  modeHotKeyRegistered: boolean
+  modeHotKeyError: string | null
 }
 
 declare global {

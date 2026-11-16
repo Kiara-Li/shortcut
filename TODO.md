@@ -4,6 +4,8 @@ The user’s November 12 priority is real desktop functionality. The previous �
 
 ## First
 
+- User confirmed the final native menu-bar panel, On/Off switch and direct K hint work. Continue hands-on checks of Control–Shift–Space, target shortcut execution in this mode, text fields/canvas text, unknown-context input protection and off-state edge cases. Automatic remapping remains deferred.
+
 - Confirmed in real Photoshop: Control–Option–K popup → Cmd+T → Congratulations/confetti → native achievement saved; preserved after relaunch. Also checked with an existing layer selected: query → ordinary Cmd+T enters Free Transform, and copy query → ordinary Cmd+C enables Paste. Continue broader checks for query side effects, dismiss/flip, pause, target-only mode and other mapped actions.
 - The finished build was reopened and its Ready status and earned achievement were preserved. When editing native code again, remember that a running older build does not include source edits and new ad-hoc signatures may need Accessibility re-registration.
 - Have at least one independent person do the task in `docs/user-test.md`. Record their actual observations; do not invent notes.

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { bridge, usePair } from '@/bridge'
-import { isDesktop } from '@/bridge/desktop'
+import { isDesktop, useDesktopStatus } from '@/bridge/desktop'
+import { ModeHotKeyPicker } from '@/components/KeyboardModeControl'
 import { comboLabel } from '@/components/KeyCombo'
 import { PairForm } from '@/components/PairForm'
 import { ScreenHeading, WindowFrame } from '@/components/WindowFrame'
@@ -14,6 +15,7 @@ import { navigate } from '@/lib/router'
  */
 export function Settings({ deck }: { deck: Deck }) {
   const pair = usePair()
+  const status = useDesktopStatus()
   const [savedAt, setSavedAt] = useState<number | null>(null)
   const [confirmReset, setConfirmReset] = useState(false)
 
@@ -30,20 +32,21 @@ export function Settings({ deck }: { deck: Deck }) {
         }}
         onEdit={() => setSavedAt(null)}
       />
+      {status && <ModeHotKeyPicker key={status.modeHotKey} status={status} />}
 
       <section className="mt-8 border-t border-field-border pt-6" aria-labelledby="kb-title">
         <h3 id="kb-title" className="text-body font-semibold">
           Desktop shortcuts
         </h3>
         <p className="mt-1 text-small text-window-ink-muted">
-          In the macOS app, hold ⌃ Control + ⌥ Option and press the shortcut you know.
-          Shortcuts with ⌘ also need ⌘. The query is intercepted before it reaches the selected target app.
-          Ordinary shortcuts without ⌃⌥ pass through. Requires Accessibility permission.
+          Turn on Figma Mode using the menu-bar switch to look up the shortcuts below directly.
+          Turn off to restore the target app’s original shortcuts and stop lookups. Shared shortcuts pass through.
+          Hints show what to press; you still perform the target shortcut yourself. Requires Accessibility permission.
         </p>
         <ul className="mt-3 flex flex-wrap gap-1.5">
           {deck.cards.map((c) => (
             <li key={c.id} className="rounded-md bg-tile px-2 py-1 text-tiny text-window-ink-muted">
-              {comboLabel(parseCombo(c.fromKeys), { withTrigger: true })}
+              {comboLabel(parseCombo(c.fromKeys))}
             </li>
           ))}
         </ul>

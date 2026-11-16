@@ -8,7 +8,8 @@ if (process.platform !== 'darwin') {
   process.exit(1)
 }
 const root = fileURLToPath(new URL('../', import.meta.url))
-const app = path.join(root, 'desktop/build/Shortcut.app')
+// --staging leaves the currently authorized application untouched for review.
+const app = path.join(root, process.argv.includes('--staging') ? 'desktop/build/staging/Shortcut.app' : 'desktop/build/Shortcut.app')
 const contents = path.join(app, 'Contents')
 const command = process.argv[2] ?? 'run'
 
@@ -37,11 +38,12 @@ if (command !== 'open') {
 <key>CFBundleShortVersionString</key><string>1.0.0</string>
 <key>LSMinimumSystemVersion</key><string>13.0</string>
 <key>NSHighResolutionCapable</key><true/>
-<key>NSAccessibilityUsageDescription</key><string>Intercept only Control–Option shortcut queries and show a learning card over your app.</string>
+<key>NSAccessibilityUsageDescription</key><string>Recognize shortcut queries and Figma keyboard mode in your selected app, while protecting text input.</string>
 </dict></plist>
 `)
   run('xcrun', ['swiftc', '-O', '-module-cache-path', '/tmp/shortcut-swift-cache',
-    'desktop/ShortcutPolicy.swift', 'desktop/CompletionTracker.swift', 'desktop/main.swift', '-o', path.join(contents, 'MacOS/Shortcut'),
+    'desktop/ShortcutPolicy.swift', 'desktop/CompletionTracker.swift', 'desktop/ModeHotKey.swift', 'desktop/TextEntryGuard.swift', 'desktop/ModePopover.swift',
+    'desktop/main.swift', '-o', path.join(contents, 'MacOS/Shortcut'),
     '-framework', 'AppKit', '-framework', 'WebKit', '-framework', 'Carbon'])
   // Ad-hoc signing supports local execution without an Apple developer account.
   // Rebuilt ad-hoc binaries can require re-enabling Accessibility in macOS.

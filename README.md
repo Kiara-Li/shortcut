@@ -17,21 +17,33 @@ In the app, choose **Open Accessibility settings**, then personally enable **Sho
 
 The app opens directly to Home with Figma → Photoshop selected. There is no tutorial or multi-step onboarding. Settings contains a single relationship editor: **I know Figma → I’m working in Photoshop / Illustrator**.
 
+### Figma Mode: one on/off switch
+
+Click Shortcut’s keyboard icon in the macOS menu bar to open a small native panel with a **Figma Mode** switch. The menu bar shows **On** or **Off**, without labeling the off state as another application. The same switch is available on Home. **Control + Shift + Space** toggles it; Settings and the right-click menu offer alternative switch shortcuts if registration conflicts with another app.
+
+- **Off** restores original shortcuts and stops all keyboard lookups, including the old Control–Option lookup prefix.
+- **On** recognizes supported Figma shortcuts directly in the selected target app. For example, in Illustrator press **K** to see the Scale hint, then press **S** yourself. In Photoshop, **K** shows **Cmd+T**.
+- Shared shortcuts such as **Cmd+C** pass through without an interrupting card. The target shortcut shown by a recent card takes precedence over a conflicting source shortcut, even for an already-unlocked card.
+- Other applications keep their original input. Secure Input, accessible text controls, and conservative canvas Type-tool protection suspend hints. If a custom editor does not expose enough accessibility information, input is preserved rather than captured. For canvas text editing, **Cmd+Return** or **Esc** clears the conservative guard after finishing the edit; test your application’s text workflow before broader use.
+- Mode starts **Off** after relaunch or a pair change. The chosen switch shortcut is saved.
+
+This is a **hint mode**, not automatic keyboard remapping. It shows which target key to press; it does not perform the action. Direct remapping is deferred at the user’s request. The control is in Shortcut’s own menu-bar popover; it is not installed as a system Control Center widget.
+
 ### Use it in real Photoshop
 
 1. Switch to Photoshop.
-2. Hold **Control + Option** and press the shortcut you remember from Figma.
-3. Read the floating card, then use the Photoshop shortcut yourself.
+2. Turn on **Figma Mode**, then press the shortcut you remember from Figma directly.
+3. Read the hint, then use the Photoshop shortcut yourself.
 
 Examples:
 
-- **⌃⌥K** → Scale → **⌘T**, Free Transform in Photoshop.
-- **⌃⌥⌘D** → Duplicate → **⌘J**, Layer via Copy in Photoshop.
-- **⌃⌥⌘C** → Copy → **⌘C**. Ordinary **⌘C** continues to copy normally.
+- **K** → Scale → **⌘T**, Free Transform in Photoshop.
+- **⌘D** → Duplicate → **⌘J**, Layer via Copy in Photoshop.
+- **⌘C** → Copy works normally, without an extra hint because both apps share it.
 
-The query key-down, held repeats, and matching key-up are swallowed before the target application receives them. Plain shortcuts without the Control–Option prefix pass through. Unknown supported query keys show an honest “Not in your deck yet” card; unsupported keys pass through. Queries explain an action; they do not execute or remap it.
+While Figma Mode is on, supported source shortcut key-downs, held repeats, and matching key-ups are intercepted before the target application receives them. Target keys and shared shortcuts pass through. While off, all new keyboard input passes through unchanged. Unknown ordinary keys pass through. An explicit Control–Option lookup while mode is on can show an honest “Not in your deck yet” card. Queries explain an action; they do not execute or remap it.
 
-By default, interception happens **only in the selected target app**, identified by its bundle ID. **Listen in any app for testing** deliberately uses the selected deck in other apps and resets off at launch. Pause stops new queries. Closing the window leaves the app running in the **SC** menu bar; use **Quit Shortcut** to stop it.
+By default, interception happens **only in the selected target app**, identified by its bundle ID. **Listen in any app for testing** deliberately uses the selected deck in other apps and resets off at launch. Pause stops new queries. Closing the window leaves the app running in the keyboard-icon menu bar; use **Quit Shortcut** to stop it.
 
 The card uses a real, non-activating macOS panel. It appears beside the pointer, stays within the current screen, and supports full-screen Spaces. Click to flip; **⌃⌥Space** also flips without taking focus. **Esc** closes it. It hides after six seconds, paused while hovered or flipped. Saved cards persist locally.
 
@@ -85,6 +97,9 @@ Website URL after a successful deployment: [kiara-li.github.io/shortcut](https:/
 
 - `desktop/main.swift` — macOS app/window/menu, active CGEvent filter, permission status, bundled web views, native persistence.
 - `desktop/ShortcutPolicy.swift` — filtering rules, physical keys, target-app matching; tested independently.
+- `desktop/ModePopover.swift` — native menu-bar on/off panel.
+- `desktop/ModeHotKey.swift` — system-registered toggle shortcut with conflict handling.
+- `desktop/TextEntryGuard.swift` — text-input checks without reading text content.
 - `desktop/CompletionTracker.swift` — recent lookup, target shortcut sequences, expiry and one-time eligibility.
 - `src/components/CelebrationLayer.tsx`, `src/screens/Achievements.tsx` — confetti and persistent first-try collection.
 - `desktop/tests/main.swift` — checks ordinary copy pass-through, query suppression, repeat/key-up handling, pause/scope and app identity.

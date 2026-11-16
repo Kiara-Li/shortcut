@@ -93,4 +93,60 @@ let shifted = LearningCard(id: "shifted", action: "Artboard", from: "figma", to:
 tracker.arm(shifted, alreadyUnlocked: false, now: 1)
 expect(observe(31, []) == nil, "Missing Shift must not complete a shifted shortcut")
 expect(observe(31, [.maskShift]) == shifted, "Shifted target shortcuts must complete")
-print("Passed \(checks) native shortcut and achievement checks.")
+let sourceKeys: Set<ShortcutStep> = ["K", "Cmd+D", "Cmd+C", "T", "L", "Shift+A"].compactMap(ShortcutStep.parse).reduce(into: []) { $0.insert($1) }
+let sameKeys: Set<ShortcutStep> = ["Cmd+C", "T"].compactMap(ShortcutStep.parse).reduce(into: []) { $0.insert($1) }
+func modePress(_ key: Int64, _ flags: CGEventFlags = [], on: Bool = true, text: Bool = false,
+               eligible: Bool = true, expected: ShortcutStep? = nil, repeated: Bool = false,
+               down: Bool = true, visible: Bool = false) -> ShortcutDecision {
+    policy.decide(keyCode: key, flags: flags, keyDown: down, repeated: repeated,
+        enabled: on, eligible: eligible, cardVisible: visible, figmaMode: on, textEntry: text,
+        sourceKeys: sourceKeys, sameKeys: sameKeys, expectedTarget: expected)
+}
+policy.reset()
+expect(isPass(modePress(40, on: false)), "Native mode must keep Photoshop K intact")
+expect(isPass(modePress(40, query, on: false)), "Off must stop prefixed lookups too, restoring all original shortcuts")
+expect(isPass(modePress(2, [.maskCommand], on: false)), "Native mode must keep Photoshop Deselect intact")
+if case .show(let combo) = modePress(40) { expect(combo.key == "K" && !combo.cmd, "FG K needs no prefix") }
+else { expect(false, "FG must capture the supported Figma K") }
+expect(isSwallow(modePress(40, repeated: true)), "Holding a mode query must not leak repeats")
+_ = modePress(40, down: false)
+expect(isPass(modePress(17, [.maskCommand])), "Target Cmd+T must still reach Photoshop in FG")
+if case .show(let combo) = modePress(2, [.maskCommand]) { expect(combo.cmd && combo.key == "D", "FG must interpret Figma Duplicate") }
+else { expect(false, "FG Cmd+D should show its target mapping") }
+_ = modePress(2, down: false)
+expect(isPass(modePress(8, [.maskCommand])), "Shared Copy must execute directly without a blocking card")
+expect(isPass(modePress(17)), "Shared Type tool must reach Photoshop")
+expect(isPass(modePress(12, [.maskCommand])), "Unknown commands such as Quit must pass through")
+expect(isPass(modePress(38)), "Unknown ordinary letters must pass through")
+expect(isPass(modePress(40, [.maskAlternate])), "Option shortcuts must not be reinterpreted")
+expect(isPass(modePress(40, [.maskSecondaryFn])), "Fn combinations must not be reinterpreted")
+expect(isPass(modePress(40, eligible: false)), "FG must not affect other applications")
+expect(isPass(modePress(40, text: true)), "A K in a text input must type K")
+expect(isPass(modePress(2, [.maskCommand], text: true)), "Text editing commands must pass through")
+expect(isPass(modePress(40, query, text: true)), "Even prefixed lookups must not break protected input")
+expect(isPass(modePress(53, text: true, visible: true)), "IME/text Escape must reach the editor")
+if case .show = modePress(37) { checks += 1 } else { expect(false, "FG L normally follows the source mapping") }
+_ = modePress(37, down: false)
+expect(isPass(modePress(37, expected: ShortcutStep.parse("L"))), "A hinted target must win a source/target collision")
+// Missed-release recovery protects a later, ordinary use of the same key.
+_ = modePress(40)
+expect(isPass(modePress(40, on: false)), "A fresh native press must recover from a missed query key-up")
+expect(isPass(modePress(40, on: false, down: false)), "Recovered native key-up must pass through")
+tracker.arm(sequence, alreadyUnlocked: false, now: 1)
+expect(tracker.expectedStep(now: 2) == ShortcutStep.parse("Cmd+C"), "Follow-through exposes the next target step")
+_ = observe(8)
+expect(tracker.expectedStep(now: 2) == ShortcutStep.parse("Cmd+F"), "A sequence must update the target bypass")
+_ = observe(3)
+expect(tracker.expectedStep(now: 2) == nil, "Completed follow-through must clear its bypass")
+tracker.arm(scale, alreadyUnlocked: false, now: 1)
+expect(tracker.expectedStep(now: 122) == nil, "Expired target bypass must not change the active shortcut language")
+expect(ModeHotKey.controlShiftSpace.matches(code: 49, flags: [.maskControl, .maskShift]), "Default switch key must match exactly")
+expect(!ModeHotKey.controlShiftSpace.matches(code: 49, flags: [.maskControl, .maskShift, .maskCommand]), "Extra modifiers must not switch modes")
+expect(ModeHotKey.controlOptionBackslash.matches(code: 42, flags: [.maskControl, .maskAlternate]), "Alternative mode shortcut must be recognized ahead of queries")
+expect(TextEntryGuard.shouldProtect(role: "AXTextField", attributes: []), "Native and password fields must be protected")
+expect(TextEntryGuard.shouldProtect(role: "AXTextArea", attributes: []), "Multiline text must be protected")
+expect(TextEntryGuard.shouldProtect(role: "AXComboBox", attributes: []), "Editable selectors must be protected")
+expect(TextEntryGuard.shouldProtect(role: "AXGroup", attributes: ["AXSelectedTextRange"]), "Custom editable controls must be protected by their text attributes")
+expect(TextEntryGuard.shouldProtect(role: "", attributes: []), "Unknown focus must preserve the user's input")
+expect(!TextEntryGuard.shouldProtect(role: "AXWindow", attributes: []), "An ordinary document window can use FG")
+print("Passed \(checks) native shortcut, mode, input-protection and achievement checks.")

@@ -2,6 +2,7 @@ import { desktopCommand, useDesktopStatus } from '@/bridge/desktop'
 import { ScreenHeading, WindowFrame } from '@/components/WindowFrame'
 import { Button } from '@/components/ui/button'
 import { ShortcutSearch } from '@/components/ShortcutSearch'
+import { KeyboardModeControl } from '@/components/KeyboardModeControl'
 import { APPS, type Deck } from '@/lib/deck'
 
 export function Home({ deck }: { deck: Deck }) {
@@ -12,7 +13,7 @@ export function Home({ deck }: { deck: Deck }) {
     : !status.accessibility ? 'Allow Accessibility access'
     : status.paused ? 'Listening is paused'
     : status.secureInput ? 'Secure Input is active'
-    : ready ? 'Ready for your shortcuts' : 'Shortcut listener unavailable'
+    : ready ? status.keyboardMode === 'figma' ? 'Figma Mode is on' : 'Figma Mode is off' : 'Shortcut listener unavailable'
 
   return (
     <WindowFrame title="Shortcut" className="pb-[calc(var(--size-tabbar)+1rem)]">
@@ -20,11 +21,15 @@ export function Home({ deck }: { deck: Deck }) {
       {!status && <ShortcutSearch key={deck.to} deck={deck} />}
       {status ? (
         <>
+          <KeyboardModeControl status={status} target={deck.to} />
           <p role="status" className="rounded-xl bg-tile p-4 text-body">
             {!status.accessibility ? 'Enable Shortcut in System Settings → Privacy & Security → Accessibility, then return here.'
               : status.secureInput ? 'macOS is protecting keyboard input. Leave the password field or turn off Secure Keyboard Entry in the app that enabled it.'
               : status.paused ? 'Resume to look up shortcuts in your other apps.'
-              : ready ? `Listening ${status.scope === 'all' ? 'in all apps (testing)' : `in ${target}`}. The card appears over your real application.`
+              : ready ? status.keyboardMode === 'figma'
+                ? status.inputProtected ? 'Text input protected. Finish canvas text with ⌘Return or Esc to resume shortcut hints.'
+                  : status.modeActive ? `Figma Mode is on in ${target}. Press a Figma shortcut directly to see a hint.` : `Figma Mode is on. Switch to ${target} to use shortcut hints.`
+                : `Figma Mode is off. ${target} uses its original shortcuts.`
               : status.error ?? 'Try reopening Shortcut after enabling permission.'}
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
@@ -54,11 +59,11 @@ export function Home({ deck }: { deck: Deck }) {
       {status && <section className="mt-7 border-t border-field-border pt-5" aria-labelledby="try-title">
         <h3 id="try-title" className="text-body font-semibold">Try it in your real app</h3>
         <ol className="mt-3 list-decimal space-y-3 pl-5 text-small text-window-ink-muted">
-          <li>Switch to {target}{status?.scope === 'all' ? ' (or a text editor for testing)' : ''}.</li>
-          <li>Hold <kbd>⌃ Control + ⌥ Option</kbd>, then press <kbd>K</kbd>. A card shows Scale → <kbd>{deck.to === 'photoshop' ? '⌘T (Free Transform)' : 'S'}</kbd>.</li>
-          <li>Try <kbd>⌃⌥⌘C</kbd> for the Copy card. Plain <kbd>⌘C</kbd> still copies normally.</li>
+          <li>Turn on <strong>Figma Mode</strong> from the menu-bar switch, or press <kbd>{status.modeHotKeyLabel}</kbd>.</li>
+          <li>In {target}, select an object or layer. Press <kbd>K</kbd> directly to see the Scale hint.</li>
+          <li>Then press <kbd>{deck.to === 'photoshop' ? '⌘T (Free Transform)' : 'S'}</kbd> to perform the action in {target}. The hint does not execute it for you.</li>
         </ol>
-        <p className="mt-4 text-small text-window-ink-muted">Query combinations are swallowed before the app acts on them. Cards explain the shortcut; they do not execute it. Click a card to flip it, use ⌃⌥Space to flip without moving focus, or Esc to dismiss.</p>
+        <p className="mt-4 text-small text-window-ink-muted">While on, supported Figma keys show hints and the corresponding target keys still work. Shared shortcuts such as ⌘C pass through. Text entry is protected, and other apps keep their own shortcuts. Turn off to stop all shortcut lookups.</p>
       </section>}
       {status && <ShortcutSearch key={deck.to} deck={deck} />}
       {status && <p className="mt-6 text-tiny text-window-ink-muted">Closing this window keeps Shortcut in the menu bar. Quit from the menu bar to stop it completely.</p>}

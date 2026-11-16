@@ -7,6 +7,7 @@ struct ShortcutCombo {
 
     var json: [String: Any] { ["cmd": cmd, "shift": shift, "key": key] }
     var label: String { "⌃⌥" + (cmd ? "⌘" : "") + (shift ? "⇧" : "") + key }
+    var shortcutLabel: String { (cmd ? "⌘" : "") + (shift ? "⇧" : "") + key }
 }
 
 enum ShortcutDecision {
@@ -39,13 +40,19 @@ struct ShortcutPolicy {
 
     mutating func decide(keyCode: Int64, flags: CGEventFlags, keyDown: Bool,
                          repeated: Bool, enabled: Bool, eligible: Bool,
-                         cardVisible: Bool) -> ShortcutDecision {
+                         cardVisible: Bool, figmaMode: Bool = false, textEntry: Bool = false,
+                         sourceKeys: Set<ShortcutStep> = [], sameKeys: Set<ShortcutStep> = [],
+                         expectedTarget: ShortcutStep? = nil) -> ShortcutDecision {
         // Swallow the matching release even if modifiers, app or pause changed.
         if !keyDown {
             return swallowed.remove(keyCode) != nil ? .swallow : .pass
         }
-        if swallowed.contains(keyCode) { return .swallow }
-        guard enabled else { return .pass }
+        if swallowed.contains(keyCode) {
+            if repeated { return .swallow }
+            // A fresh press means a release was missed. Never keep blocking a key.
+            swallowed.remove(keyCode)
+        }
+        guard enabled, !textEntry else { return .pass }
         let modifiers = flags.intersection([.maskControl, .maskAlternate, .maskCommand, .maskShift])
         if cardVisible && keyCode == 53 && modifiers.isEmpty {
             swallowed.insert(keyCode)
@@ -55,8 +62,13 @@ struct ShortcutPolicy {
             swallowed.insert(keyCode)
             return .flip
         }
-        guard eligible, !repeated, flags.contains([.maskControl, .maskAlternate]),
-              let key = Self.keys[keyCode] else { return .pass }
+        guard eligible, !repeated, let key = Self.keys[keyCode] else { return .pass }
+        let step = ShortcutStep(key: key, cmd: flags.contains(.maskCommand), shift: flags.contains(.maskShift))
+        let prefixed = flags.contains([.maskControl, .maskAlternate])
+        if !prefixed {
+            guard figmaMode, flags.intersection([.maskControl, .maskAlternate, .maskSecondaryFn]).isEmpty,
+                  sourceKeys.contains(step), !sameKeys.contains(step), step != expectedTarget else { return .pass }
+        }
         swallowed.insert(keyCode)
         return .show(ShortcutCombo(cmd: flags.contains(.maskCommand), shift: flags.contains(.maskShift), key: key))
     }

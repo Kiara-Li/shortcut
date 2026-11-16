@@ -158,6 +158,29 @@ label:has(input:focus-visible) {
   opacity: 0;
 }
 
+.mode-switch {
+  appearance: none;
+  display: grid;
+  align-items: center;
+  width: 46px;
+  height: 28px;
+  flex-shrink: 0;
+  padding: 3px;
+  cursor: pointer;
+  border: 1px solid var(--color-window-title);
+  border-radius: 999px;
+  background: var(--color-tile);
+}
+.mode-switch::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-window-ink);
+}
+.mode-switch:checked { background: var(--color-brand); border-color: var(--color-brand-soft); }
+.mode-switch:checked::before { justify-self: end; }
+
 @keyframes confetti-fall {
   0% { opacity: 0; transform: translate3d(0, -20px, 0) rotate(0deg); }
   8% { opacity: 1; }
