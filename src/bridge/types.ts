@@ -13,6 +13,18 @@ export interface SavedEntry {
   lastSeen: number
 }
 
+export interface HistoryEntry {
+  id: string
+  cardId: string
+  action: string
+  from: AppId
+  to: AppId
+  fromKeys: string
+  toKeys: string
+  usedAt: number
+  kind: 'remapped' | 'shared'
+}
+
 export interface ShowCardRequest {
   /** What was pressed, in the "from" app's terms. */
   pressed: Combo
@@ -39,6 +51,8 @@ export interface Bridge {
   getSavedCards(): SavedEntry[]
   recordLookup(cardId: string): void
   clearSaved(): void
+  getHistory(): HistoryEntry[]
+  clearHistory(): void
   getAchievements(): AchievementEntry[]
   /** Browser only: explicit self-report, distinguished from native key detection. */
   markTried(cardId: string): void

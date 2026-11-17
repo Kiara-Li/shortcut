@@ -57,12 +57,12 @@ export function Settings({ deck }: { deck: Deck }) {
           Your data
         </h3>
         <p className="mt-1 text-small text-window-ink-muted">
-          {isDesktop ? 'Your app pair and saved cards are stored locally in the macOS app.' : 'Browser settings and saved cards stay in this browser; they are separate from the macOS app.'} Nothing is sent anywhere.
+          {isDesktop ? 'Your app pair, saved lookups, achievements and Direct remap history are stored only on this Mac. History keeps the latest 500 uses and can be cleared separately.' : 'Browser settings and saved cards stay in this browser; they are separate from the macOS app. Direct remap history stays on your Mac.'} Nothing is sent anywhere.
         </p>
         <div className="mt-3">
           {confirmReset ? (
             <div className="flex flex-wrap items-center gap-2 text-small text-window-ink-muted">
-              Reset your app pair, saved cards and achievements?
+              {isDesktop ? 'Reset your app pair, saved cards, achievements and all history?' : 'Reset your app pair, saved cards and achievements?'}
               <Button
                 size="sm"
                 variant="destructive"

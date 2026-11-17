@@ -43,7 +43,7 @@ if (command !== 'open') {
 `)
   run('xcrun', ['swiftc', '-O', '-module-cache-path', '/tmp/shortcut-swift-cache',
     'desktop/ShortcutPolicy.swift', 'desktop/CompletionTracker.swift', 'desktop/ModeHotKey.swift', 'desktop/TextEntryGuard.swift', 'desktop/ModePopover.swift', 'desktop/HintPlacement.swift',
-    'desktop/Remapping.swift', 'desktop/main.swift', '-o', path.join(contents, 'MacOS/Shortcut'),
+    'desktop/Remapping.swift', 'desktop/RemapHistory.swift', 'desktop/main.swift', '-o', path.join(contents, 'MacOS/Shortcut'),
     '-framework', 'AppKit', '-framework', 'WebKit', '-framework', 'Carbon'])
   // Ad-hoc signing supports local execution without an Apple developer account.
   // Rebuilt ad-hoc binaries can require re-enabling Accessibility in macOS.

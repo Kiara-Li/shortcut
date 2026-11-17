@@ -7,6 +7,7 @@ import { useRoute } from '@/lib/router'
 import { isCelebration, isDesktop, isOverlay } from '@/bridge/desktop'
 import { Achievements } from '@/screens/Achievements'
 import { Home } from '@/screens/Home'
+import { History } from '@/screens/History'
 import { Saved } from '@/screens/Saved'
 import { Settings } from '@/screens/Settings'
 
@@ -23,7 +24,9 @@ export function App() {
   return (
     <>
       <main className="min-h-dvh">
-        {route === 'saved' ? (
+        {route === 'history' ? (
+          <History />
+        ) : route === 'saved' ? (
           <Saved deck={deck} />
         ) : route === 'achievements' ? (
           <Achievements deck={deck} />

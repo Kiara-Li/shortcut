@@ -1,9 +1,9 @@
 import { useEffect, useSyncExternalStore } from 'react'
 
 /** Hash routes keep refresh working on GitHub Pages (no server rewrites). */
-export type Route = 'home' | 'saved' | 'achievements' | 'settings'
+export type Route = 'home' | 'history' | 'saved' | 'achievements' | 'settings'
 
-const ROUTES: Route[] = ['home', 'saved', 'achievements', 'settings']
+const ROUTES: Route[] = ['home', 'history', 'saved', 'achievements', 'settings']
 
 function current(): Route {
   const name = window.location.hash.replace(/^#\/?/, '')
@@ -18,7 +18,7 @@ function subscribe(cb: () => void) {
 export function useRoute(): Route {
   const route = useSyncExternalStore(subscribe, current)
   useEffect(() => {
-    document.title = `${route === 'saved' ? 'Saved cards' : route === 'settings' ? 'Settings' : route === 'achievements' ? 'Achievements' : 'Shortcut lookup'} · Shortcut`
+    document.title = `${route === 'saved' ? 'Saved cards' : route === 'history' ? 'History' : route === 'settings' ? 'Settings' : route === 'achievements' ? 'Achievements' : 'Shortcut lookup'} · Shortcut`
   }, [route])
   return route
 }

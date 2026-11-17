@@ -1,11 +1,12 @@
 import { useSyncExternalStore } from 'react'
 import type { Pair } from '@/lib/deck'
-import type { AchievementEntry, Bridge, SavedEntry, ShowCardRequest } from './types'
+import type { AchievementEntry, Bridge, HistoryEntry, SavedEntry, ShowCardRequest } from './types'
 
 interface DesktopState {
   pair: Pair | null
   saved: Record<string, SavedEntry>
   achievements?: Record<string, AchievementEntry>
+  history?: HistoryEntry[]
 }
 
 export interface DesktopStatus {
@@ -44,6 +45,7 @@ export const isCelebration = window.shortcutNative?.celebration ?? false
 let state = window.shortcutNative?.state ?? { pair: null, saved: {} }
 let savedList = Object.values(state.saved)
 let achievementList = Object.values(state.achievements ?? {})
+let historyList = state.history ?? []
 let status = window.shortcutNative?.status ?? null
 const listeners = new Set<() => void>()
 const statusListeners = new Set<() => void>()
@@ -60,6 +62,7 @@ window.addEventListener('shortcut-native', (event) => {
     state = message.value
     savedList = Object.values(state.saved)
     achievementList = Object.values(state.achievements ?? {})
+    historyList = state.history ?? []
     listeners.forEach((listener) => listener())
   } else if (message.type === 'status') {
     status = message.value
@@ -88,6 +91,8 @@ export const desktopBridge: Bridge = {
   getSavedCards: () => savedList,
   recordLookup: (cardId) => desktopCommand('recordLookup', cardId),
   clearSaved: () => desktopCommand('clearSaved'),
+  getHistory: () => historyList,
+  clearHistory: () => desktopCommand('clearHistory'),
   getAchievements: () => achievementList,
   markTried: () => {},
   onAchievement: (listener) => {

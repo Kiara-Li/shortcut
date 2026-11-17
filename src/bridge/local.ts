@@ -1,5 +1,5 @@
 import type { Pair } from '@/lib/deck'
-import type { AchievementEntry, Bridge, SavedEntry, ShowCardRequest } from './types'
+import type { AchievementEntry, Bridge, HistoryEntry, SavedEntry, ShowCardRequest } from './types'
 
 /**
  * Browser implementation of the bridge. All data lives in localStorage on
@@ -37,6 +37,8 @@ let achievementList = Object.values(state.achievements)
 const changeListeners = new Set<() => void>()
 const cardListeners = new Set<(req: ShowCardRequest) => void>()
 const achievementListeners = new Set<(entry: AchievementEntry) => void>()
+// Browser searches cannot create real cross-application usage records.
+const history: HistoryEntry[] = []
 
 function write(next: Stored) {
   state = next
@@ -75,6 +77,8 @@ export const localBridge: Bridge = {
     write({ ...state, saved: { ...state.saved, [cardId]: entry } })
   },
   clearSaved: () => write({ ...state, saved: {} }),
+  getHistory: () => history,
+  clearHistory: () => {},
   getAchievements: () => achievementList,
   markTried: (cardId) => {
     if (!state.pair || state.achievements[cardId]) return

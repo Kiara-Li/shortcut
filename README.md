@@ -59,6 +59,16 @@ The hint uses a real, non-activating macOS panel. It stays at the top right of t
 
 An untouched hint hides after six seconds. Hovering, expanding details, or focusing a website control pauses that timer. Expanded explanations remain until collapsed, closed or replaced. Use the close button or **Esc** to dismiss; Escape also reaches the active app, so it can still cancel transformations or editing. The panel fits its content and stays within the visible screen; long explanations scroll. Saved lookups persist locally.
 
+### History: work now, review later
+
+**Validation status (November 16):** the implementation and automated checks pass, but the first physical K/K/R check left History empty. The cause is unresolved; the follow-up input/listener and restart-persistence checks are postponed at the owner's request. Native end-to-end History is not yet verified.
+
+Open **History** in the macOS app after using Direct remap. It automatically records supported remaps after the complete target sequence is submitted, and supported shared keys that pass through unchanged. The existing two-second side notification stays quiet; recording adds no popup, reward or required interaction.
+
+Activity is grouped by local calendar date and action, with counts and first/last-use times. Expand an action to revisit the Figma and Photoshop/Illustrator key snapshots and its explanation. Reviewing never sends keys or switches your active app pair. History includes both supported target apps. It records key submission/passage, not confirmed document edits or mastery.
+
+Only the latest **500 uses** are kept in local macOS storage. **Clear history…** asks for confirmation and leaves Saved lookups, achievements and app settings intact. Reset everything also clears History. Learning queries remain under Saved. History starts empty on upgrade; past activity is not invented. Failed, interrupted, unavailable or queue-rejected remaps, key repeats, generated sequence substeps, unknown keys and protected text input are not logged. The website cannot record or synchronize native activity.
+
 ### First-try achievements
 
 After looking up a card in Learning, press its target shortcut in the matching real app within two minutes. The first matching key-down (or complete sequence) unlocks that card once, shows a brief **Congratulations!** toast and desktop confetti, and saves it under **Achievements**. The target event still reaches the app unchanged. New lookups replace the pending card; pause and changing the pair clear it. No-match and already-unlocked cards do not arm an achievement.
@@ -74,7 +84,7 @@ On the website, the explicit **I tried this · mark as tried** button records a 
 - Secure Input (for example, a protected password field or Terminal Secure Keyboard Entry) can block event taps. The status screen reports it. Other keyboard utilities or OS-reserved combinations can also take precedence.
 - Source key mapping currently follows physical US/ANSI key positions, like the previous browser listener. Non-US layouts need user testing.
 - Photoshop/Illustrator defaults can be customized. Card copy is based on documented defaults, not inspection of your app’s custom keymap or current document. `verified: false` means the card has not been checked hands-on in both applications.
-- The app does not read clipboard contents, screen contents, document contents, or ordinary typed text. Only explicit shortcut queries are retained as card history. There is no network service.
+- The app does not read clipboard contents, screen contents, document contents, or ordinary typed text. Saved retains lookups; History retains catalog action/key snapshots, target app and timestamps from Direct mode only. There is no network service.
 
 ## Run the website
 
@@ -91,6 +101,7 @@ The website has a real core task: enter a Figma shortcut or action (for example 
 - `npm run lint` — ESLint.
 - `npm run build` — TypeScript checks and static website build in `dist/`.
 - `npm run test:desktop` — native policy and remapping tests, without sending input. Quartz event construction needs WindowServer access (run outside a restricted shell sandbox).
+- `npm run test:history` — history grouping, counts, snapshot separation and local calendar/DST checks.
 - `npm run desktop:build` — compile and ad-hoc-sign the app in `desktop/build/`.
 - `npm run desktop:open` — open the existing build without rebuilding.
 - `npm run desktop` — build and open.

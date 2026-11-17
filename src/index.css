@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "./styles/tokens.css";
 
+/* Safari's marker is replaced by the explicit, decorative History chevron. */
+.history-action > summary::-webkit-details-marker { display: none; }
+
 /* Expose tokens as Tailwind utilities (bg-window, text-card-ink, rounded-card, …)
    and map shadcn's semantic names onto them. */
 @theme inline {

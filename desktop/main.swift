@@ -57,6 +57,8 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     })
     private var remapEpoch = 0
     private var lastRemap = ""
+    private var history = RemapHistory()
+    private var historyEpoch = 0
     private var nativeModeItem: NSMenuItem!
     private var figmaModeItem: NSMenuItem!
     private var learnModeItem: NSMenuItem!
@@ -110,6 +112,8 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         }
         if !(state["pair"] is [String: String]) { state["pair"] = ["from": "figma", "to": "photoshop"] }
         if state["achievements"] == nil { state["achievements"] = [String: Any]() }
+        history = RemapHistory(raw: state["history"])
+        state["history"] = history.json
         interactionMode = InteractionMode(rawValue: defaults.string(forKey: "interactionMode") ?? "") ?? .learn
         loadCatalog()
         updateModeKeys()
@@ -288,9 +292,11 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                          "firstSeen": old["firstSeen"] ?? now, "lastSeen": now]
             state["saved"] = saved; save()
         case "clearSaved": state["saved"] = [String: Any](); save()
+        case "clearHistory": historyEpoch += 1; history.clear(); state["history"] = history.json; save()
         case "resetAll":
             cancelRemaps(); hideCard(); completion.clear(); followThrough.clear(); figmaMode = false; celebrationPanel.orderOut(nil)
-            state = ["pair": ["from": "figma", "to": "photoshop"], "saved": [String: Any](), "achievements": [String: Any]()]; save()
+            historyEpoch += 1; history.clear()
+            state = ["pair": ["from": "figma", "to": "photoshop"], "saved": [String: Any](), "achievements": [String: Any](), "history": history.json]; save()
             updateModeKeys(); refresh()
         case "requestPermission":
             let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
@@ -418,6 +424,24 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             allowPrefixedLookup: interactionMode == .learn)
         switch decision {
         case .pass:
+            // Shared keys execute unchanged. Record only catalog matches in Direct
+            // mode, outside text contexts; synthetic sequence steps returned above.
+            if interactionMode == .remap, figmaMode, !paused, inTarget, !protected, AXIsProcessTrusted(),
+               !IsSecureEventInputEnabled(), type == .keyDown,
+               event.getIntegerValueField(.keyboardEventAutorepeat) == 0,
+               event.flags.intersection([.maskControl, .maskAlternate, .maskSecondaryFn]).isEmpty,
+               let key = ShortcutPolicy.keys[code] {
+                let step = ShortcutStep(key: key, cmd: event.flags.contains(.maskCommand), shift: event.flags.contains(.maskShift))
+                if modeSameKeys.contains(step), let card = catalog.first(where: {
+                    $0.to == target && ShortcutStep.parse($0.fromKeys) == step
+                }) {
+                    let usedAt = now * 1000
+                    let epoch = historyEpoch
+                    DispatchQueue.main.async {
+                        if self.historyEpoch == epoch { self.recordHistory(card, kind: .shared, sent: true, at: usedAt) }
+                    }
+                }
+            }
             if inTarget, let active = active, type == .keyDown, !protected || code == 53 || code == 36 {
                 textEntry.observeKey(code: code, flags: event.flags, pid: active.processIdentifier, targetIsDesignApp: true)
             }
@@ -473,6 +497,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         case .unavailable:
             showRemapNotice(combo, result: "unavailable")
         case .keys(let steps):
+            let recordingEpoch = historyEpoch
             let accepted = remapper.enqueue(steps, pid: pid, allowed: { [weak self] in
                 guard let self = self, self.figmaMode, self.interactionMode == .remap, !self.paused,
                       self.target == selectedTarget, AXIsProcessTrusted(), !IsSecureEventInputEnabled(),
@@ -482,6 +507,9 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                 return !self.textEntry.isProtected(pid: pid, now: Date().timeIntervalSince1970)
             }, finished: { [weak self] sent in
                 guard let self = self else { return }
+                if self.historyEpoch == recordingEpoch {
+                    self.recordHistory(card, kind: .remapped, sent: sent, at: Date().timeIntervalSince1970 * 1000)
+                }
                 self.lastRemap = "\(combo.shortcutLabel) → \(card.toKeys ?? "") · " + (sent ? "shortcut sent" : "stopped: context changed")
                 if self.figmaMode, self.interactionMode == .remap, self.target == selectedTarget,
                    NSWorkspace.shared.frontmostApplication?.processIdentifier == pid {
@@ -491,6 +519,12 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             })
             if !accepted { showRemapNotice(combo, result: "busy") }
         }
+    }
+
+    private func recordHistory(_ card: LearningCard, kind: HistoryKind, sent: Bool, at: Double) {
+        guard history.record(card, kind: kind, sent: sent, at: at) else { return }
+        state["history"] = history.json
+        save()
     }
 
     private func showRemapNotice(_ combo: ShortcutCombo, result: String) {

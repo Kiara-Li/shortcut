@@ -1,13 +1,14 @@
-import { Bookmark, House, Settings, Trophy } from 'lucide-react'
+import { Bookmark, History, House, Settings, Trophy } from 'lucide-react'
 import { navigate, type Route } from '@/lib/router'
 import { cn } from '@/lib/utils'
 
 /**
  * Navigation. The design uses a lavender side rail (Learn / Home / Check / Saved).
- * Learn and Check are out of scope for the MVP, so only Home / Saved / Settings.
+ * History is passive Direct-mode activity; Saved remains manual lookup review.
  */
 const TABS: { route: Route; label: string; Icon: typeof House }[] = [
   { route: 'home', label: 'Home', Icon: House },
+  { route: 'history', label: 'History', Icon: History },
   { route: 'saved', label: 'Saved', Icon: Bookmark },
   { route: 'achievements', label: 'Achievements', Icon: Trophy },
   { route: 'settings', label: 'Settings', Icon: Settings },
@@ -19,7 +20,7 @@ export function TabBar({ active }: { active: Route }) {
       aria-label="Main"
       className="fixed inset-x-0 bottom-0 z-30 flex justify-center bg-window/80 px-4 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur"
     >
-      <ul className="flex w-full max-w-[420px] justify-around gap-1 rounded-window bg-rail p-1.5">
+      <ul className="flex w-full max-w-[480px] justify-around gap-1 rounded-window bg-rail p-1.5">
         {TABS.map(({ route, label, Icon }) => {
           const isActive = route === active
           return (

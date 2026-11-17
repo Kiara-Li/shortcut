@@ -3,7 +3,7 @@ import { localBridge } from './local'
 import { desktopBridge, isDesktop } from './desktop'
 import type { Bridge } from './types'
 
-export type { AchievementEntry, Bridge, SavedEntry, ShowCardRequest } from './types'
+export type { AchievementEntry, Bridge, HistoryEntry, SavedEntry, ShowCardRequest } from './types'
 
 export const bridge: Bridge = isDesktop ? desktopBridge : localBridge
 
@@ -17,4 +17,8 @@ export function useSavedCards() {
 
 export function useAchievements() {
   return useSyncExternalStore(bridge.subscribe, bridge.getAchievements)
+}
+
+export function useHistory() {
+  return useSyncExternalStore(bridge.subscribe, bridge.getHistory)
 }
