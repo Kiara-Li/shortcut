@@ -340,7 +340,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                 "paused": paused, "scope": scope, "foregroundApp": active?.localizedName ?? "",
                 "targetActive": targetActive,
                 "interactionMode": interactionMode.rawValue,
-                "remapSupported": catalog.filter { $0.to == target && RemapResolution.resolve($0) != .unavailable }.count,
+                "remapSupported": catalog.filter { $0.to == target && $0.intercept && RemapResolution.resolve($0) != .unavailable }.count,
                 "remapTotal": catalog.filter { $0.to == target }.count,
                 "lastRemap": lastRemap,
                 "keyboardMode": figmaMode ? "figma" : "native", "modeActive": figmaMode && listening && targetActive && !protected && !IsSecureEventInputEnabled(),
@@ -429,16 +429,16 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             if interactionMode == .remap, figmaMode, !paused, inTarget, !protected, AXIsProcessTrusted(),
                !IsSecureEventInputEnabled(), type == .keyDown,
                event.getIntegerValueField(.keyboardEventAutorepeat) == 0,
-               event.flags.intersection([.maskControl, .maskAlternate, .maskSecondaryFn]).isEmpty,
-               let key = ShortcutPolicy.keys[code] {
-                let step = ShortcutStep(key: key, cmd: event.flags.contains(.maskCommand), shift: event.flags.contains(.maskShift))
+               (!event.flags.contains(.maskSecondaryFn) || code >= 64),
+               let step = ShortcutStep.from(keyCode: code, flags: event.flags) {
                 if modeSameKeys.contains(step), let card = catalog.first(where: {
-                    $0.to == target && ShortcutStep.parse($0.fromKeys) == step
+                    $0.to == target && $0.intercept && $0.matches(step)
                 }) {
                     let usedAt = now * 1000
                     let epoch = historyEpoch
                     DispatchQueue.main.async {
-                        if self.historyEpoch == epoch { self.recordHistory(card, kind: .shared, sent: true, at: usedAt) }
+                        if self.historyEpoch == epoch { self.recordHistory(LearningCard(id: card.id, action: card.action, from: card.from, to: card.to,
+                            fromKeys: step.notation, toKeys: card.toKeys), kind: .shared, sent: true, at: usedAt) }
                     }
                 }
             }
@@ -463,7 +463,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             DispatchQueue.main.async { self.emit(self.cardWeb, "details", NSNull()) }
         case .show(let combo):
             if interactionMode == .remap, inTarget, let pid = active?.processIdentifier,
-               !event.flags.contains([.maskControl, .maskAlternate]) {
+               !combo.prefixed {
                 let epoch = remapEpoch
                 DispatchQueue.main.async {
                     if self.remapEpoch == epoch { self.executeRemap(combo, pid: pid) }
@@ -472,7 +472,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             }
             // Keep the event callback short: rendering and saving run after it returns.
             let appName = active?.localizedName ?? "Unknown"
-            let label = event.flags.contains([.maskControl, .maskAlternate]) ? combo.label : combo.shortcutLabel
+            let label = combo.prefixed ? combo.label : combo.shortcutLabel
             DispatchQueue.main.async {
                 self.lastTrigger = label + " in " + appName
                 self.showCard(["pressed": combo.json, "at": NSNull(), "source": "keyboard"])
@@ -488,11 +488,11 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     private func executeRemap(_ combo: ShortcutCombo, pid: pid_t) {
         let selectedTarget = target
         let from = (state["pair"] as? [String: String])?["from"] ?? "figma"
-        let step = ShortcutStep(key: combo.key, cmd: combo.cmd, shift: combo.shift)
+        let step = combo.step
         guard figmaMode, interactionMode == .remap, !paused,
               NSWorkspace.shared.frontmostApplication?.processIdentifier == pid else { return }
-        guard let card = catalog.first(where: { $0.from == from && $0.to == selectedTarget && ShortcutStep.parse($0.fromKeys) == step }) else { return }
-        switch RemapResolution.resolve(card) {
+        guard let card = catalog.first(where: { $0.from == from && $0.to == selectedTarget && $0.intercept && $0.matches(step) }) else { return }
+        switch RemapResolution.resolve(card, source: step) {
         case .same: return // Shared shortcuts normally pass before reaching this path.
         case .unavailable:
             showRemapNotice(combo, result: "unavailable")
@@ -508,7 +508,8 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             }, finished: { [weak self] sent in
                 guard let self = self else { return }
                 if self.historyEpoch == recordingEpoch {
-                    self.recordHistory(card, kind: .remapped, sent: sent, at: Date().timeIntervalSince1970 * 1000)
+                    self.recordHistory(LearningCard(id: card.id, action: card.action, from: card.from, to: card.to,
+                        fromKeys: step.notation, toKeys: card.toKeys), kind: .remapped, sent: sent, at: Date().timeIntervalSince1970 * 1000)
                 }
                 self.lastRemap = "\(combo.shortcutLabel) → \(card.toKeys ?? "") · " + (sent ? "shortcut sent" : "stopped: context changed")
                 if self.figmaMode, self.interactionMode == .remap, self.target == selectedTarget,
@@ -593,7 +594,8 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
                 guard let id = card["id"] as? String, let action = card["action"] as? String,
                       let fromKeys = card["fromKeys"] as? String else { continue }
                 catalog.append(LearningCard(id: id, action: action, from: from, to: to,
-                                            fromKeys: fromKeys, toKeys: card["toKeys"] as? String))
+                                            fromKeys: fromKeys, toKeys: card["toKeys"] as? String,
+                                            aliases: card["aliases"] as? [String] ?? [], intercept: card["intercept"] as? Bool ?? true))
             }
         }
     }
@@ -602,9 +604,10 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         guard let pressed = request["pressed"] as? [String: Any], let key = pressed["key"] as? String else {
             completion.clear(); return
         }
-        let step = ShortcutStep(key: key.uppercased(), cmd: pressed["cmd"] as? Bool ?? false, shift: pressed["shift"] as? Bool ?? false)
+        let step = ShortcutStep(key: key.uppercased(), cmd: pressed["cmd"] as? Bool ?? false, shift: pressed["shift"] as? Bool ?? false,
+                                alt: pressed["alt"] as? Bool ?? false, ctrl: pressed["ctrl"] as? Bool ?? false)
         let from = (state["pair"] as? [String: String])?["from"] ?? "figma"
-        let card = catalog.first { $0.from == from && $0.to == target && ShortcutStep.parse($0.fromKeys) == step }
+        let card = catalog.first { $0.from == from && $0.to == target && $0.intercept && $0.matches(step) }
         let achievements = state["achievements"] as? [String: Any] ?? [:]
         completion.arm(card, alreadyUnlocked: card.map { achievements[$0.id] != nil } ?? false, now: Date().timeIntervalSince1970)
         // Keep target keys usable even for already-unlocked cards and source/target collisions.
@@ -636,12 +639,11 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
 
     private func updateModeKeys() {
         let from = (state["pair"] as? [String: String])?["from"] ?? "figma"
-        let cards = catalog.filter { $0.from == from && $0.to == target }
-        modeSourceKeys = Set(cards.compactMap { ShortcutStep.parse($0.fromKeys) })
-        modeSameKeys = Set(cards.compactMap { card in
-            guard let source = ShortcutStep.parse(card.fromKeys),
-                  let text = card.toKeys, !text.contains(","), ShortcutStep.parse(text) == source else { return nil }
-            return source
+        let cards = catalog.filter { $0.from == from && $0.to == target && $0.intercept }
+        modeSourceKeys = Set(cards.flatMap { $0.sourceSteps })
+        modeSameKeys = Set(cards.flatMap { card -> [ShortcutStep] in
+            guard let text = card.toKeys, let steps = ShortcutStep.sequence(text), steps.count == 1 else { return [] }
+            return card.sourceSteps.filter { $0 == steps[0] }
         })
     }
 

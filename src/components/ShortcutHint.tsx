@@ -76,7 +76,7 @@ export function ShortcutHint({ lookup, deck, unlocked, onClose }: {
         <div className="min-w-0">
           <p className="mb-2 text-small text-card-ink-soft">{card?.toKeys ? `Press in ${target}` : 'In this app'}</p>
           {card?.toKeys ? <KeySequence keys={card.toKeys} className="justify-start text-card-body" />
-            : <p className="text-body font-medium">{card ? 'No direct equivalent' : 'Not in this collection yet'}</p>}
+            : <p className="text-body font-medium">{card ? 'No direct shortcut' : 'Not in this collection yet'}</p>}
         </div>
       </div>
 
@@ -88,12 +88,12 @@ export function ShortcutHint({ lookup, deck, unlocked, onClose }: {
           <p>{card.summary}</p>
           {card.but && <div className="hint-difference"><p className="mb-1 font-semibold">What’s different</p><p>{card.but}</p></div>}
           {card.noMatchAlternative && <div className="hint-difference"><p className="mb-1 font-semibold">Try instead</p><p>{card.noMatchAlternative}</p></div>}
-          {card.toKeys && <p className="text-small text-card-ink-soft">{card.toKeys.includes(',') ? 'Press the shortcuts in order, one after the other. ' : ''}The hint does not perform the action for you.</p>}
+          {card.toKeys && <p className="text-small text-card-ink-soft">{card.toKeys.includes(', ') ? 'Press the shortcuts in order, one after the other. ' : ''}The hint does not perform the action for you.</p>}
           {unlocked && <p className="text-small text-card-ink-soft">First try saved to Achievements.</p>}
           {card.toKeys && !isDesktop && !unlocked && <button type="button" className="hint-tried"
             onClick={() => { bridge.markTried(card.id); onClose() }}>I tried this · mark as tried</button>}
         </div>
-      </details> : <p className="mt-3 text-small text-card-ink-soft">Try another shortcut or use the search in Shortcut.</p>}
+      </details> : <p className="mt-3 text-small text-card-ink-soft">Use the app’s menus for this action.</p>}
     </article>
   )
 }

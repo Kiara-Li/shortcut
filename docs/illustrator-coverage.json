@@ -1,0 +1,1205 @@
+{
+  "reviewedAt": "2026-11-19",
+  "scope": "Figma Design macOS US QWERTY, default Illustrator desktop keymap. Public-reference baseline, not a claim of all current or future Figma product commands.",
+  "actions": [
+    {
+      "id": "copy",
+      "source": "Cmd+C",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "scale",
+      "source": "K",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "rectangle",
+      "source": "R",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "ellipse",
+      "source": "O",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "line",
+      "source": "L",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "frame",
+      "source": "F",
+      "aliases": [
+        "A"
+      ],
+      "disposition": "execute"
+    },
+    {
+      "id": "hide",
+      "source": "Cmd+Shift+H",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "lock",
+      "source": "Cmd+Shift+L",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "duplicate",
+      "source": "Cmd+D",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "rulers",
+      "source": "Shift+R",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "zoom-fit",
+      "source": "Shift+1",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "move",
+      "source": "V",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "pen",
+      "source": "P",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "text",
+      "source": "T",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "group",
+      "source": "Cmd+G",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "auto-layout",
+      "source": "Shift+A",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "pencil",
+      "source": "Shift+P",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "hand",
+      "source": "H",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "slice",
+      "source": "S",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "eyedropper",
+      "source": "Ctrl+C",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "arrow",
+      "source": "Shift+L",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "section",
+      "source": "Shift+S",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "comment",
+      "source": "C",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "toggle-ui",
+      "source": "Cmd+\\",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "left-sidebar",
+      "source": "Cmd+Shift+\\",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "multiplayer-cursors",
+      "source": "Cmd+Alt+\\",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "outlines",
+      "source": "Cmd+Shift+O",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "pixel-preview",
+      "source": "Ctrl+P",
+      "aliases": [
+        "Cmd+Shift+P"
+      ],
+      "disposition": "execute"
+    },
+    {
+      "id": "layout-guides",
+      "source": "Shift+G",
+      "aliases": [
+        "Ctrl+G"
+      ],
+      "disposition": "manual"
+    },
+    {
+      "id": "pixel-grid",
+      "source": "Shift+'",
+      "aliases": [
+        "Cmd+'"
+      ],
+      "disposition": "manual"
+    },
+    {
+      "id": "snap-pixel",
+      "source": "Cmd+Shift+'",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "layers-panel",
+      "source": "Alt+1",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "assets-panel",
+      "source": "Alt+2",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "design-panel",
+      "source": "Alt+8",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "prototype-panel",
+      "source": "Alt+9",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "inspect-panel",
+      "source": "Alt+0",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "resources",
+      "source": "Shift+I",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "libraries",
+      "source": "Alt+3",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "actions",
+      "source": "Cmd+K",
+      "aliases": [
+        "Cmd+/"
+      ],
+      "disposition": "manual"
+    },
+    {
+      "id": "zoom-in",
+      "source": "+",
+      "aliases": [
+        "Cmd++",
+        "Cmd+="
+      ],
+      "disposition": "execute"
+    },
+    {
+      "id": "zoom-out",
+      "source": "-",
+      "aliases": [
+        "Cmd+-"
+      ],
+      "disposition": "execute"
+    },
+    {
+      "id": "zoom-100",
+      "source": "Shift+0",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "zoom-selection",
+      "source": "Shift+2",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "next-frame",
+      "source": "N",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "previous-frame",
+      "source": "Shift+N",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "previous-page",
+      "source": "PAGEUP",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "next-page",
+      "source": "PAGEDOWN",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "first-frame",
+      "source": "HOME",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "last-frame",
+      "source": "END",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "cut",
+      "source": "Cmd+X",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "paste",
+      "source": "Cmd+V",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "undo",
+      "source": "Cmd+Z",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "redo",
+      "source": "Cmd+Shift+Z",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "delete",
+      "source": "DELETE",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "paste-over",
+      "source": "Cmd+Shift+V",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "paste-replace",
+      "source": "Cmd+Shift+R",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "rename",
+      "source": "Cmd+R",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "export",
+      "source": "Cmd+Shift+E",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "place-image",
+      "source": "Cmd+Shift+K",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "copy-properties",
+      "source": "Cmd+Alt+C",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "paste-properties",
+      "source": "Cmd+Alt+V",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "copy-png",
+      "source": "Cmd+Shift+C",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "copy-link",
+      "source": "Cmd+L",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "find",
+      "source": "Cmd+F",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "select-all",
+      "source": "Cmd+A",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "ungroup",
+      "source": "Cmd+Shift+G",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "select-inverse",
+      "source": "Cmd+Shift+A",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "select-matching",
+      "source": "Cmd+Alt+A",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "frame-selection",
+      "source": "Cmd+Alt+G",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "edit-selection",
+      "source": "RETURN",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "select-parent",
+      "source": "Shift+RETURN",
+      "aliases": [
+        "\\"
+      ],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "next-sibling",
+      "source": "TAB",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "previous-sibling",
+      "source": "Shift+TAB",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "deselect",
+      "source": "ESCAPE",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "bring-forward",
+      "source": "Cmd+]",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "send-backward",
+      "source": "Cmd+[",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "bring-front",
+      "source": "Cmd+Alt+]",
+      "aliases": [
+        "]"
+      ],
+      "disposition": "execute"
+    },
+    {
+      "id": "send-back",
+      "source": "Cmd+Alt+[",
+      "aliases": [
+        "["
+      ],
+      "disposition": "execute"
+    },
+    {
+      "id": "nudge-left",
+      "source": "LEFT",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "big-nudge-left",
+      "source": "Shift+LEFT",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "nudge-right",
+      "source": "RIGHT",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "big-nudge-right",
+      "source": "Shift+RIGHT",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "nudge-up",
+      "source": "UP",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "big-nudge-up",
+      "source": "Shift+UP",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "nudge-down",
+      "source": "DOWN",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "big-nudge-down",
+      "source": "Shift+DOWN",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "align-left",
+      "source": "Alt+A",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "align-right",
+      "source": "Alt+D",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "align-top",
+      "source": "Alt+W",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "align-bottom",
+      "source": "Alt+S",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "align-h-center",
+      "source": "Alt+H",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "align-v-center",
+      "source": "Alt+V",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "distribute-horizontal",
+      "source": "Ctrl+Alt+H",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "distribute-vertical",
+      "source": "Ctrl+Alt+V",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "tidy",
+      "source": "Ctrl+Alt+T",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "remove-auto-layout",
+      "source": "Alt+Shift+A",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "suggest-auto-layout",
+      "source": "Ctrl+Shift+A",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "swap-fill-stroke",
+      "source": "Shift+X",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "join",
+      "source": "Cmd+J",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "paint",
+      "source": "Shift+B",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "remove-fill",
+      "source": "Alt+/",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "remove-stroke",
+      "source": "Shift+/",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "outline-stroke",
+      "source": "Cmd+Alt+O",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "flatten",
+      "source": "Alt+Shift+F",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "smooth-join",
+      "source": "Cmd+Shift+J",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "delete-heal",
+      "source": "Shift+DELETE",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "flip-horizontal",
+      "source": "Shift+H",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "flip-vertical",
+      "source": "Shift+V",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "rotation-origin",
+      "source": "Alt+R",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "mask",
+      "source": "Ctrl+Cmd+M",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "opacity-10",
+      "source": "1",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "opacity-20",
+      "source": "2",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "opacity-30",
+      "source": "3",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "opacity-40",
+      "source": "4",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "opacity-50",
+      "source": "5",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "opacity-60",
+      "source": "6",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "opacity-70",
+      "source": "7",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "opacity-80",
+      "source": "8",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "opacity-90",
+      "source": "9",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "opacity-100",
+      "source": "0",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "text-align-left",
+      "source": "Cmd+Alt+L",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "text-align-center",
+      "source": "Cmd+Alt+T",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "text-align-right",
+      "source": "Cmd+Alt+R",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "text-align-justify",
+      "source": "Cmd+Alt+J",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "text-bold",
+      "source": "Cmd+B",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "text-italic",
+      "source": "Cmd+I",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "text-underline",
+      "source": "Cmd+U",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "text-strike",
+      "source": "Cmd+Shift+X",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "text-numbered-list",
+      "source": "Cmd+Shift+7",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "text-bulleted-list",
+      "source": "Cmd+Shift+8",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "text-link",
+      "source": "Cmd+Shift+U",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "font-size-decrease",
+      "source": "Cmd+Shift+,",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "font-weight-decrease",
+      "source": "Cmd+Alt+,",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "letter-spacing-decrease",
+      "source": "Alt+,",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "line-height-decrease",
+      "source": "Alt+Shift+,",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "font-size-increase",
+      "source": "Cmd+Shift+.",
+      "aliases": [],
+      "disposition": "execute"
+    },
+    {
+      "id": "font-weight-increase",
+      "source": "Cmd+Alt+.",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "letter-spacing-increase",
+      "source": "Alt+.",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "line-height-increase",
+      "source": "Alt+Shift+.",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "create-component",
+      "source": "Cmd+Alt+K",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "detach-instance",
+      "source": "Cmd+Alt+B",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "keyboard-box-select",
+      "source": "Alt+SPACE",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "next-region",
+      "source": "F6",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "ui-size-reset",
+      "source": "Cmd+Alt+Shift+0",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "ui-size-larger",
+      "source": "Cmd+Alt+Shift+=",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "ui-size-smaller",
+      "source": "Cmd+Alt+Shift+-",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "boolean-union",
+      "source": "Alt+Shift+U",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "boolean-subtract",
+      "source": "Alt+Shift+S",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "boolean-intersect",
+      "source": "Alt+Shift+I",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "boolean-exclude",
+      "source": "Alt+Shift+E",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "main-component",
+      "source": "Ctrl+Alt+Cmd+K",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "shortcut-panel",
+      "source": "Ctrl+Shift+/",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "rotate-up",
+      "source": "Cmd+Alt+UP",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "big-rotate-up",
+      "source": "Cmd+Alt+Shift+UP",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "rotate-down",
+      "source": "Cmd+Alt+DOWN",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "big-rotate-down",
+      "source": "Cmd+Alt+Shift+DOWN",
+      "aliases": [],
+      "disposition": "manual"
+    },
+    {
+      "id": "vector-cut",
+      "source": "X",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "vector-eraser",
+      "source": "Shift+E",
+      "aliases": [],
+      "disposition": "preserve-native"
+    },
+    {
+      "id": "vector-lasso",
+      "source": "Q",
+      "aliases": [],
+      "disposition": "preserve-native"
+    }
+  ],
+  "gestures": [
+    {
+      "id": "pan",
+      "source": "Space + drag",
+      "disposition": "native",
+      "alternative": "Hold Space and drag in Illustrator.",
+      "reference": "f-zoom"
+    },
+    {
+      "id": "duplicate-drag",
+      "source": "Option + drag",
+      "disposition": "native",
+      "alternative": "Option-drag the selected Illustrator artwork.",
+      "reference": "f-copy"
+    },
+    {
+      "id": "measure-distance",
+      "source": "Option + hover",
+      "disposition": "manual",
+      "alternative": "Use Illustrator Smart Guides or Measure tool; no Figma distance overlay is emulated.",
+      "reference": "f-access"
+    },
+    {
+      "id": "deep-select",
+      "source": "Cmd + click",
+      "disposition": "manual",
+      "alternative": "Use Direct Selection (A) or Layers; Illustrator Command temporarily changes selection tools.",
+      "reference": "f-select"
+    },
+    {
+      "id": "select-layer-menu",
+      "source": "Cmd + right-click",
+      "disposition": "manual",
+      "alternative": "Use the Illustrator Layers panel.",
+      "reference": "f-select"
+    },
+    {
+      "id": "deep-marquee",
+      "source": "Cmd + drag",
+      "disposition": "manual",
+      "alternative": "Use Direct Selection (A) to marquee anchor points.",
+      "reference": "f-select"
+    },
+    {
+      "id": "resize-center",
+      "source": "Option + resize drag",
+      "disposition": "native",
+      "alternative": "Option-drag a bounding-box handle; check Illustrator transform settings.",
+      "reference": "f-vector"
+    },
+    {
+      "id": "resize-proportionally",
+      "source": "Shift + resize drag",
+      "disposition": "native",
+      "alternative": "Shift-drag a bounding-box handle. Constraint behavior depends on the tool.",
+      "reference": "f-vector"
+    },
+    {
+      "id": "reposition-during-resize",
+      "source": "Space + resize drag",
+      "disposition": "manual",
+      "alternative": "Gesture behavior depends on the Illustrator tool; held input is never synthesized.",
+      "reference": "f-vector"
+    },
+    {
+      "id": "ignore-constraints",
+      "source": "Cmd + frame resize drag",
+      "disposition": "figma-only",
+      "alternative": "Illustrator has no Figma frame constraints.",
+      "reference": "f-vector"
+    },
+    {
+      "id": "bend",
+      "source": "Cmd while editing vector handles",
+      "disposition": "manual",
+      "alternative": "Use Anchor Point (Shift+C) or Direct Selection (A).",
+      "reference": "f-vector"
+    },
+    {
+      "id": "crop-image",
+      "source": "Option + double-click image",
+      "disposition": "manual",
+      "alternative": "Select the image and use Crop Image; selection and embedding affect availability.",
+      "reference": "f-tools"
+    },
+    {
+      "id": "instance-swap",
+      "source": "Option while dragging a component",
+      "disposition": "manual",
+      "alternative": "Use Illustrator Symbols panel replacement; do not emulate Figma overrides.",
+      "reference": "f-instance"
+    },
+    {
+      "id": "rotation-snap",
+      "source": "Shift while rotating",
+      "disposition": "native",
+      "alternative": "Use Shift with Illustrator Rotate; angular increments may differ.",
+      "reference": "f-arrange"
+    },
+    {
+      "id": "disable-snapping",
+      "source": "Control while dragging",
+      "disposition": "manual",
+      "alternative": "Use Illustrator View snapping settings.",
+      "reference": "f-arrange"
+    },
+    {
+      "id": "auto-layout-spacing",
+      "source": "Option / Shift+Option drag padding or gap",
+      "disposition": "figma-only",
+      "alternative": "Align/Distribute manually; no responsive auto layout container exists.",
+      "reference": "f-auto"
+    }
+  ],
+  "contextExclusions": [
+    {
+      "id": "prototype-player",
+      "keys": [
+        "F",
+        "Z",
+        "R",
+        "C",
+        "LEFT",
+        "RIGHT",
+        "SPACE",
+        "N"
+      ],
+      "reason": "Prototype playback has its own context. The Illustrator canvas must not interpret R as restart or F as fullscreen.",
+      "source": "https://help.figma.com/hc/en-us/articles/360040318013-Play-your-prototypes"
+    },
+    {
+      "id": "text-and-ime",
+      "keys": [
+        "typing",
+        "selection/caret movement",
+        "Cmd+Return",
+        "Escape"
+      ],
+      "reason": "All protected text fields, canvas text editing and Secure Input preserve native input. Text-object alignment/size applies only outside protected entry.",
+      "source": "https://developer.apple.com/documentation/applicationservices/axuielement"
+    },
+    {
+      "id": "auto-layout-alignment-box",
+      "keys": [
+        "W",
+        "A",
+        "S",
+        "D",
+        "arrows",
+        "B",
+        "X"
+      ],
+      "reason": "Keys active inside Figma’s focused layout control are not canvas-global commands. Illustrator has no equivalent focused control.",
+      "source": "https://help.figma.com/hc/en-us/articles/360040451373-Guide-to-auto-layout-in-Figma"
+    },
+    {
+      "id": "other-products",
+      "keys": [
+        "FigJam",
+        "Slides",
+        "Sites",
+        "Make",
+        "Buzz",
+        "Dev Mode",
+        "Motion"
+      ],
+      "reason": "Separate product/tool contexts need their own catalogs. Figma Design assets, components, vector editing and accessibility are classified here.",
+      "source": "https://help.figma.com/hc/en-us/articles/360040328653-Use-Figma-products-with-a-keyboard"
+    },
+    {
+      "id": "custom-keymaps",
+      "keys": [
+        "non-US physical layouts",
+        "custom Illustrator shortcuts",
+        "legacy Figma outlines preference"
+      ],
+      "reason": "No guessing a customized user keymap; this catalog assumes documented defaults.",
+      "source": "https://help.figma.com/hc/en-us/articles/5665442977431-Select-keyboard-layout"
+    }
+  ],
+  "legacyConflicts": [
+    {
+      "source": "Shift+O",
+      "current": "Cmd+Shift+O",
+      "action": "Show outlines",
+      "policy": "Not an alias; the old-outline preference changes other actions too."
+    },
+    {
+      "source": "Cmd+Shift+O",
+      "current": "Cmd+Alt+O",
+      "action": "Outline stroke/text",
+      "policy": "Never bind old Outline Stroke here: current Figma uses this chord for outline view."
+    },
+    {
+      "source": "Cmd+E",
+      "current": "Alt+Shift+F",
+      "action": "Flatten",
+      "policy": "Leave Cmd+E native rather than assume the old Figma keymap."
+    },
+    {
+      "source": "B",
+      "current": "Shift+B",
+      "action": "Paint regions",
+      "policy": "Vector-edit-only behavior, not a canvas-wide Live Paint replacement."
+    },
+    {
+      "source": "Cmd+Alt+O",
+      "current": "Alt+3",
+      "action": "Libraries",
+      "policy": "Do not keep the old library alias: it now conflicts with Outline Stroke."
+    },
+    {
+      "source": "Cmd+K",
+      "current": "Cmd+Shift+U",
+      "action": "Add text link",
+      "policy": "Cmd+K is Actions on the Design canvas; comment text has a separate context."
+    },
+    {
+      "source": "Cmd+P",
+      "current": "Cmd+K / Cmd+/",
+      "action": "Actions",
+      "policy": "Old third-party lists include Cmd+P. Do not intercept Illustrator Print based on an unverified legacy alias."
+    }
+  ]
+}

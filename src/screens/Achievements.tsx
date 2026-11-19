@@ -9,7 +9,7 @@ import { APPS, parseCombo, type Card, type Deck } from '@/lib/deck'
 export function Achievements({ deck }: { deck: Deck }) {
   const achievements = useAchievements()
   const entries = new Map(achievements.filter((entry) => entry.from === deck.from && entry.to === deck.to).map((entry) => [entry.cardId, entry]))
-  const cards = deck.cards.filter((card) => card.toKeys !== null)
+  const cards = deck.cards.filter((card) => card.toKeys !== null && card.intercept !== false)
   const unlocked = cards.filter((card) => entries.has(card.id)).sort((a, b) => entries.get(b.id)!.unlockedAt - entries.get(a.id)!.unlockedAt)
   const locked = cards.filter((card) => !entries.has(card.id))
 

@@ -1,6 +1,48 @@
 {
   "from": "figma",
   "to": "illustrator",
+  "scope": {
+    "product": "Figma Design",
+    "platform": "macOS",
+    "keyboard": "US QWERTY / default Illustrator keymap",
+    "reviewedAt": "2026-11-19",
+    "validation": "Public documentation review and automated routing tests; not hands-on action verification.",
+    "sources": {
+      "f-keys": "https://help.figma.com/hc/en-us/articles/360040328653-Use-Figma-products-with-a-keyboard",
+      "f-layout": "https://help.figma.com/hc/en-us/articles/5665442977431-Select-keyboard-layout",
+      "f-tools": "https://help.figma.com/hc/en-us/articles/15297425105303-Explore-design-files",
+      "f-shapes": "https://help.figma.com/hc/en-us/articles/360040450133-Shape-tools",
+      "f-pencil": "https://help.figma.com/hc/en-us/articles/4402723791511-Sketch-on-the-canvas-with-the-pencil-tool",
+      "f-vector": "https://help.figma.com/hc/en-us/articles/360039957634-Edit-vector-layers",
+      "f-select": "https://help.figma.com/hc/en-us/articles/360040449873-Select-layers-and-objects",
+      "f-arrange": "https://help.figma.com/hc/en-us/articles/360039956914-Adjust-alignment-rotation-position-and-dimensions",
+      "f-zoom": "https://help.figma.com/hc/en-us/articles/360041065034-Adjust-your-zoom-and-view-options",
+      "f-copy": "https://help.figma.com/hc/en-us/articles/4409078832791-Copy-and-paste-objects",
+      "f-auto": "https://help.figma.com/hc/en-us/articles/360040451373-Guide-to-auto-layout-in-Figma",
+      "f-text": "https://help.figma.com/hc/en-us/articles/360039956634-Explore-text-properties",
+      "f-link": "https://help.figma.com/hc/en-us/articles/360045942953-Add-links-to-text",
+      "f-mask": "https://help.figma.com/hc/en-us/articles/360040450253-Masks",
+      "f-outline": "https://help.figma.com/hc/en-us/articles/33052305733015-Convert-strokes-to-vector-paths",
+      "f-flatten": "https://help.figma.com/hc/en-us/articles/30101373312279-Flatten-layers",
+      "f-outlines": "https://help.figma.com/hc/en-us/articles/5724448965527-View-layer-outlines-in-Figma-Design",
+      "f-actions": "https://help.figma.com/hc/en-us/articles/23570416033943-Use-the-actions-menu-in-Figma-Design",
+      "f-export": "https://help.figma.com/hc/en-us/articles/360040028114-Export-static-designs-from-Figma",
+      "f-access": "https://help.figma.com/hc/en-us/articles/35063862380311-Accessibility-at-Figma",
+      "f-component": "https://help.figma.com/hc/en-us/articles/39712951432343-Design-an-interactive-button-component",
+      "f-libraries": "https://help.figma.com/hc/en-us/articles/360039820134-Manage-and-share-styles",
+      "f-find": "https://help.figma.com/hc/en-us/articles/9141292269847-Find-and-replace-in-Figma",
+      "ai-keys": "https://helpx.adobe.com/illustrator/desktop/get-started/preferences-and-settings/default-keyboard-shortcuts-for-illustrator.html",
+      "ai-align": "https://helpx.adobe.com/illustrator/desktop/manage-objects/arrange-objects/align-and-distribute-objects.html",
+      "ai-type": "https://helpx.adobe.com/in/illustrator/using/default-keyboard-shortcuts.html",
+      "f-boolean": "https://help.figma.com/hc/en-us/articles/360039957534-Boolean-operations",
+      "f-instance": "https://help.figma.com/hc/en-us/articles/360039150173-Create-and-insert-component-instances",
+      "f-detach": "https://help.figma.com/hc/en-us/articles/360038665754-Detach-an-instance-from-the-component",
+      "f-scale": "https://help.figma.com/hc/en-us/articles/360040451453-Scale-layers-while-maintaining-proportions",
+      "f-hide": "https://help.figma.com/hc/en-us/articles/360041112614-Toggle-visibility-to-hide-layers",
+      "f-lock": "https://help.figma.com/hc/en-us/articles/360041596573-Lock-and-unlock-layers",
+      "ai-panels": "https://helpx.adobe.com/lt/illustrator/using/default-keyboard-shortcuts.html"
+    }
+  },
   "cards": [
     {
       "id": "copy",
@@ -11,7 +53,15 @@
       "summary": "Copies the selection to the clipboard.",
       "but": null,
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Edit",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "scale",
@@ -22,7 +72,15 @@
       "summary": "Select an object, press S, then drag to resize it. Click once before dragging to choose a different origin.",
       "but": "Unlike Figma Scale, Illustrator scales strokes and effects only when Scale Strokes & Effects is enabled in its scaling settings.",
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-scale",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "rectangle",
@@ -33,7 +91,15 @@
       "summary": "Draws a rectangle. Hold Shift for a square.",
       "but": null,
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "ellipse",
@@ -44,7 +110,15 @@
       "summary": "Draws an ellipse. Hold Shift for a circle.",
       "but": null,
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "line",
@@ -55,7 +129,15 @@
       "summary": "Draws a straight line segment.",
       "but": "L in Illustrator is the Ellipse tool, not Line.",
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "frame",
@@ -64,9 +146,20 @@
       "toKeys": "Shift+O",
       "type": "different-key",
       "summary": "An artboard sets the area of a design, like a top-level frame.",
-      "but": "This is an approximate match for a design area. An Illustrator artboard does not provide Figma Frame's container and auto layout behavior.",
+      "but": "A design-area approximation: artboards do not contain layers or supply Figma constraints or auto layout.",
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "aliases": [
+        "A"
+      ],
+      "context": "canvas"
     },
     {
       "id": "hide",
@@ -77,7 +170,15 @@
       "summary": "Hides the selected objects.",
       "but": "To show them again, use Cmd+Option+3. It shows everything you hid.",
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Selection",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-hide",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "lock",
@@ -88,7 +189,15 @@
       "summary": "Locks the selected objects so they can't be clicked.",
       "but": "To unlock, use Cmd+Option+2. It unlocks everything at once.",
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Selection",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-lock",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "duplicate",
@@ -99,7 +208,15 @@
       "summary": "Copy, then Paste in Front puts the copy exactly on top.",
       "but": "Cmd+D in Illustrator is Transform Again: it repeats the last transformation. Use Copy, then Paste in Front to duplicate; this updates your clipboard.",
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Edit",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "rulers",
@@ -110,7 +227,15 @@
       "summary": "Toggles the rulers along the canvas edges.",
       "but": null,
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "View",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "zoom-fit",
@@ -119,9 +244,17 @@
       "toKeys": "Cmd+0",
       "type": "different-key",
       "summary": "Fits the current artboard in the window.",
-      "but": "Cmd+0 fits the active artboard only. Cmd+Option+0 fits all of them.",
+      "but": "Fits the active artboard. Figma fits page content; use Cmd+Option+0 in Illustrator to fit all artboards.",
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Zoom",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "move",
@@ -132,7 +265,15 @@
       "summary": "Selects and moves whole objects.",
       "but": "To select points inside a path, use the Direct Selection tool (A).",
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "pen",
@@ -143,7 +284,15 @@
       "summary": "Draws paths point by point.",
       "but": null,
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "text",
@@ -154,7 +303,15 @@
       "summary": "Adds text. Click for point text, drag for a text box.",
       "but": null,
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "group",
@@ -165,7 +322,15 @@
       "summary": "Groups the selected objects.",
       "but": null,
       "noMatchAlternative": null,
-      "verified": false
+      "verified": false,
+      "category": "Selection",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-select",
+        "ai-keys"
+      ],
+      "context": "canvas"
     },
     {
       "id": "auto-layout",
@@ -175,8 +340,2777 @@
       "type": "no-match",
       "summary": "Figma auto layout responds to content changes. Illustrator's Align and Distribute commands are manual alternatives.",
       "but": null,
-      "noMatchAlternative": "Line things up with the Align panel (Window → Align).",
-      "verified": false
+      "noMatchAlternative": "Window → Align for manual alignment and spacing.",
+      "verified": false,
+      "category": "Layout",
+      "availability": "figma-only",
+      "intercept": true,
+      "sources": [
+        "f-auto",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "pencil",
+      "action": "Pencil",
+      "fromKeys": "Shift+P",
+      "toKeys": "N",
+      "type": "different-key",
+      "summary": "Selects the Pencil tool. Drag to draw a freehand path.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-pencil",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "hand",
+      "action": "Hand",
+      "fromKeys": "H",
+      "toKeys": "H",
+      "type": "same-key",
+      "summary": "Selects the Hand tool. Drag to pan the canvas.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "slice",
+      "action": "Slice",
+      "fromKeys": "S",
+      "toKeys": "Shift+K",
+      "type": "different-key",
+      "summary": "Selects the Slice tool for an export region.",
+      "but": "Slice export settings and output differ between the two apps.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "eyedropper",
+      "action": "Pick color",
+      "fromKeys": "Ctrl+C",
+      "toKeys": "I",
+      "type": "different-key",
+      "summary": "Selects the Eyedropper tool. Click a sample.",
+      "but": "Illustrator can sample the full appearance, not only color. Configure Eyedropper Options to limit what it copies.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Tools",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "arrow",
+      "action": "Arrow",
+      "fromKeys": "Shift+L",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "The Line Segment tool alone does not create an arrowhead.",
+      "noMatchAlternative": "Draw a line with \\, then set an arrowhead in Window → Stroke.",
+      "verified": false,
+      "category": "Tools",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-shapes",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "section",
+      "action": "Section",
+      "fromKeys": "Shift+S",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator has no Figma Section object.",
+      "noMatchAlternative": "Use named artboards or layers to organize the document.",
+      "verified": false,
+      "category": "Tools",
+      "availability": "figma-only",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "comment",
+      "action": "Comment",
+      "fromKeys": "C",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "C normally selects Scissors in Illustrator; it does not add a Figma comment.",
+      "noMatchAlternative": "Use Illustrator’s Share for review workflow.",
+      "verified": false,
+      "category": "Tools",
+      "availability": "figma-only",
+      "intercept": true,
+      "sources": [
+        "f-tools",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "toggle-ui",
+      "action": "Show / hide panels",
+      "fromKeys": "Cmd+\\",
+      "toKeys": "TAB",
+      "type": "different-key",
+      "summary": "Shows or hides Illustrator panels.",
+      "but": "This toggles panels; it does not reproduce Figma’s entire UI visibility state.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "View",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-layout",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "left-sidebar",
+      "action": "Show / hide left sidebar",
+      "fromKeys": "Cmd+Shift+\\",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator has no equivalent left-sidebar toggle.",
+      "noMatchAlternative": "Use Window → Layers.",
+      "verified": false,
+      "category": "View",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-layout",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "multiplayer-cursors",
+      "action": "Multiplayer cursors",
+      "fromKeys": "Cmd+Alt+\\",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": null,
+      "noMatchAlternative": "Use Figma for live multiplayer cursor visibility.",
+      "verified": false,
+      "category": "View",
+      "availability": "figma-only",
+      "intercept": true,
+      "sources": [
+        "f-layout"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "outlines",
+      "action": "Show outlines",
+      "fromKeys": "Cmd+Shift+O",
+      "toKeys": "Cmd+Y",
+      "type": "different-key",
+      "summary": "Switches between artwork and outline preview.",
+      "but": "Current Figma shortcut. Legacy Shift+O is not enabled; Illustrator Cmd+Shift+O creates text outlines.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "View",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-outlines",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "pixel-preview",
+      "action": "Pixel preview",
+      "fromKeys": "Ctrl+P",
+      "toKeys": "Cmd+Alt+Y",
+      "type": "different-key",
+      "summary": "Toggles Illustrator Pixel Preview.",
+      "but": "Pixel rendering and document settings differ.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "View",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "aliases": [
+        "Cmd+Shift+P"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "layout-guides",
+      "action": "Layout guides",
+      "fromKeys": "Shift+G",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma’s frame-based layout guides are not Illustrator’s document grid.",
+      "noMatchAlternative": "Use View → Guides and Window → Align.",
+      "verified": false,
+      "category": "View",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-layout",
+        "f-zoom",
+        "ai-keys"
+      ],
+      "aliases": [
+        "Ctrl+G"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "pixel-grid",
+      "action": "Pixel grid",
+      "fromKeys": "Shift+'",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator’s Show Grid command is a configurable document grid, not Figma’s pixel grid. Figma documentation lists both Shift+apostrophe and Cmd+apostrophe.",
+      "noMatchAlternative": "Use View → Pixel Preview and zoom in.",
+      "verified": false,
+      "category": "View",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-layout",
+        "f-zoom",
+        "ai-keys"
+      ],
+      "aliases": [
+        "Cmd+'"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "snap-pixel",
+      "action": "Snap to pixel grid",
+      "fromKeys": "Cmd+Shift+'",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Cmd+Shift+apostrophe in Illustrator toggles Snap to Grid, a different setting.",
+      "noMatchAlternative": "Use View → Snap to Pixel.",
+      "verified": false,
+      "category": "View",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-layout",
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "layers-panel",
+      "action": "Layers",
+      "fromKeys": "Alt+1",
+      "toKeys": "F7",
+      "type": "different-key",
+      "summary": "Shows the Layers panel.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "View",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-select",
+        "ai-panels"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "assets-panel",
+      "action": "Assets",
+      "fromKeys": "Alt+2",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma assets and Illustrator symbols/libraries have different linking models.",
+      "noMatchAlternative": "Use Window → Symbols or Window → Libraries.",
+      "verified": false,
+      "category": "Components",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-component",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "design-panel",
+      "action": "Design properties",
+      "fromKeys": "Alt+8",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator does not have Figma’s Design tab.",
+      "noMatchAlternative": "Use Window → Properties.",
+      "verified": false,
+      "category": "View",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "prototype-panel",
+      "action": "Prototype",
+      "fromKeys": "Alt+9",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": null,
+      "noMatchAlternative": "Prototype in Figma; Illustrator creates artwork.",
+      "verified": false,
+      "category": "View",
+      "availability": "figma-only",
+      "intercept": true,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "inspect-panel",
+      "action": "Inspect / Dev Mode",
+      "fromKeys": "Alt+0",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "This older Inspect shortcut depends on the Figma version and UI.",
+      "noMatchAlternative": "Use Figma Dev Mode for developer handoff.",
+      "verified": false,
+      "category": "View",
+      "availability": "figma-only",
+      "intercept": false,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "resources",
+      "action": "Quick insert",
+      "fromKeys": "Shift+I",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "Find components in Figma’s Actions menu.",
+      "but": "Figma resources include components, plugins and widgets; these are not interchangeable.",
+      "noMatchAlternative": "Use Window → Symbols or Window → Libraries.",
+      "verified": false,
+      "category": "Components",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-instance",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "libraries",
+      "action": "Libraries",
+      "fromKeys": "Alt+3",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": null,
+      "noMatchAlternative": "Use Window → Libraries.",
+      "verified": false,
+      "category": "Components",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-libraries",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "actions",
+      "action": "Actions",
+      "fromKeys": "Cmd+K",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Cmd+K in Illustrator opens Preferences; Cmd+/ adds a new fill. Neither is Figma Actions.",
+      "noMatchAlternative": "Use Illustrator’s Help search or menus.",
+      "verified": false,
+      "category": "Edit",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-actions",
+        "f-layout",
+        "ai-keys"
+      ],
+      "aliases": [
+        "Cmd+/"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "zoom-in",
+      "action": "Zoom in",
+      "fromKeys": "+",
+      "toKeys": "Cmd+=",
+      "type": "different-key",
+      "summary": "Zooms into the document.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Zoom",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "aliases": [
+        "Cmd++",
+        "Cmd+="
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "zoom-out",
+      "action": "Zoom out",
+      "fromKeys": "-",
+      "toKeys": "Cmd+-",
+      "type": "different-key",
+      "summary": "Zooms out of the document.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Zoom",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "aliases": [
+        "Cmd+-"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "zoom-100",
+      "action": "Actual size",
+      "fromKeys": "Shift+0",
+      "toKeys": "Cmd+1",
+      "type": "different-key",
+      "summary": "Sets the view to 100%.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Zoom",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "zoom-selection",
+      "action": "Zoom to selection",
+      "fromKeys": "Shift+2",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "No documented default Illustrator chord performs Figma’s exact fit-selection action.",
+      "noMatchAlternative": "Use the Zoom tool (Z) to enclose the selection.",
+      "verified": false,
+      "category": "Zoom",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "next-frame",
+      "action": "Next frame",
+      "fromKeys": "N",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator artboards do not follow Figma frame navigation.",
+      "noMatchAlternative": "Choose the next artboard in Window → Artboards.",
+      "verified": false,
+      "category": "Zoom",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "previous-frame",
+      "action": "Previous frame",
+      "fromKeys": "Shift+N",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": null,
+      "noMatchAlternative": "Choose the previous artboard in Window → Artboards.",
+      "verified": false,
+      "category": "Zoom",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "previous-page",
+      "action": "Previous page",
+      "fromKeys": "PAGEUP",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Navigation keys remain native; an Illustrator document has artboards rather than Figma pages and frames.",
+      "noMatchAlternative": "Use Window → Artboards to choose a design area.",
+      "verified": false,
+      "category": "Zoom",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "next-page",
+      "action": "Next page",
+      "fromKeys": "PAGEDOWN",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Navigation keys remain native; an Illustrator document has artboards rather than Figma pages and frames.",
+      "noMatchAlternative": "Use Window → Artboards to choose a design area.",
+      "verified": false,
+      "category": "Zoom",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "first-frame",
+      "action": "First frame",
+      "fromKeys": "HOME",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Navigation keys remain native; an Illustrator document has artboards rather than Figma pages and frames.",
+      "noMatchAlternative": "Use Window → Artboards to choose a design area.",
+      "verified": false,
+      "category": "Zoom",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "last-frame",
+      "action": "Last frame",
+      "fromKeys": "END",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Navigation keys remain native; an Illustrator document has artboards rather than Figma pages and frames.",
+      "noMatchAlternative": "Use Window → Artboards to choose a design area.",
+      "verified": false,
+      "category": "Zoom",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-zoom",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "cut",
+      "action": "Cut",
+      "fromKeys": "Cmd+X",
+      "toKeys": "Cmd+X",
+      "type": "same-key",
+      "summary": "Cut in the active document.",
+      "but": "Applies to the current selection and editing context.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Edit",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "paste",
+      "action": "Paste",
+      "fromKeys": "Cmd+V",
+      "toKeys": "Cmd+V",
+      "type": "same-key",
+      "summary": "Paste in the active document.",
+      "but": "Applies to the current selection and editing context.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Edit",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "undo",
+      "action": "Undo",
+      "fromKeys": "Cmd+Z",
+      "toKeys": "Cmd+Z",
+      "type": "same-key",
+      "summary": "Undo in the active document.",
+      "but": "Applies to the current selection and editing context.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Edit",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "redo",
+      "action": "Redo",
+      "fromKeys": "Cmd+Shift+Z",
+      "toKeys": "Cmd+Shift+Z",
+      "type": "same-key",
+      "summary": "Redo in the active document.",
+      "but": "Applies to the current selection and editing context.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Edit",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "delete",
+      "action": "Delete selection",
+      "fromKeys": "DELETE",
+      "toKeys": "DELETE",
+      "type": "same-key",
+      "summary": "Delete selection in the active document.",
+      "but": "Applies to the current selection and editing context.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Edit",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "paste-over",
+      "action": "Paste over selection",
+      "fromKeys": "Cmd+Shift+V",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Paste in Place does not reproduce all Figma paste-over, image-fill or style behavior.",
+      "noMatchAlternative": "Use Edit → Paste in Place (Cmd+Shift+V) when matching the copied position is sufficient.",
+      "verified": false,
+      "category": "Edit",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "paste-replace",
+      "action": "Paste to replace",
+      "fromKeys": "Cmd+Shift+R",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator has no equivalent default-key replacement operation.",
+      "noMatchAlternative": "Paste the copied artwork, position it, then remove the replaced objects.",
+      "verified": false,
+      "category": "Edit",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "f-layout",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "rename",
+      "action": "Rename selection",
+      "fromKeys": "Cmd+R",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Cmd+R normally toggles Illustrator rulers.",
+      "noMatchAlternative": "Double-click the object’s name in the Layers panel.",
+      "verified": false,
+      "category": "Edit",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "export",
+      "action": "Export",
+      "fromKeys": "Cmd+Shift+E",
+      "toKeys": "Cmd+Alt+E",
+      "type": "different-key",
+      "summary": "Opens Illustrator Export for Screens.",
+      "but": "Choose artboards/assets and export settings; this does not reuse Figma’s per-layer export configuration.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Edit",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-export",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "place-image",
+      "action": "Place image",
+      "fromKeys": "Cmd+Shift+K",
+      "toKeys": "Cmd+Shift+P",
+      "type": "different-key",
+      "summary": "Opens Place. Choose a file, then place it in the document.",
+      "but": "Illustrator supports linked or embedded artwork; Figma uses image fills or media layers.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Edit",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "copy-properties",
+      "action": "Copy properties",
+      "fromKeys": "Cmd+Alt+C",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Cmd+Option+C in Illustrator is an Envelope command, not Copy properties.",
+      "noMatchAlternative": "Use the Eyedropper tool or Graphic Styles to transfer appearance.",
+      "verified": false,
+      "category": "Edit",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "paste-properties",
+      "action": "Paste properties",
+      "fromKeys": "Cmd+Alt+V",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma properties include layout and effects that do not share Illustrator’s object model.",
+      "noMatchAlternative": "Use the Eyedropper tool or apply a Graphic Style.",
+      "verified": false,
+      "category": "Edit",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "copy-png",
+      "action": "Copy as PNG",
+      "fromKeys": "Cmd+Shift+C",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Normal Copy keeps editable Illustrator artwork, not a guaranteed PNG clipboard payload.",
+      "noMatchAlternative": "Export the selection as PNG, then use the exported image.",
+      "verified": false,
+      "category": "Edit",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "copy-link",
+      "action": "Copy page link",
+      "fromKeys": "Cmd+L",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": null,
+      "noMatchAlternative": "Share a review link from Illustrator or use Figma for its page URL.",
+      "verified": false,
+      "category": "Edit",
+      "availability": "figma-only",
+      "intercept": true,
+      "sources": [
+        "f-copy",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "find",
+      "action": "Find and replace",
+      "fromKeys": "Cmd+F",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma also searches layer names and properties. Cmd+F in Illustrator is Paste in Front.",
+      "noMatchAlternative": "Use Edit → Find and Replace for text.",
+      "verified": false,
+      "category": "Edit",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-find",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "select-all",
+      "action": "Select all",
+      "fromKeys": "Cmd+A",
+      "toKeys": "Cmd+A",
+      "type": "same-key",
+      "summary": "Selects all eligible objects.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Selection",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-select",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "ungroup",
+      "action": "Ungroup",
+      "fromKeys": "Cmd+Shift+G",
+      "toKeys": "Cmd+Shift+G",
+      "type": "same-key",
+      "summary": "Ungroups the selected group.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Selection",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-select",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "select-inverse",
+      "action": "Select inverse",
+      "fromKeys": "Cmd+Shift+A",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Cmd+Shift+A in Illustrator deselects everything; it does not invert the selection.",
+      "noMatchAlternative": "Use Select → Inverse.",
+      "verified": false,
+      "category": "Selection",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-select",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "select-matching",
+      "action": "Select matching layers",
+      "fromKeys": "Cmd+Alt+A",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator has separate matching criteria rather than one Figma matching-layer command.",
+      "noMatchAlternative": "Use Select → Same and choose a property.",
+      "verified": false,
+      "category": "Selection",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-select",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "frame-selection",
+      "action": "Frame selection",
+      "fromKeys": "Cmd+Alt+G",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "An artboard is not a Figma container and does not reparent the objects.",
+      "noMatchAlternative": "Use the Artboard tool to create an artboard around the artwork.",
+      "verified": false,
+      "category": "Selection",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-select",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "edit-selection",
+      "action": "Edit selection / select children",
+      "fromKeys": "RETURN",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Return also confirms dialogs and transforms. It remains native; object type determines Figma’s action.",
+      "noMatchAlternative": "Double-click to enter Isolation Mode, or use Direct Selection (A) for path points.",
+      "verified": false,
+      "category": "Selection",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-select",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "select-parent",
+      "action": "Select parent",
+      "fromKeys": "Shift+RETURN",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma parent traversal differs from Illustrator’s isolation and selection hierarchy.",
+      "noMatchAlternative": "Select the containing group in the Layers panel.",
+      "verified": false,
+      "category": "Selection",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-select",
+        "f-layout",
+        "ai-keys"
+      ],
+      "aliases": [
+        "\\"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "next-sibling",
+      "action": "Select next sibling",
+      "fromKeys": "TAB",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Tab must remain native for panel and keyboard focus navigation.",
+      "noMatchAlternative": "Choose the next object in the Layers panel.",
+      "verified": false,
+      "category": "Selection",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-select",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "previous-sibling",
+      "action": "Select previous sibling",
+      "fromKeys": "Shift+TAB",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Shift+Tab remains native for panel and keyboard focus navigation.",
+      "noMatchAlternative": "Choose the previous object in the Layers panel.",
+      "verified": false,
+      "category": "Selection",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-select",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "deselect",
+      "action": "Deselect / cancel",
+      "fromKeys": "ESCAPE",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Escape remains native to cancel transforms, paths and text composition.",
+      "noMatchAlternative": "Click a blank area, or press Cmd+Shift+A to deselect in Illustrator.",
+      "verified": false,
+      "category": "Selection",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-select",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "bring-forward",
+      "action": "Bring forward",
+      "fromKeys": "Cmd+]",
+      "toKeys": "Cmd+]",
+      "type": "same-key",
+      "summary": "Changes the stacking order within the current layer.",
+      "but": "Layer and group boundaries affect the result.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "f-layout",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "send-backward",
+      "action": "Send backward",
+      "fromKeys": "Cmd+[",
+      "toKeys": "Cmd+[",
+      "type": "same-key",
+      "summary": "Changes the stacking order within the current layer.",
+      "but": "Layer and group boundaries affect the result.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "f-layout",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "bring-front",
+      "action": "Bring to front",
+      "fromKeys": "Cmd+Alt+]",
+      "toKeys": "Cmd+Shift+]",
+      "type": "different-key",
+      "summary": "Changes the stacking order within the current layer.",
+      "but": "Layer and group boundaries affect the result.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "f-layout",
+        "ai-keys"
+      ],
+      "aliases": [
+        "]"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "send-back",
+      "action": "Send to back",
+      "fromKeys": "Cmd+Alt+[",
+      "toKeys": "Cmd+Shift+[",
+      "type": "different-key",
+      "summary": "Changes the stacking order within the current layer.",
+      "but": "Layer and group boundaries affect the result.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "f-layout",
+        "ai-keys"
+      ],
+      "aliases": [
+        "["
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "nudge-left",
+      "action": "Nudge left",
+      "fromKeys": "LEFT",
+      "toKeys": "LEFT",
+      "type": "same-key",
+      "summary": "Moves the selection using Illustrator’s keyboard increment.",
+      "but": "The distance uses Illustrator Preferences, not the Figma nudge value.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "big-nudge-left",
+      "action": "Big nudge left",
+      "fromKeys": "Shift+LEFT",
+      "toKeys": "Shift+LEFT",
+      "type": "same-key",
+      "summary": "Moves the selection using Illustrator’s 10× keyboard increment.",
+      "but": "The distance uses Illustrator Preferences, not the Figma nudge value.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "nudge-right",
+      "action": "Nudge right",
+      "fromKeys": "RIGHT",
+      "toKeys": "RIGHT",
+      "type": "same-key",
+      "summary": "Moves the selection using Illustrator’s keyboard increment.",
+      "but": "The distance uses Illustrator Preferences, not the Figma nudge value.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "big-nudge-right",
+      "action": "Big nudge right",
+      "fromKeys": "Shift+RIGHT",
+      "toKeys": "Shift+RIGHT",
+      "type": "same-key",
+      "summary": "Moves the selection using Illustrator’s 10× keyboard increment.",
+      "but": "The distance uses Illustrator Preferences, not the Figma nudge value.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "nudge-up",
+      "action": "Nudge up",
+      "fromKeys": "UP",
+      "toKeys": "UP",
+      "type": "same-key",
+      "summary": "Moves the selection using Illustrator’s keyboard increment.",
+      "but": "The distance uses Illustrator Preferences, not the Figma nudge value.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "big-nudge-up",
+      "action": "Big nudge up",
+      "fromKeys": "Shift+UP",
+      "toKeys": "Shift+UP",
+      "type": "same-key",
+      "summary": "Moves the selection using Illustrator’s 10× keyboard increment.",
+      "but": "The distance uses Illustrator Preferences, not the Figma nudge value.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "nudge-down",
+      "action": "Nudge down",
+      "fromKeys": "DOWN",
+      "toKeys": "DOWN",
+      "type": "same-key",
+      "summary": "Moves the selection using Illustrator’s keyboard increment.",
+      "but": "The distance uses Illustrator Preferences, not the Figma nudge value.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "big-nudge-down",
+      "action": "Big nudge down",
+      "fromKeys": "Shift+DOWN",
+      "toKeys": "Shift+DOWN",
+      "type": "same-key",
+      "summary": "Moves the selection using Illustrator’s 10× keyboard increment.",
+      "but": "The distance uses Illustrator Preferences, not the Figma nudge value.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Arrange",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "align-left",
+      "action": "Align left",
+      "fromKeys": "Alt+A",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "There is no default Illustrator keyboard chord for this Align panel button.",
+      "noMatchAlternative": "Window → Align → Align left. Choose the alignment reference first.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-align"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "align-right",
+      "action": "Align right",
+      "fromKeys": "Alt+D",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "There is no default Illustrator keyboard chord for this Align panel button.",
+      "noMatchAlternative": "Window → Align → Align right. Choose the alignment reference first.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-align"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "align-top",
+      "action": "Align top",
+      "fromKeys": "Alt+W",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "There is no default Illustrator keyboard chord for this Align panel button.",
+      "noMatchAlternative": "Window → Align → Align top. Choose the alignment reference first.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-align"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "align-bottom",
+      "action": "Align bottom",
+      "fromKeys": "Alt+S",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "There is no default Illustrator keyboard chord for this Align panel button.",
+      "noMatchAlternative": "Window → Align → Align bottom. Choose the alignment reference first.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-align"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "align-h-center",
+      "action": "Align horizontal centers",
+      "fromKeys": "Alt+H",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "There is no default Illustrator keyboard chord for this Align panel button.",
+      "noMatchAlternative": "Window → Align → Align horizontal centers. Choose the alignment reference first.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-align"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "align-v-center",
+      "action": "Align vertical centers",
+      "fromKeys": "Alt+V",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "There is no default Illustrator keyboard chord for this Align panel button.",
+      "noMatchAlternative": "Window → Align → Align vertical centers. Choose the alignment reference first.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-align"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "distribute-horizontal",
+      "action": "Distribute horizontal spacing",
+      "fromKeys": "Ctrl+Alt+H",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "No default Illustrator chord; object/key-object/artboard alignment affects the result.",
+      "noMatchAlternative": "Window → Align → Distribute Spacing.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-align"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "distribute-vertical",
+      "action": "Distribute vertical spacing",
+      "fromKeys": "Ctrl+Alt+V",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "No default Illustrator chord; object/key-object/artboard alignment affects the result.",
+      "noMatchAlternative": "Window → Align → Distribute Spacing.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-align"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "tidy",
+      "action": "Tidy up",
+      "fromKeys": "Ctrl+Alt+T",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma’s grid rearrangement is not an Illustrator default-key command.",
+      "noMatchAlternative": "Use Window → Align for manual alignment and spacing.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-align"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "remove-auto-layout",
+      "action": "Remove auto layout",
+      "fromKeys": "Alt+Shift+A",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator has no Figma auto layout container.",
+      "noMatchAlternative": "Use Align/Distribute to arrange Illustrator objects manually.",
+      "verified": false,
+      "category": "Layout",
+      "availability": "figma-only",
+      "intercept": true,
+      "sources": [
+        "f-auto",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "suggest-auto-layout",
+      "action": "Suggest auto layout",
+      "fromKeys": "Ctrl+Shift+A",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator has no Figma auto layout container.",
+      "noMatchAlternative": "Use Align/Distribute to arrange Illustrator objects manually.",
+      "verified": false,
+      "category": "Layout",
+      "availability": "figma-only",
+      "intercept": true,
+      "sources": [
+        "f-auto",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "swap-fill-stroke",
+      "action": "Swap fill and stroke",
+      "fromKeys": "Shift+X",
+      "toKeys": "Shift+X",
+      "type": "same-key",
+      "summary": "Swaps the selection’s fill and stroke.",
+      "but": null,
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Vector",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-shapes",
+        "f-layout",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "join",
+      "action": "Join endpoints",
+      "fromKeys": "Cmd+J",
+      "toKeys": "Cmd+J",
+      "type": "same-key",
+      "summary": "Joins selected path endpoints.",
+      "but": "Figma vector networks and Illustrator paths have different topology; select open endpoints first.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Vector",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-vector",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "paint",
+      "action": "Paint regions",
+      "fromKeys": "Shift+B",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "A Figma vector network is not an Illustrator Live Paint group; no automatic conversion is attempted.",
+      "noMatchAlternative": "Use Live Paint Bucket (K) with a Live Paint group.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-vector",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "remove-fill",
+      "action": "Remove fill",
+      "fromKeys": "Alt+/",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "The / key clears whichever swatch is active; blindly sending it could erase the stroke.",
+      "noMatchAlternative": "Activate Fill (X switches the active swatch), then press / for None.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-layout",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "remove-stroke",
+      "action": "Remove stroke",
+      "fromKeys": "Shift+/",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "The active Fill/Stroke swatch must be checked first.",
+      "noMatchAlternative": "Activate Stroke (X switches the active swatch), then press / for None.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-layout",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "outline-stroke",
+      "action": "Outline stroke / text",
+      "fromKeys": "Cmd+Alt+O",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma uses one action for different selection types. Illustrator’s Create Outlines only converts text.",
+      "noMatchAlternative": "For strokes: Object → Path → Outline Stroke. For text: Type → Create Outlines (Cmd+Shift+O).",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-outline",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "flatten",
+      "action": "Flatten selection",
+      "fromKeys": "Alt+Shift+F",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Combining paths, expanding appearances and outlining type are separate Illustrator operations.",
+      "noMatchAlternative": "Use Pathfinder or Object → Expand as appropriate for the selected artwork.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-flatten",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "smooth-join",
+      "action": "Smooth join",
+      "fromKeys": "Cmd+Shift+J",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator’s average-and-join command changes point positions; it is not a safe universal equivalent.",
+      "noMatchAlternative": "Select endpoints, then use Object → Path → Join and adjust handles with the Anchor Point tool.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-vector",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "delete-heal",
+      "action": "Delete and heal",
+      "fromKeys": "Shift+DELETE",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Deleting and healing Figma vector networks does not have a universal Illustrator default-key equivalent.",
+      "noMatchAlternative": "Delete the anchor with the Delete Anchor Point tool, then inspect the curve.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-vector",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "flip-horizontal",
+      "action": "Flip horizontal",
+      "fromKeys": "Shift+H",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Selecting Reflect (O) only chooses a tool; it does not perform a flip.",
+      "noMatchAlternative": "Object → Transform → Reflect → Vertical axis.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "flip-vertical",
+      "action": "Flip vertical",
+      "fromKeys": "Shift+V",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": null,
+      "noMatchAlternative": "Object → Transform → Reflect → Horizontal axis.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "rotation-origin",
+      "action": "Set rotation origin",
+      "fromKeys": "Alt+R",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "A held pointer gesture is required.",
+      "noMatchAlternative": "Select Rotate (R), then Option-click to set the origin.",
+      "verified": false,
+      "category": "Arrange",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-arrange",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "mask",
+      "action": "Use as mask",
+      "fromKeys": "Ctrl+Cmd+M",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator uses the topmost path. Figma masks use different ordering and alpha/luminance semantics.",
+      "noMatchAlternative": "Put the clipping path above the artwork, then Object → Clipping Mask → Make (Cmd+7).",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-mask",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "opacity-10",
+      "action": "Opacity 10%",
+      "fromKeys": "1",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator does not have Figma’s canvas digit shortcuts for opacity.",
+      "noMatchAlternative": "Set Opacity to 10% in Window → Transparency.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-keys",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "opacity-20",
+      "action": "Opacity 20%",
+      "fromKeys": "2",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator does not have Figma’s canvas digit shortcuts for opacity.",
+      "noMatchAlternative": "Set Opacity to 20% in Window → Transparency.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-keys",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "opacity-30",
+      "action": "Opacity 30%",
+      "fromKeys": "3",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator does not have Figma’s canvas digit shortcuts for opacity.",
+      "noMatchAlternative": "Set Opacity to 30% in Window → Transparency.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-keys",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "opacity-40",
+      "action": "Opacity 40%",
+      "fromKeys": "4",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator does not have Figma’s canvas digit shortcuts for opacity.",
+      "noMatchAlternative": "Set Opacity to 40% in Window → Transparency.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-keys",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "opacity-50",
+      "action": "Opacity 50%",
+      "fromKeys": "5",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator does not have Figma’s canvas digit shortcuts for opacity.",
+      "noMatchAlternative": "Set Opacity to 50% in Window → Transparency.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-keys",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "opacity-60",
+      "action": "Opacity 60%",
+      "fromKeys": "6",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator does not have Figma’s canvas digit shortcuts for opacity.",
+      "noMatchAlternative": "Set Opacity to 60% in Window → Transparency.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-keys",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "opacity-70",
+      "action": "Opacity 70%",
+      "fromKeys": "7",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator does not have Figma’s canvas digit shortcuts for opacity.",
+      "noMatchAlternative": "Set Opacity to 70% in Window → Transparency.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-keys",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "opacity-80",
+      "action": "Opacity 80%",
+      "fromKeys": "8",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator does not have Figma’s canvas digit shortcuts for opacity.",
+      "noMatchAlternative": "Set Opacity to 80% in Window → Transparency.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-keys",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "opacity-90",
+      "action": "Opacity 90%",
+      "fromKeys": "9",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator does not have Figma’s canvas digit shortcuts for opacity.",
+      "noMatchAlternative": "Set Opacity to 90% in Window → Transparency.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-keys",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "opacity-100",
+      "action": "Opacity 100%",
+      "fromKeys": "0",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator does not have Figma’s canvas digit shortcuts for opacity.",
+      "noMatchAlternative": "Set Opacity to 100% in Window → Transparency.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-keys",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "text-align-left",
+      "action": "Text align left",
+      "fromKeys": "Cmd+Alt+L",
+      "toKeys": "Cmd+Shift+L",
+      "type": "different-key",
+      "summary": "Applies paragraph alignment to selected text objects.",
+      "but": "Canvas text entry and text fields keep native input. Illustrator justify uses the last-line-left setting.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Text",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-text",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "text-align-center",
+      "action": "Text align center",
+      "fromKeys": "Cmd+Alt+T",
+      "toKeys": "Cmd+Shift+C",
+      "type": "different-key",
+      "summary": "Applies paragraph alignment to selected text objects.",
+      "but": "Canvas text entry and text fields keep native input. Illustrator justify uses the last-line-left setting.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Text",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-text",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "text-align-right",
+      "action": "Text align right",
+      "fromKeys": "Cmd+Alt+R",
+      "toKeys": "Cmd+Shift+R",
+      "type": "different-key",
+      "summary": "Applies paragraph alignment to selected text objects.",
+      "but": "Canvas text entry and text fields keep native input. Illustrator justify uses the last-line-left setting.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Text",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-text",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "text-align-justify",
+      "action": "Text align justify",
+      "fromKeys": "Cmd+Alt+J",
+      "toKeys": "Cmd+Shift+J",
+      "type": "different-key",
+      "summary": "Applies paragraph alignment to selected text objects.",
+      "but": "Canvas text entry and text fields keep native input. Illustrator justify uses the last-line-left setting.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Text",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-text",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "text-bold",
+      "action": "Bold",
+      "fromKeys": "Cmd+B",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Font styles and text editing are context-dependent. Native text input is preserved; no canvas-wide replacement is sent.",
+      "noMatchAlternative": "Select text, then use Window → Type → Character or Paragraph.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-text",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "text-italic",
+      "action": "Italic",
+      "fromKeys": "Cmd+I",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Font styles and text editing are context-dependent. Native text input is preserved; no canvas-wide replacement is sent.",
+      "noMatchAlternative": "Select text, then use Window → Type → Character or Paragraph.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-text",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "text-underline",
+      "action": "Underline",
+      "fromKeys": "Cmd+U",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Font styles and text editing are context-dependent. Native text input is preserved; no canvas-wide replacement is sent.",
+      "noMatchAlternative": "Select text, then use Window → Type → Character or Paragraph.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-text",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "text-strike",
+      "action": "Strikethrough",
+      "fromKeys": "Cmd+Shift+X",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Font styles and text editing are context-dependent. Native text input is preserved; no canvas-wide replacement is sent.",
+      "noMatchAlternative": "Select text, then use Window → Type → Character or Paragraph.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-text",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "text-numbered-list",
+      "action": "Numbered list",
+      "fromKeys": "Cmd+Shift+7",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Font styles and text editing are context-dependent. Native text input is preserved; no canvas-wide replacement is sent.",
+      "noMatchAlternative": "Select text, then use Window → Type → Character or Paragraph.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-text",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "text-bulleted-list",
+      "action": "Bulleted list",
+      "fromKeys": "Cmd+Shift+8",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Font styles and text editing are context-dependent. Native text input is preserved; no canvas-wide replacement is sent.",
+      "noMatchAlternative": "Select text, then use Window → Type → Character or Paragraph.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-text",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "text-link",
+      "action": "Add text link",
+      "fromKeys": "Cmd+Shift+U",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma’s text hyperlink does not have a universal Illustrator default-key equivalent.",
+      "noMatchAlternative": "Add the link in the output or review workflow that supports it.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-link",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "font-size-decrease",
+      "action": "Font size decrease",
+      "fromKeys": "Cmd+Shift+,",
+      "toKeys": "Cmd+Shift+,",
+      "type": "same-key",
+      "summary": "Changes the font size of selected text objects.",
+      "but": "Uses Illustrator’s size increment. Native text entry remains protected.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Text",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-layout",
+        "ai-type"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "font-weight-decrease",
+      "action": "Font weight decrease",
+      "fromKeys": "Cmd+Alt+,",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Available weights depend on the font.",
+      "noMatchAlternative": "Choose the font style or variable weight in the Character panel.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-layout",
+        "f-text",
+        "ai-type"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "letter-spacing-decrease",
+      "action": "Letter spacing decrease",
+      "fromKeys": "Alt+,",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma’s public keyboard-layout and text-property articles disagree about modifiers. This chord is a reference entry, not an automatic remap.",
+      "noMatchAlternative": "Adjust Tracking in the Character panel.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-layout",
+        "f-text",
+        "ai-type"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "line-height-decrease",
+      "action": "Line height decrease",
+      "fromKeys": "Alt+Shift+,",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma’s line-height units and Illustrator’s leading differ; the public source tables also disagree about modifiers.",
+      "noMatchAlternative": "Adjust Leading in the Character panel.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-layout",
+        "f-text",
+        "ai-type"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "font-size-increase",
+      "action": "Font size increase",
+      "fromKeys": "Cmd+Shift+.",
+      "toKeys": "Cmd+Shift+.",
+      "type": "same-key",
+      "summary": "Changes the font size of selected text objects.",
+      "but": "Uses Illustrator’s size increment. Native text entry remains protected.",
+      "noMatchAlternative": null,
+      "verified": false,
+      "category": "Text",
+      "availability": "shortcut",
+      "intercept": true,
+      "sources": [
+        "f-layout",
+        "ai-type"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "font-weight-increase",
+      "action": "Font weight increase",
+      "fromKeys": "Cmd+Alt+.",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Available weights depend on the font.",
+      "noMatchAlternative": "Choose the font style or variable weight in the Character panel.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-layout",
+        "f-text",
+        "ai-type"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "letter-spacing-increase",
+      "action": "Letter spacing increase",
+      "fromKeys": "Alt+.",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma’s public keyboard-layout and text-property articles disagree about modifiers. This chord is a reference entry, not an automatic remap.",
+      "noMatchAlternative": "Adjust Tracking in the Character panel.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-layout",
+        "f-text",
+        "ai-type"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "line-height-increase",
+      "action": "Line height increase",
+      "fromKeys": "Alt+Shift+.",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma’s line-height units and Illustrator’s leading differ; the public source tables also disagree about modifiers.",
+      "noMatchAlternative": "Adjust Leading in the Character panel.",
+      "verified": false,
+      "category": "Text",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-layout",
+        "f-text",
+        "ai-type"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "create-component",
+      "action": "Create component",
+      "fromKeys": "Cmd+Alt+K",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma components, variants and auto layout are not Illustrator symbols.",
+      "noMatchAlternative": "Create a Symbol in Window → Symbols when linked artwork is sufficient.",
+      "verified": false,
+      "category": "Components",
+      "availability": "figma-only",
+      "intercept": true,
+      "sources": [
+        "f-component",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "detach-instance",
+      "action": "Detach instance",
+      "fromKeys": "Cmd+Alt+B",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma instances and Illustrator symbol instances use different override/link models.",
+      "noMatchAlternative": "Select a symbol instance, then choose Break Link to Symbol.",
+      "verified": false,
+      "category": "Components",
+      "availability": "figma-only",
+      "intercept": true,
+      "sources": [
+        "f-detach",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "keyboard-box-select",
+      "action": "Keyboard box selection",
+      "fromKeys": "Alt+SPACE",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Keyboard navigation remains native.",
+      "noMatchAlternative": "Use Illustrator’s keyboard selection tools or the Layers panel.",
+      "verified": false,
+      "category": "Accessibility",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-access",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "next-region",
+      "action": "Next UI region",
+      "fromKeys": "F6",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "F6 remains native; there is no one-to-one Figma region model.",
+      "noMatchAlternative": "Use Illustrator’s keyboard focus navigation.",
+      "verified": false,
+      "category": "Accessibility",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-access",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "ui-size-reset",
+      "action": "Reset UI size",
+      "fromKeys": "Cmd+Alt+Shift+0",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma’s UI scale command is not an Illustrator shortcut.",
+      "noMatchAlternative": "Use Illustrator Preferences → User Interface.",
+      "verified": false,
+      "category": "Accessibility",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-access",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "ui-size-larger",
+      "action": "Increase UI size",
+      "fromKeys": "Cmd+Alt+Shift+=",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma’s UI scale command is not an Illustrator shortcut.",
+      "noMatchAlternative": "Use Illustrator Preferences → User Interface.",
+      "verified": false,
+      "category": "Accessibility",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-access",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "ui-size-smaller",
+      "action": "Decrease UI size",
+      "fromKeys": "Cmd+Alt+Shift+-",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma’s UI scale command is not an Illustrator shortcut.",
+      "noMatchAlternative": "Use Illustrator Preferences → User Interface.",
+      "verified": false,
+      "category": "Accessibility",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-access",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "boolean-union",
+      "action": "Union selection",
+      "fromKeys": "Alt+Shift+U",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator’s Pathfinder and Figma’s editable boolean groups have different appearance and expansion behavior.",
+      "noMatchAlternative": "Window → Pathfinder → Unite. Use a compound shape if the inputs must remain editable.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-boolean",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "boolean-subtract",
+      "action": "Subtract selection",
+      "fromKeys": "Alt+Shift+S",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator’s Pathfinder and Figma’s editable boolean groups have different appearance and expansion behavior.",
+      "noMatchAlternative": "Window → Pathfinder → Minus Front. Use a compound shape if the inputs must remain editable.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-boolean",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "boolean-intersect",
+      "action": "Intersect selection",
+      "fromKeys": "Alt+Shift+I",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator’s Pathfinder and Figma’s editable boolean groups have different appearance and expansion behavior.",
+      "noMatchAlternative": "Window → Pathfinder → Intersect. Use a compound shape if the inputs must remain editable.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-boolean",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "boolean-exclude",
+      "action": "Exclude selection",
+      "fromKeys": "Alt+Shift+E",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Illustrator’s Pathfinder and Figma’s editable boolean groups have different appearance and expansion behavior.",
+      "noMatchAlternative": "Window → Pathfinder → Exclude. Use a compound shape if the inputs must remain editable.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-boolean",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "main-component",
+      "action": "Go to main component",
+      "fromKeys": "Ctrl+Alt+Cmd+K",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "Figma library navigation is not Illustrator symbol editing.",
+      "noMatchAlternative": "Double-click a symbol to edit its definition, if the selected artwork is a symbol instance.",
+      "verified": false,
+      "category": "Components",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-instance",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "shortcut-panel",
+      "action": "Keyboard shortcuts",
+      "fromKeys": "Ctrl+Shift+/",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": null,
+      "noMatchAlternative": "Open Edit → Keyboard Shortcuts in Illustrator.",
+      "verified": false,
+      "category": "Accessibility",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-keys",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "rotate-up",
+      "action": "Rotate 1° up",
+      "fromKeys": "Cmd+Alt+UP",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "No Illustrator default chord applies this exact rotation increment.",
+      "noMatchAlternative": "Object → Transform → Rotate. Enter the required angle.",
+      "verified": false,
+      "category": "Accessibility",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-access",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "big-rotate-up",
+      "action": "Rotate 15° up",
+      "fromKeys": "Cmd+Alt+Shift+UP",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "No Illustrator default chord applies this exact rotation increment.",
+      "noMatchAlternative": "Object → Transform → Rotate. Enter the required angle.",
+      "verified": false,
+      "category": "Accessibility",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-access",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "rotate-down",
+      "action": "Rotate 1° down",
+      "fromKeys": "Cmd+Alt+DOWN",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "No Illustrator default chord applies this exact rotation increment.",
+      "noMatchAlternative": "Object → Transform → Rotate. Enter the required angle.",
+      "verified": false,
+      "category": "Accessibility",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-access",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "big-rotate-down",
+      "action": "Rotate 15° down",
+      "fromKeys": "Cmd+Alt+Shift+DOWN",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "No Illustrator default chord applies this exact rotation increment.",
+      "noMatchAlternative": "Object → Transform → Rotate. Enter the required angle.",
+      "verified": false,
+      "category": "Accessibility",
+      "availability": "manual",
+      "intercept": true,
+      "sources": [
+        "f-access",
+        "ai-keys"
+      ],
+      "context": "canvas"
+    },
+    {
+      "id": "vector-cut",
+      "action": "Vector cut",
+      "fromKeys": "X",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "This is a Figma vector-edit context shortcut. Native input remains unchanged.",
+      "noMatchAlternative": "Use Scissors (C) on an Illustrator path.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-vector",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "vector-eraser",
+      "action": "Vector eraser",
+      "fromKeys": "Shift+E",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "This is a Figma vector-edit context shortcut. Native input remains unchanged.",
+      "noMatchAlternative": "Use Eraser (Shift+E); the affected paths depend on the selection.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-vector",
+        "ai-keys"
+      ],
+      "context": "reference-only"
+    },
+    {
+      "id": "vector-lasso",
+      "action": "Vector lasso",
+      "fromKeys": "Q",
+      "toKeys": null,
+      "type": "no-match",
+      "summary": "No direct default-key mapping.",
+      "but": "This is a Figma vector-edit context shortcut. Native input remains unchanged.",
+      "noMatchAlternative": "Use Lasso (Q) to select anchor points.",
+      "verified": false,
+      "category": "Vector",
+      "availability": "manual",
+      "intercept": false,
+      "sources": [
+        "f-vector",
+        "ai-keys"
+      ],
+      "context": "reference-only"
     }
   ]
 }

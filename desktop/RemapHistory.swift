@@ -17,7 +17,7 @@ struct RemapHistoryEntry: Codable, Equatable {
         UUID(uuidString: id) != nil && !cardId.isEmpty && !action.isEmpty
             && from == "figma" && ["illustrator", "photoshop"].contains(to)
             && ShortcutStep.parse(fromKeys) != nil && !toKeys.isEmpty
-            && toKeys.split(separator: ",", omittingEmptySubsequences: false).allSatisfy { ShortcutStep.parse(String($0)) != nil }
+            && ShortcutStep.sequence(toKeys) != nil
             && usedAt.isFinite && usedAt > 0 && usedAt <= 8.64e15
     }
 }

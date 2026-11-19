@@ -166,23 +166,67 @@ let aboveWindow = HintPlacement.windowFrame(position: CGPoint(x: 100, y: -700), 
 expect(aboveWindow == CGRect(x: 100, y: 1200, width: 600, height: 400), "AX coordinates must resolve screens above the primary correctly")
 let leftWindow = HintPlacement.windowFrame(position: CGPoint(x: -1200, y: 200), size: CGSize(width: 500, height: 300), primaryTop: 900)
 expect(leftWindow == CGRect(x: -1200, y: 400, width: 500, height: 300), "AX coordinates must preserve negative horizontal screen positions")
-// Verify every executable mapping in the actual catalog without posting input.
+// Verify all source aliases, four modifiers and actual catalog routes without posting input.
 var executableMappings = 0
 var unavailableMappings = 0
+var catalogRows = 0
 for file in ["figma-to-illustrator.json", "figma-to-photoshop.json"] {
     let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent("src/data/" + file)
     let data = try! Data(contentsOf: url)
     let deck = try! JSONSerialization.jsonObject(with: data) as! [String: Any]
-    for row in deck["cards"] as! [[String: Any]] {
-        let card = LearningCard(id: row["id"] as! String, action: row["action"] as! String,
-            from: "figma", to: deck["to"] as! String, fromKeys: row["fromKeys"] as! String, toKeys: row["toKeys"] as? String)
+    let rows = deck["cards"] as! [[String: Any]]
+    let cards = rows.map { row in
+        LearningCard(id: row["id"] as! String, action: row["action"] as! String,
+            from: "figma", to: deck["to"] as! String, fromKeys: row["fromKeys"] as! String,
+            toKeys: row["toKeys"] as? String, aliases: row["aliases"] as? [String] ?? [], intercept: row["intercept"] as? Bool ?? true)
+    }
+    let sources = Set(cards.filter { $0.intercept }.flatMap { $0.sourceSteps })
+    let shared = Set(cards.filter { $0.intercept }.flatMap { card -> [ShortcutStep] in
+        guard let target = card.toKeys, let steps = ShortcutStep.sequence(target), steps.count == 1 else { return [] }
+        return card.sourceSteps.filter { $0 == steps[0] }
+    })
+    for card in cards {
+        catalogRows += 1
+        expect(card.sourceSteps.count == card.aliases.count + 1, "Every source and alias must parse: \(card.id)")
+        for source in card.sourceSteps {
+            let code = ShortcutPolicy.keys.first { $0.value == source.key }!.key
+            var flags: CGEventFlags = []
+            if source.cmd { flags.insert(.maskCommand) }
+            if source.shift { flags.insert(.maskShift) }
+            if source.alt { flags.insert(.maskAlternate) }
+            if source.ctrl { flags.insert(.maskControl) }
+            // Navigation key events commonly carry Fn on real Apple keyboards.
+            if code >= 64 { flags.insert(.maskSecondaryFn) }
+            var route = ShortcutPolicy()
+            let result = route.decide(keyCode: code, flags: flags, keyDown: true, repeated: false,
+                enabled: true, eligible: true, cardVisible: false, figmaMode: true,
+                sourceKeys: sources, sameKeys: shared, allowPrefixedLookup: false)
+            let shouldCapture = card.intercept && !shared.contains(source)
+            if shouldCapture {
+                if case .show(let combo) = result {
+                    expect(combo.step == source && !combo.prefixed, "Real source modifiers must survive routing: \(card.id)")
+                } else { expect(false, "Registered remap/manual action must be captured: \(card.id)") }
+            } else { expect(isPass(result), "Shared and contextual keys must remain native: \(card.id)") }
+            expect(isSwallow(route.decide(keyCode: code, flags: [], keyDown: false, repeated: false,
+                enabled: false, eligible: false, cardVisible: false)) == shouldCapture, "Release follows its source even after app or mode change: \(card.id)")
+            expect(isPass(route.decide(keyCode: code, flags: flags, keyDown: true, repeated: false,
+                enabled: true, eligible: true, cardVisible: false, figmaMode: true, textEntry: true,
+                sourceKeys: sources, sameKeys: shared, allowPrefixedLookup: false)), "Every chord must preserve protected text input: \(card.id)")
+            expect(isPass(route.decide(keyCode: code, flags: flags, keyDown: true, repeated: false,
+                enabled: true, eligible: false, cardVisible: false, figmaMode: true,
+                sourceKeys: sources, sameKeys: shared, allowPrefixedLookup: false)), "Every chord must preserve another app: \(card.id)")
+            if card.toKeys != nil, !shared.contains(source) {
+                if case .keys = RemapResolution.resolve(card, source: source) { checks += 1 }
+                else { expect(false, "A different-key alias must execute, even when the canonical chord is shared: \(card.id)") }
+            }
+        }
         switch RemapResolution.resolve(card) {
         case .unavailable:
             unavailableMappings += 1
             expect(card.toKeys == nil, "Only declared no-match entries may be unavailable: \(card.id)")
         case .same:
             executableMappings += 1
-            expect(card.fromKeys == card.toKeys, "Shared commands must not be synthesized: \(card.id)")
+            expect(ShortcutStep.parse(card.fromKeys) == ShortcutStep.parse(card.toKeys!), "Shared commands must not be synthesized: \(card.id)")
         case .keys(let steps):
             executableMappings += 1
             for step in steps {
@@ -194,7 +238,8 @@ for file in ["figma-to-illustrator.json", "figma-to-photoshop.json"] {
                 for event in pair {
                     let flags = event.flags.intersection([.maskCommand, .maskShift, .maskControl, .maskAlternate])
                     expect(flags.contains(.maskCommand) == step.cmd && flags.contains(.maskShift) == step.shift
-                        && flags.intersection([.maskControl, .maskAlternate]).isEmpty, "Synthesized modifiers must match the target, not the source: \(card.id)")
+                        && flags.contains(.maskControl) == step.ctrl && flags.contains(.maskAlternate) == step.alt,
+                        "Synthesized modifiers must match the target, not the source: \(card.id)")
                     expect(RemapEvents.isSynthetic(event), "Synthetic target keys must be tagged to prevent remapping recursion")
                     expect(ShortcutPolicy.keys[event.getIntegerValueField(.keyboardEventKeycode)] == step.key, "Target virtual key must match the catalog: \(card.id)")
                 }
@@ -202,7 +247,23 @@ for file in ["figma-to-illustrator.json", "figma-to-photoshop.json"] {
         }
     }
 }
-expect(executableMappings == 24 && unavailableMappings == 2, "Current catalogs have 24 executable entries and 2 no-direct-equivalent entries")
+expect(executableMappings + unavailableMappings == catalogRows, "Every catalog action must be classified")
+expect(executableMappings >= 64 && unavailableMappings > 2, "Expanded Illustrator coverage and manual fallbacks must not disappear")
+expect(ShortcutStep.parse("Control+Option+Command+Shift+ArrowUp") == ShortcutStep(key: "UP", cmd: true, shift: true, alt: true, ctrl: true), "All modifier synonyms and arrow aliases parse")
+expect(ShortcutStep.parse("+") == ShortcutStep.parse("Shift+="), "A literal plus is the shifted equals key")
+expect(ShortcutStep.sequence("Cmd+,") == [ShortcutStep.parse("Cmd+,")!], "A comma key is not an empty sequence step")
+expect(ShortcutStep.sequence("Cmd+,, Cmd+F")?.count == 2, "Comma can be followed by a real sequence separator")
+let aliasCopy = LearningCard(id: "alias-copy", action: "Copy", from: "figma", to: "illustrator", fromKeys: "Cmd+C", toKeys: "Cmd+C", aliases: ["Ctrl+C"])
+expect(RemapResolution.resolve(aliasCopy, source: ShortcutStep.parse("Ctrl+C")) == .keys([ShortcutStep.parse("Cmd+C")!]), "A shared canonical key must not swallow a non-shared alias")
+let optionTarget = LearningCard(id: "pixel", action: "Pixel preview", from: "figma", to: "illustrator", fromKeys: "Ctrl+P", toKeys: "Cmd+Alt+Y")
+tracker.arm(optionTarget, alreadyUnlocked: false, now: 1)
+expect(observe(16, [.maskCommand]) == nil, "An Option target cannot complete with missing modifiers")
+expect(observe(16, [.maskCommand, .maskAlternate]) == optionTarget, "Option targets can complete learning")
+for text in ["Ctrl+Alt+LEFT", "Ctrl+Cmd+Alt+Shift+F7", "Cmd+,"] {
+    let step = ShortcutStep.parse(text)!
+    let pair = RemapEvents.pair(for: step)!
+    expect(pair.allSatisfy { ShortcutStep.from(keyCode: $0.getIntegerValueField(.keyboardEventKeycode), flags: $0.flags) == step }, "All four modifiers survive target events: \(text)")
+}
 let invalid = LearningCard(id: "invalid", action: "Invalid", from: "figma", to: "illustrator", fromKeys: "K", toKeys: "Cmd+C, BAD+F")
 expect(RemapResolution.resolve(invalid) == .unavailable, "A partly invalid sequence must not execute its first step")
 expect(RemapResolution.resolve(noMatch) == .unavailable, "Auto layout must never synthesize an unrelated target shortcut")

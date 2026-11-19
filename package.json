@@ -16,7 +16,8 @@
     "desktop:build": "node scripts/desktop.mjs build",
     "desktop:open": "node scripts/desktop.mjs open",
     "test:desktop": "node scripts/test-desktop.mjs",
-    "test:history": "node --experimental-strip-types scripts/test-history.mjs"
+    "test:history": "node --experimental-strip-types scripts/test-history.mjs",
+    "test:catalog": "node --experimental-strip-types scripts/test-catalog.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

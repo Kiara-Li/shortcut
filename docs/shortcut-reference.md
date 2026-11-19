@@ -1,5 +1,7 @@
 # 快捷键研究依据
 
+> 2026-11-19 更新：以下 16/10 条核查及界面描述保留为历史记录。当前 Illustrator 已扩展为 159 项分类，具体可执行／手动／保留原生输入的范围、来源冲突和未完成的实机验收见 [illustrator-coverage.md](illustrator-coverage.md)。不能将“已分类”理解为“全部自动映射成功”。
+
 核查日期：2026-11-16。范围：项目现有 macOS 配对，Figma → Illustrator 16 条，Figma → Photoshop 10 条。以下是默认键位资料审查，不是 26 条动作的完整实机测试；保留两个数据文件的 `verified: false`。
 
 符号：`⌘` Command，`⇧` Shift，`⌥` Option。箭头表示任务对应，不代表动作完全相同，也不代表程序已经自动转换；逗号表示依次按键。

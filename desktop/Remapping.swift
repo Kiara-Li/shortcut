@@ -10,12 +10,10 @@ enum RemapResolution: Equatable {
     case same, unavailable
     case keys([ShortcutStep])
 
-    static func resolve(_ card: LearningCard) -> RemapResolution {
+    static func resolve(_ card: LearningCard, source: ShortcutStep? = nil) -> RemapResolution {
         guard let text = card.toKeys else { return .unavailable }
-        let parts = text.split(separator: ",", omittingEmptySubsequences: false).map(String.init)
-        let steps = parts.compactMap(ShortcutStep.parse)
-        guard !steps.isEmpty, steps.count == parts.count else { return .unavailable }
-        if steps.count == 1, steps[0] == ShortcutStep.parse(card.fromKeys) { return .same }
+        guard let steps = ShortcutStep.sequence(text) else { return .unavailable }
+        if steps.count == 1, steps[0] == (source ?? ShortcutStep.parse(card.fromKeys)) { return .same }
         return .keys(steps)
     }
 }
@@ -35,6 +33,8 @@ enum RemapEvents {
         var flags: CGEventFlags = []
         if step.cmd { flags.insert(.maskCommand) }
         if step.shift { flags.insert(.maskShift) }
+        if step.alt { flags.insert(.maskAlternate) }
+        if step.ctrl { flags.insert(.maskControl) }
         for event in [down, up] {
             event.flags = flags
             event.setIntegerValueField(.eventSourceUserData, value: marker)

@@ -2,7 +2,7 @@ import { ArrowRight, Check, Minus } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { desktopCommand, isOverlay } from '@/bridge/desktop'
 import type { ShowCardRequest } from '@/bridge'
-import { APPS, type Deck, type Lookup } from '@/lib/deck'
+import { APPS, parseSequence, type Deck, type Lookup } from '@/lib/deck'
 import { comboLabel } from './KeyCombo'
 
 export function RemapToast({ lookup, deck, result, onClose }: {
@@ -15,7 +15,7 @@ export function RemapToast({ lookup, deck, result, onClose }: {
   const card = lookup.kind === 'card' ? lookup.card : null
   const sent = result === 'sent'
   const feedback = sent ? 'Shortcut sent' : result === 'busy' ? 'Queue busy · try again'
-    : result === 'cancelled' ? 'Stopped · input context changed' : 'No direct equivalent'
+    : result === 'cancelled' ? 'Stopped · input context changed' : 'No direct shortcut'
 
   useEffect(() => {
     const timer = window.setTimeout(onClose, 2000)
@@ -37,7 +37,7 @@ export function RemapToast({ lookup, deck, result, onClose }: {
       <h2 className="mt-1 text-body leading-snug font-semibold">{card?.action ?? 'Shortcut unavailable'}</h2>
       <p className="mt-1 flex flex-wrap items-center gap-2 text-small text-brand-tint">
         <span>{comboLabel(lookup.pressed)}</span>
-        {sent && card?.toKeys && <><ArrowRight size={12} aria-hidden="true" /><span>{card.toKeys.replaceAll('Cmd+', '⌘').replaceAll('Shift+', '⇧').replaceAll(', ', ' then ')}</span></>}
+        {sent && card?.toKeys && <><ArrowRight size={12} aria-hidden="true" /><span>{parseSequence(card.toKeys).map((step) => comboLabel(step)).join(' then ')}</span></>}
       </p>
     </div>
   </article>
