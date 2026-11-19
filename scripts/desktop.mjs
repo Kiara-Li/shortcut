@@ -8,8 +8,12 @@ if (process.platform !== 'darwin') {
   process.exit(1)
 }
 const root = fileURLToPath(new URL('../', import.meta.url))
-// --staging leaves the currently authorized application untouched for review.
-const app = path.join(root, process.argv.includes('--staging') ? 'desktop/build/staging/Shortcut.app' : 'desktop/build/Shortcut.app')
+// A distinct staging identity keeps Launch Services, TCC and UserDefaults from
+// resolving the review build to an already-installed production application.
+const staging = process.argv.includes('--staging')
+const bundleID = staging ? 'design.kiara.shortcut.preview' : 'design.kiara.shortcut'
+const appName = staging ? 'Shortcut Preview' : 'Shortcut'
+const app = path.join(root, staging ? `desktop/build/staging/${appName}.app` : `desktop/build/${appName}.app`)
 const contents = path.join(app, 'Contents')
 const command = process.argv[2] ?? 'run'
 
@@ -31,9 +35,9 @@ if (command !== 'open') {
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
 <key>CFBundleExecutable</key><string>Shortcut</string>
-<key>CFBundleIdentifier</key><string>design.kiara.shortcut</string>
-<key>CFBundleName</key><string>Shortcut</string>
-<key>CFBundleDisplayName</key><string>Shortcut</string>
+<key>CFBundleIdentifier</key><string>${bundleID}</string>
+<key>CFBundleName</key><string>${appName}</string>
+<key>CFBundleDisplayName</key><string>${appName}</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>CFBundleShortVersionString</key><string>1.0.0</string>
 <key>LSMinimumSystemVersion</key><string>13.0</string>
@@ -47,7 +51,7 @@ if (command !== 'open') {
     '-framework', 'AppKit', '-framework', 'WebKit', '-framework', 'Carbon'])
   // Ad-hoc signing supports local execution without an Apple developer account.
   // Rebuilt ad-hoc binaries can require re-enabling Accessibility in macOS.
-  run('codesign', ['--force', '--sign', '-', '--identifier', 'design.kiara.shortcut', app])
+  run('codesign', ['--force', '--sign', '-', '--identifier', bundleID, app])
   console.log(`\nBuilt ${app}`)
 }
 if (command === 'run' || command === 'open') {

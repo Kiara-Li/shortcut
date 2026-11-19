@@ -17,7 +17,7 @@ For the macOS app:
 npm run desktop
 ```
 
-This compiles `desktop/build/Shortcut.app` and opens it. Enable Accessibility for that app yourself when macOS requests it. Rebuilding an ad-hoc-signed app can require renewing its permission. The review build is available separately with `npm run desktop:build -- --staging`, leaving the existing application binary untouched.
+This compiles `desktop/build/Shortcut.app` and opens it. Enable Accessibility for that app when macOS requests it. Rebuilding an ad-hoc-signed app can require renewing its permission. `npm run desktop:build -- --staging` instead creates `desktop/build/staging/Shortcut Preview.app`, with its own bundle identity, Accessibility entry and local data. This keeps the review build separate from the existing application's binary, permission record and activity.
 
 The browser previews the interface and stores local preferences and self-reported tries. It cannot intercept another application’s input or create real native usage history. Native preferences/history use macOS UserDefaults and are separate from browser localStorage. No backend or account is used.
 
@@ -38,7 +38,7 @@ Generated events are tagged, sent only to the captured target PID, and paired do
 
 Illustrator has **159 classified Figma Design actions**: **55 executable/shared** (28 translations and 27 shared chords), **81 manual/Figma-specific**, and **23 contextual reference entries that preserve native input**. Another 16 pointer gestures are classified separately. This is not 159 automatic mappings and is not a claim of all Figma products/versions being supported. See [Illustrator coverage, sources and limitations](docs/illustrator-coverage.md) and the machine-checked [baseline](docs/illustrator-coverage.json).
 
-Photoshop retains its earlier 10-action catalog (9 executable/shared, one unavailable); its expansion is a separate task. All cards keep `verified: false` until hands-on action checks. Automated tests do not prove Illustrator document results. The new staging app currently reports missing Accessibility permission; real cross-app execution and native History relaunch acceptance remain unverified.
+Photoshop retains its earlier 10-action catalog (9 executable/shared, one unavailable); its expansion is a separate task. All cards keep `verified: false` until hands-on action checks. Automated tests do not prove Illustrator document results. Shortcut Preview now has Accessibility permission. Automation can select native Illustrator tools, but did not trigger the registered global toggle or produce remap history, so it is not accepted as proof of the global input path. Physical-keyboard and native History relaunch acceptance remain pending.
 
 ## History and achievements
 
