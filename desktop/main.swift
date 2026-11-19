@@ -77,7 +77,9 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     })
     private var hotKeyItems: [NSMenuItem] = []
     private var hotKeyError: String?
-    private var requestedHotKey = ModeHotKey.controlShiftSpace
+    private var requestedHotKey = ModeHotKey.tripleCommand
+    private var commandTaps = TripleCommandDetector()
+    private var lastDiagnostic = ""
     private lazy var modeHotKey = ModeHotKeyRegistration { [weak self] in
         guard let self = self else { return }
         self.setFigmaMode(!self.figmaMode)
@@ -223,7 +225,8 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         modePopover.contentSize = NSSize(width: 340, height: 410)
         modePopover.behavior = .transient
         modePopover.animates = false
-        requestedHotKey = ModeHotKey(rawValue: defaults.string(forKey: "modeHotKey") ?? "") ?? .controlShiftSpace
+        // New key name: the switch default changed to triple-Command on Nov 19.
+        requestedHotKey = ModeHotKey(rawValue: defaults.string(forKey: "modeSwitchKey") ?? "") ?? .tripleCommand
         configureModeHotKey(requestedHotKey)
     }
 
@@ -372,7 +375,8 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
 
     private func installTap() {
         let mask = (CGEventMask(1) << CGEventType.keyDown.rawValue) | (CGEventMask(1) << CGEventType.keyUp.rawValue)
-            | (CGEventMask(1) << CGEventType.leftMouseDown.rawValue)
+            | (CGEventMask(1) << CGEventType.leftMouseDown.rawValue) | (CGEventMask(1) << CGEventType.leftMouseUp.rawValue)
+            | (CGEventMask(1) << CGEventType.flagsChanged.rawValue) | (CGEventMask(1) << CGEventType.rightMouseDown.rawValue)
         tap = CGEvent.tapCreate(tap: .cgSessionEventTap, place: .headInsertEventTap, options: .defaultTap,
                                eventsOfInterest: mask, callback: { _, type, event, context in
             guard let context = context else { return Unmanaged.passUnretained(event) }
@@ -392,14 +396,36 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     private func handle(_ type: CGEventType, _ event: CGEvent) -> Unmanaged<CGEvent>? {
         if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
             policy.reset(); completion.clear(); followThrough.clear(); cancelRemaps()
+            Diagnostics.log("event filter was disabled by macOS (\(type == .tapDisabledByTimeout ? "timeout" : "user input")); re-enabling")
             if let tap = tap, AXIsProcessTrusted() { CGEvent.tapEnable(tap: tap, enable: true) }
             return Unmanaged.passUnretained(event)
         }
         if RemapEvents.isSynthetic(event) { return Unmanaged.passUnretained(event) }
+        // Triple-Command mode switch. Modifier events always pass through unchanged.
+        if type == .flagsChanged {
+            if modeHotKey.current?.usesTapDetector == true,
+               commandTaps.observe(flags: event.flags, now: Date().timeIntervalSince1970) {
+                DispatchQueue.main.async { self.setFigmaMode(!self.figmaMode) }
+            }
+            return Unmanaged.passUnretained(event)
+        }
+        if type == .keyDown || type == .leftMouseDown || type == .rightMouseDown { commandTaps.reset() }
+        if type == .rightMouseDown { return Unmanaged.passUnretained(event) }
         let active = NSWorkspace.shared.frontmostApplication
         let inTarget = ShortcutPolicy.isTarget(active?.bundleIdentifier, target: target)
         if type == .leftMouseDown {
-            textEntry.observeClick(pid: inTarget ? active?.processIdentifier : nil)
+            // Only refresh the focus cache. Canvas typing is decided on mouse-up,
+            // once it is known whether the click hit a tool, a control or the canvas.
+            textEntry.invalidate()
+            return Unmanaged.passUnretained(event)
+        }
+        if type == .leftMouseUp {
+            // Tool activation and app activation have settled by mouse-up. This
+            // also handles the first tool click when returning from another app.
+            if inTarget, let pid = active?.processIdentifier {
+                textEntry.observeClick(pid: pid, at: event.location)
+                Diagnostics.log("click: \(textEntry.lastClick)")
+            } else { textEntry.invalidate() }
             return Unmanaged.passUnretained(event)
         }
         let code = event.getIntegerValueField(.keyboardEventKeycode)
@@ -407,6 +433,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             event.flags.intersection([.maskControl, .maskAlternate, .maskCommand, .maskShift]).isEmpty {
             cancelRemaps(); completion.clear(); followThrough.clear()
             DispatchQueue.main.async { self.hideCard(); self.emit(self.cardWeb, "dismiss", NSNull()) }
+            if inTarget { Diagnostics.log("Esc in target app: canvas typing cleared") }
             // Escape must also reach the target app (cancel transform, finish a path, etc.).
         }
         // Let Carbon receive the registered switch even when it resembles a query.
@@ -422,6 +449,14 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             sourceKeys: modeSourceKeys, sameKeys: modeSameKeys,
             expectedTarget: interactionMode == .learn ? followThrough.expectedStep(now: now) : nil,
             allowPrefixedLookup: interactionMode == .learn)
+        if type == .keyDown && inTarget && figmaMode && event.getIntegerValueField(.keyboardEventAutorepeat) == 0 {
+            // State-change log only; the pressed key itself is never recorded.
+            let kind: String
+            switch decision { case .pass: kind = "pass"; case .swallow: kind = "swallow"; case .toggleDetails: kind = "details"; case .show: kind = "convert/hint" }
+            let summary = "keys in target: mode=\(interactionMode.rawValue) paused=\(paused) secure=\(IsSecureEventInputEnabled()) protected=\(protected)"
+                + (protected ? " reason=\(textEntry.lastReason)" : "") + " last=\(kind)"
+            if summary != lastDiagnostic { lastDiagnostic = summary; Diagnostics.log(summary) }
+        }
         switch decision {
         case .pass:
             // Shared keys execute unchanged. Record only catalog matches in Direct
@@ -666,7 +701,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
     private func configureModeHotKey(_ key: ModeHotKey) {
         if modeHotKey.register(key) {
             requestedHotKey = key
-            defaults.set(key.rawValue, forKey: "modeHotKey")
+            defaults.set(key.rawValue, forKey: "modeSwitchKey")
             hotKeyError = nil
         } else {
             hotKeyError = "Could not register \(key.label). It may be in use. Choose another switch shortcut; the previous shortcut stays active."
@@ -685,7 +720,8 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
         else if status["inputProtected"] as? Bool == true { reason = "Figma Mode on · text input protected" }
         else if !active { reason = "Figma Mode on · waiting for \(targetName)" }
         else { reason = "\(interactionMode.label) on in \(targetName)" }
-        menuItem.button?.title = figmaMode ? "On" : "Off"
+        // Show when text protection is holding shortcuts back, so a stuck state is visible (Esc clears it).
+        menuItem.button?.title = !figmaMode ? "Off" : status["inputProtected"] as? Bool == true ? "On · Text" : "On"
         menuItem.button?.toolTip = reason
         menuItem.button?.setAccessibilityLabel("Shortcut: " + reason)
         nativeModeItem.title = "Figma Mode: Off — Original shortcuts"

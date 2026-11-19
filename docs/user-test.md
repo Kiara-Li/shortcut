@@ -65,7 +65,7 @@ The user confirmed direct K → Scale and R → Rectangle in Illustrator without
 - Learning On, K → hint, then S → Scale: owner-reported pass in the same build.
 - Text safety with mouse-selected Type, both workflows: the user confirmed krol types without hints/tool changes, and Esc then K restores the selected workflow: “两种模式输入和退出后恢复都正常”. Owner-reported pass. Numeric fields, keyboard-selected Type, re-editing existing text and Cmd+Return remain unverified.
 - Pause/Resume controls: the installed native Home changed to Listening is paused with Resume listening, then returned to Direct remap is on with Pause listening. UI-state check passed. The owner also confirmed paused R selects native Rotate and Resume restores listening.
-- Physical Control–Shift–Space Off/On, paused native R, and normal krol typing without hints in another app with mode On: owner-reported pass, “三项都正常”.
+- (Before Nov 19 the switch was Control–Shift–Space; it is now triple-tap Command, not yet hand-tested.) Physical Control–Shift–Space Off/On, paused native R, and normal krol typing without hints in another app with mode On: owner-reported pass, “三项都正常”.
 - Native view-command checks: the selected Illustrator default keymap export names Show Rulers as Cmd+R, Change to Artboard Rulers as Opt+Cmd+R, and Fit Artboard in Window as Cmd+0. App-directed Cmd+R changed the View menu from Show Rulers to Hide Rulers, then was toggled back; Cmd+0 changed the scratch document zoom from 30.41% to 44.61%. This verifies target commands, not global Shift+R/Shift+1 remapping or multiple-artboard scope.
 - Cancellation during an operation and notification click-through: pending actual input checks.
 

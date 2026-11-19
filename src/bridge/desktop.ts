@@ -26,7 +26,7 @@ export interface DesktopStatus {
   lastRemap: string
   modeActive: boolean
   inputProtected: boolean
-  modeHotKey: 'controlShiftSpace' | 'controlOptionBackslash' | 'controlOptionReturn'
+  modeHotKey: 'tripleCommand' | 'controlShiftSpace' | 'controlOptionBackslash' | 'controlOptionReturn'
   modeHotKeyLabel: string
   modeHotKeyRegistered: boolean
   modeHotKeyError: string | null

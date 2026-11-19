@@ -52,6 +52,7 @@ export function KeyboardModeControl({ status, deck }: { status: DesktopStatus | 
 }
 
 const SWITCH_KEYS = [
+  { id: 'tripleCommand', label: '⌘⌘⌘ (tap Command 3×)' },
   { id: 'controlShiftSpace', label: '⌃⇧Space' },
   { id: 'controlOptionBackslash', label: '⌃⌥\\' },
   { id: 'controlOptionReturn', label: '⌃⌥Return' },
