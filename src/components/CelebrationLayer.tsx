@@ -1,16 +1,9 @@
-import { useEffect, useState, type CSSProperties } from 'react'
+import { Check } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { bridge, type AchievementEntry } from '@/bridge'
 import { APPS, DECKS } from '@/lib/deck'
 
-// Fixed particle positions keep rendering deterministic; no animation library.
-const pieces = Array.from({ length: 54 }, (_, index) => ({
-  x: (index * 37) % 100,
-  drift: ((index * 29) % 240) - 120,
-  rotate: (index % 2 ? 1 : -1) * (180 + index * 31),
-  delay: (index % 9) * 0.045,
-  color: ['#9999ff', '#ffd86b', '#f6a8ca', '#8ce3c4', '#ffffff'][index % 5],
-}))
-
+/** First-try feedback uses the same compact notification grammar as Direct remap. */
 export function CelebrationLayer() {
   const [entry, setEntry] = useState<AchievementEntry | null>(null)
   useEffect(() => bridge.onAchievement(setEntry), [])
@@ -23,21 +16,14 @@ export function CelebrationLayer() {
   const card = DECKS.flatMap((deck) => deck.cards).find((item) => item.id === entry.cardId)
 
   return (
-    <div key={entry.unlockedAt} className="pointer-events-none fixed inset-0 z-[100] overflow-hidden">
-      <div aria-hidden="true" className="confetti-field">
-        {pieces.map((piece, index) => (
-          <span key={index} className="confetti-piece" style={{
-            left: `${piece.x}%`, background: piece.color,
-            '--drift': `${piece.drift}px`, '--spin': `${piece.rotate}deg`,
-            animationDelay: `${piece.delay}s`,
-          } as CSSProperties} />
-        ))}
-      </div>
-      <div role="status" className="celebration-toast absolute top-10 left-1/2 w-[min(360px,90vw)] -translate-x-1/2 rounded-card border border-brand-soft/50 bg-window p-5 text-center text-window-ink shadow-window">
-        <p className="text-tiny font-semibold tracking-widest text-brand-soft">ACHIEVEMENT UNLOCKED</p>
-        <p className="mt-2 text-heading font-bold">Congratulations!</p>
-        <p className="mt-2 text-body">{card?.action ?? 'Shortcut tried'} · {APPS[entry.to].name}</p>
-        <p className="mt-2 text-small text-window-ink-muted">{entry.method === 'shortcut' ? 'Your first try, saved to Achievements.' : 'Marked as tried, saved to Achievements.'}</p>
+    <div className="celebration-layer" key={entry.unlockedAt}>
+      <div role="status" className="celebration-toast remap-toast">
+        <span className="remap-toast-icon" aria-hidden="true"><Check size={22} /></span>
+        <div>
+          <p className="text-small text-window-ink-muted">{entry.method === 'shortcut' ? 'First try saved' : 'Marked as tried'} · {APPS[entry.to].name}</p>
+          <h2 className="mt-1 text-body font-semibold">{card?.action ?? 'Shortcut tried'}</h2>
+          <p className="mt-1 text-small text-window-ink-muted">You can revisit it in Progress.</p>
+        </div>
       </div>
     </div>
   )

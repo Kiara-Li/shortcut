@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./styles/tokens.css";
+@import "./styles/app.css";
 
 /* Safari's marker is replaced by the explicit, decorative History chevron. */
 .history-action > summary::-webkit-details-marker { display: none; }
@@ -97,6 +98,7 @@
 html[data-overlay='true'],
 html[data-overlay='true'] body {
   background: transparent;
+  color-scheme: light;
 }
 
 :where(button, input, a, summary):focus-visible,
@@ -138,7 +140,8 @@ label:has(input:focus-visible) {
   max-height: calc(100dvh - 32px);
 }
 .shortcut-hint {
-  padding: 18px;
+  color-scheme: light;
+  padding: var(--space-5);
   border: 1px solid var(--color-keycap-border);
   border-radius: inherit;
   background: var(--color-card);
@@ -151,7 +154,7 @@ label:has(input:focus-visible) {
   width: 28px;
   height: 28px;
   margin: -4px -4px 0 0;
-  border-radius: var(--radius-keycap);
+  border-radius: var(--radius-control);
   color: var(--color-card-ink-soft);
   cursor: pointer;
 }
@@ -159,15 +162,16 @@ label:has(input:focus-visible) {
 .hint-mapping {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-top: 16px;
-  padding-block: 14px;
+  gap: var(--space-4);
+  margin-block-start: var(--space-4);
+  padding-block: var(--space-4);
   border-block: 1px solid var(--color-keycap-border);
 }
 .hint-details > summary {
   width: fit-content;
-  margin-top: 12px;
-  padding: 4px 2px;
+  margin-block-start: var(--space-3);
+  min-block-size: 44px;
+  padding: var(--space-2) 2px;
   font-size: var(--text-small);
   font-weight: 600;
   cursor: pointer;
@@ -176,8 +180,8 @@ label:has(input:focus-visible) {
 .hint-details > summary:hover { text-decoration: underline; }
 .hint-explanation {
   display: grid;
-  gap: 12px;
-  padding-top: 12px;
+  gap: var(--space-3);
+  padding-block-start: var(--space-3);
   font-size: var(--text-body);
   line-height: 1.55;
 }
@@ -187,9 +191,9 @@ label:has(input:focus-visible) {
 }
 .hint-tried {
   width: fit-content;
-  padding: 8px 12px;
+  padding: var(--space-3) var(--space-4);
   border: 1px solid var(--color-keycap-border);
-  border-radius: var(--radius-keycap);
+  border-radius: var(--radius-control);
   font-size: var(--text-small);
   cursor: pointer;
 }
@@ -199,8 +203,8 @@ label:has(input:focus-visible) {
 .remap-toast {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 16px;
+  gap: var(--space-4);
+  padding: var(--space-5);
   border: 1px solid var(--color-field-border);
   border-left: 3px solid var(--color-brand-soft);
   border-radius: inherit;
@@ -223,15 +227,6 @@ label:has(input:focus-visible) {
 }
 @media (prefers-reduced-motion: no-preference) {
   .remap-toast { animation: remap-arrive 0.16s ease-out; }
-}
-
-.confetti-piece {
-  position: absolute;
-  top: -20px;
-  width: 9px;
-  height: 18px;
-  border-radius: 2px;
-  opacity: 0;
 }
 
 .mode-switch {
@@ -257,14 +252,6 @@ label:has(input:focus-visible) {
 .mode-switch:checked { background: var(--color-brand); border-color: var(--color-brand-soft); }
 .mode-switch:checked::before { justify-self: end; }
 
-@keyframes confetti-fall {
-  0% { opacity: 0; transform: translate3d(0, -20px, 0) rotate(0deg); }
-  8% { opacity: 1; }
-  85% { opacity: 1; }
-  100% { opacity: 0; transform: translate3d(var(--drift), 85vh, 0) rotate(var(--spin)); }
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  .confetti-piece { animation: confetti-fall 2.8s ease-in forwards; }
   .celebration-toast { animation: card-in 0.2s ease-out; }
 }

@@ -24,10 +24,14 @@ export function ShortcutHint({ lookup, deck, unlocked, onClose }: {
   const target = APPS[deck.to].name
 
   useEffect(() => {
-    if (expanded || hovered || focused) return
+    if (!isDesktop || expanded || hovered || focused) return
     const timer = window.setTimeout(onClose, AUTO_HIDE_MS)
     return () => window.clearTimeout(timer)
   }, [expanded, hovered, focused, onClose])
+
+  useEffect(() => {
+    if (!isDesktop) surface.current?.focus({ preventScroll: true })
+  }, [])
 
   useEffect(() => {
     const toggle = () => { if (details.current) details.current.open = !details.current.open }
@@ -47,7 +51,7 @@ export function ShortcutHint({ lookup, deck, unlocked, onClose }: {
   }, [])
 
   return (
-    <article ref={surface} className="shortcut-hint" aria-label="Shortcut hint"
+    <article ref={surface} className="shortcut-hint" tabIndex={-1} aria-label="Shortcut hint"
       onPointerEnter={(event) => event.pointerType === 'mouse' && setHovered(true)}
       onPointerLeave={(event) => event.pointerType === 'mouse' && setHovered(false)}
       onFocusCapture={() => { if (!isOverlay) setFocused(true) }}

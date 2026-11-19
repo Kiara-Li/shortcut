@@ -1,14 +1,37 @@
 /*
- * Design tokens, pulled from the Figma exports in /11.
- * Components use these through Tailwind utilities (see index.css @theme)
- * or var(--…). Don't hard-code colors, sizes or radii in components.
+ * Shared foundation, retaining the original dark / purple palette.
+ * Spacing uses a 4px base. Update these values when the design spec arrives.
+ * Components consume these directly or via Tailwind utilities in index.css.
  */
 :root {
+  color-scheme: dark;
+  /* 4px rhythm: nested controls → cards → sections → page. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-page-x: clamp(1rem, 5vw, 3rem);
+  --size-page-max: 880px;
+  --text-page-heading: clamp(1.875rem, 4vw, 2.25rem);
+  --radius-control: 12px;
+  --radius-nav: 24px;
+  --color-brand-hover: #7777ff;
+  --color-mode-selected: #303047;
+  --color-mode-edge: #53538c;
+  --color-rail-border: #626080;
+  --color-keycap-dark: #333338;
+  --color-keycap-dark-border: #505057;
+  --shadow-nav: 0 8px 32px rgb(0 0 0 / 0.25);
+
   /* ---- App window (dark, "Settings" / "Figma" frames) ---- */
   --color-window: #1c1c1c;
   --color-window-title: #9a9999;
   --color-window-ink: #f5f5f5;
-  --color-window-ink-muted: #d4d4d4;
+  --color-window-ink-muted: #b0b0b6;
   --color-field: #0e0e0e;
   --color-field-border: #2a2a2a;
   --color-tile: #262626;
@@ -26,7 +49,7 @@
   --color-brand-soft: #9999ff;
   --color-brand-tint: #babaff;
   --color-brand-ink: #ffffff;
-  --color-rail: rgb(186 186 255 / 0.57);
+  --color-rail: #39384c;
   --color-rail-active: #1c1c1c;
   --color-rail-ink: #ffffff;
 
@@ -61,8 +84,8 @@
   --text-window-title: 1.0625rem; /* 17px */
   --text-heading: 1.5rem; /* 24px */
   --text-body: 0.9375rem; /* 15px */
-  --text-small: 0.75rem; /* 12px */
-  --text-tiny: 0.6875rem; /* 11px */
+  --text-small: 0.8125rem; /* 13px */
+  --text-tiny: 0.75rem; /* 12px */
   --text-card-action: 1.375rem; /* 22px */
   --text-card-body: 1.125rem; /* 18px */
 
@@ -72,10 +95,10 @@
 
   /* ---- Radii ---- */
   --radius-window: 20px;
-  --radius-card: 16px;
-  --radius-tile: 14px;
+  --radius-card: 20px;
+  --radius-tile: 12px;
   --radius-icon: 8px;
-  --radius-keycap: 6px;
+  --radius-keycap: 4px;
   --radius-pill: 999px;
 
   /* ---- Sizes ---- */

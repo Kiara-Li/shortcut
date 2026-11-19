@@ -237,7 +237,7 @@ final class ShortcutApp: NSObject, NSApplicationDelegate, WKScriptMessageHandler
             injectionTime: .atDocumentStart, forMainFrameOnly: true))
         let web = WKWebView(frame: .zero, configuration: config)
         web.navigationDelegate = self
-        web.load(URLRequest(url: URL(string: "shortcut://app/index.html" + (overlay ? "#/overlay" : celebration ? "#/celebration" : "#/home"))!))
+        web.load(URLRequest(url: URL(string: "shortcut://app/index.html" + (overlay ? "#/overlay" : celebration ? "#/celebration" : "#/settings"))!))
         return web
     }
 

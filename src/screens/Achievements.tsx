@@ -1,51 +1,43 @@
-import { Trophy } from 'lucide-react'
+import type { CSSProperties } from 'react'
 import { bridge, useAchievements } from '@/bridge'
-import { ScreenHeading, WindowFrame } from '@/components/WindowFrame'
+import { AchievementBadge } from '@/components/AchievementBadge'
+import { AppIcon } from '@/components/AppIcon'
 import { KeySequence } from '@/components/KeyCombo'
-import { APPS, cardById, DECKS, parseCombo, type Deck } from '@/lib/deck'
+import { ScreenHeading, WindowFrame } from '@/components/WindowFrame'
+import { APPS, parseCombo, type Card, type Deck } from '@/lib/deck'
 
 export function Achievements({ deck }: { deck: Deck }) {
   const achievements = useAchievements()
-  const items = [...achievements].sort((a, b) => b.unlockedAt - a.unlockedAt).flatMap((entry) => {
-    const sourceDeck = DECKS.find((item) => item.from === entry.from && item.to === entry.to)
-    const card = sourceDeck ? cardById(sourceDeck, entry.cardId) : null
-    return card ? [{ entry, card }] : []
-  })
-  const count = items.filter(({ entry }) => entry.from === deck.from && entry.to === deck.to).length
-  const total = deck.cards.filter((card) => card.toKeys !== null).length
-  return (
-    <WindowFrame title="Achievements" className="pb-[calc(var(--size-tabbar)+1rem)]">
-      <ScreenHeading sub="A little record of the shortcuts you’ve tried.">Your first tries</ScreenHeading>
-      <div className="flex items-center gap-4 rounded-card border border-brand-soft/40 bg-brand/10 p-5">
-        <Trophy className="size-8 shrink-0 text-brand-soft" aria-hidden />
-        <div>
-          <p className="text-card-action font-semibold">{count} / {total}</p>
-          <p className="text-small text-window-ink-muted">Figma → {APPS[deck.to].name}</p>
-        </div>
+  const entries = new Map(achievements.filter((entry) => entry.from === deck.from && entry.to === deck.to).map((entry) => [entry.cardId, entry]))
+  const cards = deck.cards.filter((card) => card.toKeys !== null)
+  const unlocked = cards.filter((card) => entries.has(card.id)).sort((a, b) => entries.get(b.id)!.unlockedAt - entries.get(a.id)!.unlockedAt)
+  const locked = cards.filter((card) => !entries.has(card.id))
+
+  function collection(items: Card[], completed: boolean) {
+    return <ul className="achievement-grid">{items.map((card) => {
+      const entry = entries.get(card.id)
+      return <li key={card.id}>
+        <button type="button" className={`achievement-card${completed ? ' is-unlocked' : ''}`}
+          aria-label={`${card.action.split(' → ')[0]}, ${completed ? 'unlocked' : 'locked'}. View shortcut`}
+          onClick={() => bridge.showCard({ pressed: parseCombo(card.fromKeys), at: null, source: 'saved' })}>
+          <AchievementBadge card={card} unlocked={completed} />
+          <span className="achievement-title">{card.action.split(' → ')[0]}</span>
+          {card.toKeys && <span className="achievement-keys"><KeySequence keys={card.toKeys} /></span>}
+          {entry && <span className="achievement-date"><time dateTime={new Date(entry.unlockedAt).toISOString()}>{new Date(entry.unlockedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</time>{entry.method === 'self-reported' && <span aria-label="Marked as tried" title="Marked as tried">*</span>}</span>}
+        </button>
+      </li>
+    })}</ul>
+  }
+
+  return <WindowFrame title="Achievements">
+    <ScreenHeading>Achievements</ScreenHeading>
+    <div className="achievement-overview">
+      <div className="unlock-ring" style={{ '--progress': `${cards.length ? unlocked.length / cards.length * 100 : 0}%` } as CSSProperties} role="img" aria-label={`${unlocked.length} of ${cards.length} achievements unlocked`}>
+        <span>{unlocked.length}<span>/{cards.length}</span></span>
       </div>
-      <p className="mt-4 text-small text-window-ink-muted">In the Mac app, read a card, then try its target shortcut in the matching app within two minutes. Each card unlocks once. This records the key press, not whether the app finished the action. Website entries are explicitly marked as self-reported.</p>
-      {items.length === 0 ? (
-        <p className="mt-7 rounded-card border border-dashed border-field-border p-6 text-body text-window-ink-muted">Your first shortcut is waiting. Look up Scale, then try the shortcut shown on its card.</p>
-      ) : (
-        <ul className="mt-6 space-y-3">
-          {items.map(({ entry, card }) => (
-            <li key={entry.cardId} className="rounded-card bg-tile p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-body font-semibold">{card.action}</p>
-                  <p className="mt-1 text-small text-window-ink-muted">{APPS[entry.to].name} · {entry.method === 'shortcut' ? 'First shortcut try' : 'Self-reported try'}</p>
-                </div>
-                <Trophy className="size-5 shrink-0 text-brand-soft" aria-hidden />
-              </div>
-              {card.toKeys && <div className="mt-3"><KeySequence keys={card.toKeys} /></div>}
-              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-small">
-                <time dateTime={new Date(entry.unlockedAt).toISOString()} className="text-window-ink-muted">{new Date(entry.unlockedAt).toLocaleDateString()}</time>
-                {entry.from === deck.from && entry.to === deck.to && <button type="button" className="min-h-8 rounded-lg px-2 text-brand-soft underline underline-offset-4" onClick={() => bridge.showCard({ pressed: parseCombo(card.fromKeys), at: null, source: 'saved' })}>Revisit card</button>}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </WindowFrame>
-  )
+      <div><p className="unlock-heading">Unlocked</p><span className="achievement-app"><AppIcon app={deck.to} size={24} />{APPS[deck.to].name}</span></div>
+    </div>
+    {unlocked.length > 0 && <section className="achievement-section" aria-labelledby="unlocked-title"><h2 id="unlocked-title">Unlocked<span>{unlocked.length}</span></h2>{collection(unlocked, true)}</section>}
+    {locked.length > 0 && <section className="achievement-section" aria-labelledby="locked-title"><h2 id="locked-title">Locked<span>{locked.length}</span></h2>{collection(locked, false)}</section>}
+  </WindowFrame>
 }
